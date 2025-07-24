@@ -371,10 +371,11 @@ public class Board {
         tickCount++;
         secondsPassed++; // Increment every update to match GUI timer
 
-        // Sun generation every 40 ticks (optional: adjust if needed)
-        if (tickCount % 40 == 0) {
+        // Sun generation every 10 seconds (automatic drop)
+        if (secondsPassed % 10 == 0) {
             generateSun();
         }
+        // Sunflower-generated sun is handled in Sunflower.update()
 
         // Zombie spawning intervals based on game time:
         // 30-80s: every 10 seconds
@@ -428,10 +429,12 @@ public class Board {
 
                 if (cell.equals("00") && tile.getPlant() != null) {
                     Plant plant = tile.getPlant();
-                    if (plant instanceof Sunflower) {
-                        cell = "S ";
-                    } else if (plant instanceof Peashooter) {
-                        cell = "P ";
+                    if (!plant.isDead()) {
+                        if (plant instanceof Sunflower) {
+                            cell = "S ";
+                        } else if (plant instanceof Peashooter) {
+                            cell = "P ";
+                        }
                     }
                 }
 

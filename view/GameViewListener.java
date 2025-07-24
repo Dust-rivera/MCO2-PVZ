@@ -4,7 +4,7 @@ package view;
  * Listener interface for GameView to communicate with the controller
  * @author Deveza, Jerry King 
  * @author Rivera, Dustine Gian
- * @version 1.0
+ * @version 2.0
  */
 public interface GameViewListener {
     /**
@@ -24,4 +24,9 @@ public interface GameViewListener {
      * @param col The column of the clicked tile.
      */
     void onTileClicked(int row, int col);
+
+    /**
+     * Called when the claim sun button is clicked.
+     */
+    void onClaimSun();
 }

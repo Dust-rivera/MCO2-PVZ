@@ -11,8 +11,8 @@ public class Zombie {
     private int health = 70;
     private int attackTick = 0;
 
-    private static final int SPEED = 16;
-    private final int DAMAGE = 10;
+    private static final int SPEED = 4; 
+    private final int DAMAGE = 20;
 
     /**
      * Creates Zombie object given its y position

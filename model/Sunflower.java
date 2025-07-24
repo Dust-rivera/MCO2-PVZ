@@ -12,7 +12,7 @@ public class Sunflower extends Plant{
      * @param y the y position of the sunflower
      */
     public Sunflower(int x, int y){
-        super(50, 60, x, y, 96, 0, 0, 0);
+        super(50, 60, x, y, 24, 0, 0, 0); // 24 ticks = 24 seconds
     }
 
     /** This updates the Peashooter given the board
