@@ -26,7 +26,7 @@ public class GameController implements GameViewListener {
     public GameController() {
         this.player = new User(); // Create a new player
         this.board = new Board(player, 5, 9); // 5x9 board
-        this.view = new GameView(5, 9, this); // 5x9 grid in the view, register controller as listener
+        //this.view = new GameView(5, 9, this); // 5x9 grid in the view, register controller as listener
         updateSunDisplay(); // Show initial sun count
     }
 

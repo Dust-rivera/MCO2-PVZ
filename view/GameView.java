@@ -1,244 +1,379 @@
 package view;
+// /**
+//  * GUI view class that displays the Plants vs Zombies game interface
+//  * @author Deveza, Jerry King 
+//  * @author Rivera, Dustine Gian
+//  * @version 2.0
+//  */
+// import javax.swing.*;
+// import java.awt.*;
+// import java.awt.event.ActionEvent;
+// import java.awt.event.ActionListener;
 
-/**
- * GUI view class that displays the Plants vs Zombies game interface
- * @author Deveza, Jerry King 
- * @author Rivera, Dustine Gian
- * @version 2.0
- */
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+// public class GameView extends JFrame {
+//     // 2D array of buttons representing the game board tiles
+//     private final JButton[][] tiles;
+//     // Label showing current sun count
+//     private final JLabel sunLabel;
+//     // Label for displaying messages to the player
+//     private final JLabel messageLabel;
+//     // Label for displaying the game timer
+//     private final JLabel timerLabel;
+//     // Button to select Sunflower plant
+//     private final JButton sunflowerButton;
+//     // Button to select Peashooter plant
+//     private final JButton peashooterButton;
+//     // Button to start the game
+//     private final JButton startButton;
+//     // Button to claim dropped sun
+//     private final JButton claimSunButton;
+//     // Label to show unclaimed sun
+//     private final JLabel unclaimedSunLabel;
+//     // Listener for user actions (controller)
+//     private final GameViewListener listener;
+//     // Timer for game ticks (1 second interval)
+//     private Timer gameTimer;
+//     // Time left in seconds
+//     private int timeLeft = 180; // 3 minutes game timer
 
-public class GameView extends JFrame {
-    // 2D array of buttons representing the game board tiles
-    private final JButton[][] tiles;
-    // Label showing current sun count
-    private final JLabel sunLabel;
-    // Label for displaying messages to the player
-    private final JLabel messageLabel;
-    // Label for displaying the game timer
-    private final JLabel timerLabel;
-    // Button to select Sunflower plant
-    private final JButton sunflowerButton;
-    // Button to select Peashooter plant
-    private final JButton peashooterButton;
-    // Button to start the game
-    private final JButton startButton;
-    // Button to claim dropped sun
-    private final JButton claimSunButton;
-    // Label to show unclaimed sun
-    private final JLabel unclaimedSunLabel;
-    // Listener for user actions (controller)
-    private final GameViewListener listener;
-    // Timer for game ticks (1 second interval)
-    private Timer gameTimer;
-    // Time left in seconds
-    private int timeLeft = 180; // 3 minutes game timer
+//     /**
+//      * Constructs the game view, sets up the GUI layout and event listeners.
+//      * @param rows Number of rows in the board
+//      * @param cols Number of columns in the board
+//      * @param listener Controller to handle user actions
+//      */
+//     public GameView(int rows, int cols, GameViewListener listener) {
+//         this.listener = listener;
+//         this.tiles = new JButton[rows][cols];
 
-    /**
-     * Constructs the game view, sets up the GUI layout and event listeners.
-     * @param rows Number of rows in the board
-     * @param cols Number of columns in the board
-     * @param listener Controller to handle user actions
-     */
-    public GameView(int rows, int cols, GameViewListener listener) {
-        this.listener = listener;
-        this.tiles = new JButton[rows][cols];
+//         setTitle("Plants vs Zombies - GUI Version"); // Window title
+//         setSize(1000, 700); // Window size
+//         setDefaultCloseOperation(EXIT_ON_CLOSE); // Close app on exit
+//         setResizable(false);
+//         setLayout(new BorderLayout()); // Use BorderLayout
 
-        setTitle("Plants vs Zombies - GUI Version"); // Window title
-        setSize(1000, 700); // Window size
-        setDefaultCloseOperation(EXIT_ON_CLOSE); // Close app on exit
-        setLayout(new BorderLayout()); // Use BorderLayout
+//         // Menu Bar setup
+//         JMenuBar menuBar = new JMenuBar();
+//         JMenu gameMenu = new JMenu("Game");
+//         JMenuItem exitItem = new JMenuItem("Exit");
+//         exitItem.addActionListener(e -> System.exit(0)); // Exit app
+//         gameMenu.add(exitItem);
+//         menuBar.add(gameMenu);
+//         setJMenuBar(menuBar);
 
-        // Menu Bar setup
-        JMenuBar menuBar = new JMenuBar();
-        JMenu gameMenu = new JMenu("Game");
-        JMenuItem exitItem = new JMenuItem("Exit");
-        exitItem.addActionListener(e -> System.exit(0)); // Exit app
-        gameMenu.add(exitItem);
-        menuBar.add(gameMenu);
-        setJMenuBar(menuBar);
+//         // Top Panel - Info (sun, message, timer, start button)
+//         JPanel topPanel = new JPanel(new GridLayout(1, 4));
+//         sunLabel = new JLabel("Sun: 0"); // Initial sun
+//         messageLabel = new JLabel("Welcome!"); // Initial message
+//         timerLabel = new JLabel("Time: 180s"); // Initial timer
+//         startButton = new JButton("Start Game");
+//         startButton.addActionListener(e -> startGame()); // Start game on click
+//         topPanel.add(sunLabel);
+//         topPanel.add(messageLabel);
+//         topPanel.add(timerLabel);
+//         topPanel.add(startButton);
+//         add(topPanel, BorderLayout.NORTH);
 
-        // Top Panel - Info (sun, message, timer, start button)
-        JPanel topPanel = new JPanel(new GridLayout(1, 4));
-        sunLabel = new JLabel("Sun: 0"); // Initial sun
-        messageLabel = new JLabel("Welcome!"); // Initial message
-        timerLabel = new JLabel("Time: 180s"); // Initial timer
-        startButton = new JButton("Start Game");
-        startButton.addActionListener(e -> startGame()); // Start game on click
-        topPanel.add(sunLabel);
-        topPanel.add(messageLabel);
-        topPanel.add(timerLabel);
-        topPanel.add(startButton);
-        add(topPanel, BorderLayout.NORTH);
+//         // Center Panel - Game Board Grid
+//         JPanel gridPanel = new JPanel(new GridLayout(rows, cols));
+//         for (int r = 0; r < rows; r++) {
+//             for (int c = 0; c < cols; c++) {
+//                 JButton tileButton = new JButton(); // Each tile is a button
+//                 tileButton.setPreferredSize(new Dimension(80, 80)); // Size of tile
+//                 final int row = r, col = c;
+//                 tileButton.addActionListener(e -> listener.onTileClicked(row, col)); // Notify controller on click
+//                 tiles[r][c] = tileButton;
+//                 gridPanel.add(tileButton);
+//             }
+//         }
+//         add(gridPanel, BorderLayout.CENTER);
 
-        // Center Panel - Game Board Grid
-        JPanel gridPanel = new JPanel(new GridLayout(rows, cols));
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                JButton tileButton = new JButton(); // Each tile is a button
-                tileButton.setPreferredSize(new Dimension(80, 80)); // Size of tile
-                final int row = r, col = c;
-                tileButton.addActionListener(e -> listener.onTileClicked(row, col)); // Notify controller on click
-                tiles[r][c] = tileButton;
-                gridPanel.add(tileButton);
-            }
+//         // Bottom Panel - Plant Selection and Sun Claim
+//         unclaimedSunLabel = new JLabel("Unclaimed Sun: 0");
+//         claimSunButton = new JButton("Claim Sun");
+//         claimSunButton.setEnabled(false);
+//         claimSunButton.addActionListener(e -> listener.onClaimSun());
+//         JPanel bottomPanel = new JPanel();
+//         sunflowerButton = new JButton("Sunflower");
+//         sunflowerButton.addActionListener(e -> listener.onPlantSelected("Sunflower")); // Select Sunflower
+//         peashooterButton = new JButton("Peashooter");
+//         peashooterButton.addActionListener(e -> listener.onPlantSelected("Peashooter")); // Select Peashooter
+//         bottomPanel.add(new JLabel("Select a plant: "));
+//         bottomPanel.add(sunflowerButton);
+//         bottomPanel.add(peashooterButton);
+//         // Add unclaimed sun label and claim button to bottom panel
+//         bottomPanel.add(unclaimedSunLabel);
+//         bottomPanel.add(claimSunButton);
+//         add(bottomPanel, BorderLayout.SOUTH);
+
+//         setLocationRelativeTo(null); // Center window
+//         setVisible(true); // Show window
+//     }
+
+//     /**
+//      * Starts the game: begins the game timer and sun generation timer.
+//      */
+//     public void startGame() {
+//         // Remove the start button from the top panel
+//         startButton.setVisible(false);
+//         startTimer(); // Start main game timer
+//         // Zombie spawning is handled by Board.update()
+//     }
+
+//     /**
+//      * Starts the main game timer (1 second per tick).
+//      * Each tick updates the timer and notifies the controller.
+//      */
+//     private void startTimer() {
+//         if (gameTimer != null && gameTimer.isRunning()) {
+//             gameTimer.stop(); // Stop previous timer if running
+//         }
+//         gameTimer = new Timer(1000, new ActionListener() {
+//             public void actionPerformed(ActionEvent e) {
+//                 timeLeft--; // Decrement time
+//                 timerLabel.setText("Time: " + timeLeft + "s"); // Update timer label
+//                 if (timeLeft <= 0) {
+//                     gameTimer.stop();
+//                     setMessage("Time's up! Game Over!");
+//                 }
+//                 listener.onStartGame(); // Notify controller for each tick
+//             }
+//         });
+//         gameTimer.start();
+//     }
+
+//     // Zombie spawning is now handled by Board.update() with proper intervals:
+//     // 30-80s: every 10 seconds
+//     // 81-140s: every 5 seconds  
+//     // 141-170s: every 3 seconds
+//     // 171-180s: wave of zombies
+
+//     /**
+//      * Updates the sun count display.
+//      * @param amount The current sun amount
+//      */
+//     public void setSun(int amount) {
+//         sunLabel.setText("Sun: " + amount);
+//     }
+
+//     /**
+//      * Sets a message to display to the player.
+//      * @param message The message to show
+//      */
+//     public void setMessage(String message) {
+//         messageLabel.setText(message);
+//     }
+
+//     /**
+//      * Updates the unclaimed sun display and claim button state.
+//      * @param amount The current unclaimed sun amount
+//      */
+//     public void setUnclaimedSun(int amount) {
+//         unclaimedSunLabel.setText("Unclaimed Sun: " + amount);
+//         claimSunButton.setEnabled(amount > 0);
+//     }
+
+//     /**
+//      * Clears all zombie markers from the board tiles.
+//      */
+//     public void clearZombies() {
+//         for (int r = 0; r < tiles.length; r++) {
+//             for (int c = 0; c < tiles[0].length; c++) {
+//                 String text = tiles[r][c].getText();
+//                 if (text.contains("Z")) {
+//                     text = text.replaceAll("Z\\d*", ""); // Remove zombie marker
+//                     tiles[r][c].setText(text.trim());
+//                 }
+//             }
+//         }
+//     }
+
+//     /**
+//      * Updates a specific tile with a marker (plant or zombie).
+//      * @param row Row index
+//      * @param col Column index
+//      * @param marker Marker string ("S", "P", "Z#", or "")
+//      */
+//     public void updateTile(int row, int col, String marker) {
+//         String text = tiles[row][col].getText();
+//         // Always remove all S, P, and Z# first
+//         text = text.replaceAll("[SP]", "");
+//         text = text.replaceAll("Z\\d*", "");
+//         text = text.trim();
+//         if (marker.startsWith("Z")) {
+//             // Only add zombie marker
+//             text = (text + " " + marker).trim();
+//         } else if (marker.equals("")) {
+//             // Clear tile
+//             // text is already cleaned
+//         } else {
+//             // Plant marker (S or P)
+//             text = (marker + " " + text).trim();
+//         }
+//         tiles[row][col].setText(text);
+//     }
+
+//     /**
+//      * Stops all running timers (game and sun timers).
+//      */
+//     public void stopAllTimers() {
+//         if (gameTimer != null) gameTimer.stop();
+//     }
+
+//     /**
+//      * Clears the message label after a delay.
+//      * @param ms Milliseconds to wait before clearing
+//      */
+//     public void clearMessageAfterDelay(int ms) {
+//         Timer clearMsgTimer = new Timer(ms, e -> setMessage(""));
+//         clearMsgTimer.setRepeats(false);
+//         clearMsgTimer.start();
+//     }
+
+//     /**
+//      * Gets the time left in the game.
+//      * @return Seconds remaining
+//      */
+//     public int getTimeLeft() {
+//         return timeLeft;
+//     }
+
+//     public String getTileText(int row, int col) {
+//         return tiles[row][col].getText();
+//     }
+// } 
+
+
+import java.awt.Image;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.File;
+import java.io.IOException;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+
+
+//import javafx.scene.text.Font;
+
+public class GameView extends JFrame{
+
+    JLabel backGround = new JLabel();
+    JLabel shopLabel = new JLabel();
+    JLabel sunCount = new JLabel("0");
+
+    JLabel sunflowerP = new JLabel();
+    JLabel peashooterP = new JLabel();
+    JLabel cherryP = new JLabel();
+
+    JLabel sun = new JLabel();
+
+    Font customFont;
+    
+
+    //ArrayList<JLabel> suns = new ArrayList<>();
+
+    // JLabel shopLabel = new JLabel();
+    // JLabel shopLabel = new JLabel();
+
+
+    JLayeredPane layers = new JLayeredPane();
+
+    public GameView(){
+
+        try{
+            customFont = Font.createFont(Font.TRUETYPE_FONT, new File("C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\Chalkboard.ttc")).deriveFont(24f);
+            sunCount.setFont(customFont);
+        }catch(FontFormatException e){}
+        catch (IOException e) {
         }
-        add(gridPanel, BorderLayout.CENTER);
 
-        // Bottom Panel - Plant Selection and Sun Claim
-        unclaimedSunLabel = new JLabel("Unclaimed Sun: 0");
-        claimSunButton = new JButton("Claim Sun");
-        claimSunButton.setEnabled(false);
-        claimSunButton.addActionListener(e -> listener.onClaimSun());
-        JPanel bottomPanel = new JPanel();
-        sunflowerButton = new JButton("Sunflower");
-        sunflowerButton.addActionListener(e -> listener.onPlantSelected("Sunflower")); // Select Sunflower
-        peashooterButton = new JButton("Peashooter");
-        peashooterButton.addActionListener(e -> listener.onPlantSelected("Peashooter")); // Select Peashooter
-        bottomPanel.add(new JLabel("Select a plant: "));
-        bottomPanel.add(sunflowerButton);
-        bottomPanel.add(peashooterButton);
-        // Add unclaimed sun label and claim button to bottom panel
-        bottomPanel.add(unclaimedSunLabel);
-        bottomPanel.add(claimSunButton);
-        add(bottomPanel, BorderLayout.SOUTH);
+        ImageIcon icon = new ImageIcon("C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\logo.png");
+        ImageIcon bg = new ImageIcon("C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\PC Computer - Plants vs Zombies - Day.png");
+        ImageIcon shop = new ImageIcon("C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\shop border.png");
+        ImageIcon sunflowerPk = new ImageIcon("C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\SunP.png");
+        ImageIcon peashooterPk = new ImageIcon("C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\PeashooterP.png");
+        ImageIcon cherryPk = new ImageIcon("C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\CherryP.png");
+        ImageIcon sunPic = new ImageIcon("C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\Sun_PvZ2.png");
 
-        setLocationRelativeTo(null); // Center window
-        setVisible(true); // Show window
+
+        sunCount.setBounds(37, 56, 15, 15);
+        //sunCount.setOpaque(true);
+        
+        Image image = sunflowerPk.getImage();
+        Image newImg = image.getScaledInstance(50, 65, Image.SCALE_SMOOTH);
+        sunflowerPk = new ImageIcon(newImg);
+
+        image = peashooterPk.getImage();
+        newImg = image.getScaledInstance(50, 65, Image.SCALE_SMOOTH);
+        peashooterPk = new ImageIcon(newImg);
+
+        image = cherryPk.getImage();
+        newImg = image.getScaledInstance(50, 65, Image.SCALE_SMOOTH);
+        cherryPk = new ImageIcon(newImg);
+
+        image = sunPic.getImage();
+        newImg = image.getScaledInstance(70, 70, Image.SCALE_SMOOTH);
+        sunPic = new ImageIcon(newImg);
+
+        layers.setBounds(0,0, bg.getIconWidth(), bg.getIconHeight());
+
+
+        sunflowerP.setIcon(sunflowerPk);
+        sunflowerP.setBounds(73,5, sunflowerPk.getIconWidth(), sunflowerPk.getIconHeight());
+        peashooterP.setIcon(peashooterPk);
+        peashooterP.setBounds(123,5,peashooterPk.getIconWidth(), peashooterPk.getIconHeight());
+        cherryP.setIcon(cherryPk);
+        cherryP.setBounds(173,5, cherryPk.getIconWidth(), cherryPk.getIconHeight());
+        sun.setIcon(sunPic);
+        sun.setBounds(100,100, sunPic.getIconWidth(), sunPic.getIconHeight());
+
+        
+        GameViewListener listener = new GameViewListener(sunflowerP, peashooterP, cherryP, sunCount);
+        sunflowerP.addMouseListener(listener);
+        peashooterP.addMouseListener(listener);
+        cherryP.addMouseListener(listener);
+        sun.addMouseListener(listener);
+
+        backGround.setIcon(bg);
+        backGround.setBounds(0, 0, bg.getIconWidth(), bg.getIconHeight());
+
+        shopLabel.setIcon(shop);
+        shopLabel.setBounds(5, 0, shop.getIconWidth(), shop.getIconHeight());
+
+        sunflowerP.setOpaque(true);
+
+        layers.add(backGround, Integer.valueOf(0));
+        layers.add(shopLabel, Integer.valueOf(1));
+        layers.add(sunflowerP, Integer.valueOf(2));
+        layers.add(peashooterP, Integer.valueOf(2));
+        layers.add(cherryP, Integer.valueOf(2));
+        layers.add(sunCount, Integer.valueOf(2));
+        layers.add(sun, Integer.valueOf(3));
+
+
+        this.setIconImage(icon.getImage());
+        this.setTitle("Plants vs. Zombies");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.setSize(bg.getIconWidth(), bg.getIconHeight());
+        this.setLayout(null);
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+        this.add(layers);
     }
 
-    /**
-     * Starts the game: begins the game timer and sun generation timer.
-     */
-    public void startGame() {
-        // Remove the start button from the top panel
-        startButton.setVisible(false);
-        startTimer(); // Start main game timer
-        // Zombie spawning is handled by Board.update()
-    }
+    // public void drawSunCount(Graphics2D g){ 
+    //     g.setFont(customFont); 
+    //     g.setColor(Color.BLACK);
+    //     FontMetrics metrics = g.getFontMetrics(customFont);
+    //     g.drawString(Integer.toString(sunCount), 4 -(metrics.stringWidth(Integer.toString(sunCount))/2), 4);
+    // }
 
-    /**
-     * Starts the main game timer (1 second per tick).
-     * Each tick updates the timer and notifies the controller.
-     */
-    private void startTimer() {
-        if (gameTimer != null && gameTimer.isRunning()) {
-            gameTimer.stop(); // Stop previous timer if running
-        }
-        gameTimer = new Timer(1000, new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                timeLeft--; // Decrement time
-                timerLabel.setText("Time: " + timeLeft + "s"); // Update timer label
-                if (timeLeft <= 0) {
-                    gameTimer.stop();
-                    setMessage("Time's up! Game Over!");
-                }
-                listener.onStartGame(); // Notify controller for each tick
-            }
-        });
-        gameTimer.start();
-    }
 
-    // Zombie spawning is now handled by Board.update() with proper intervals:
-    // 30-80s: every 10 seconds
-    // 81-140s: every 5 seconds  
-    // 141-170s: every 3 seconds
-    // 171-180s: wave of zombies
 
-    /**
-     * Updates the sun count display.
-     * @param amount The current sun amount
-     */
-    public void setSun(int amount) {
-        sunLabel.setText("Sun: " + amount);
+    public static void main(String[] args) {
+        new GameView();
     }
-
-    /**
-     * Sets a message to display to the player.
-     * @param message The message to show
-     */
-    public void setMessage(String message) {
-        messageLabel.setText(message);
-    }
-
-    /**
-     * Updates the unclaimed sun display and claim button state.
-     * @param amount The current unclaimed sun amount
-     */
-    public void setUnclaimedSun(int amount) {
-        unclaimedSunLabel.setText("Unclaimed Sun: " + amount);
-        claimSunButton.setEnabled(amount > 0);
-    }
-
-    /**
-     * Clears all zombie markers from the board tiles.
-     */
-    public void clearZombies() {
-        for (int r = 0; r < tiles.length; r++) {
-            for (int c = 0; c < tiles[0].length; c++) {
-                String text = tiles[r][c].getText();
-                if (text.contains("Z")) {
-                    text = text.replaceAll("Z\\d*", ""); // Remove zombie marker
-                    tiles[r][c].setText(text.trim());
-                }
-            }
-        }
-    }
-
-    /**
-     * Updates a specific tile with a marker (plant or zombie).
-     * @param row Row index
-     * @param col Column index
-     * @param marker Marker string ("S", "P", "Z#", or "")
-     */
-    public void updateTile(int row, int col, String marker) {
-        String text = tiles[row][col].getText();
-        // Always remove all S, P, and Z# first
-        text = text.replaceAll("[SP]", "");
-        text = text.replaceAll("Z\\d*", "");
-        text = text.trim();
-        if (marker.startsWith("Z")) {
-            // Only add zombie marker
-            text = (text + " " + marker).trim();
-        } else if (marker.equals("")) {
-            // Clear tile
-            // text is already cleaned
-        } else {
-            // Plant marker (S or P)
-            text = (marker + " " + text).trim();
-        }
-        tiles[row][col].setText(text);
-    }
-
-    /**
-     * Stops all running timers (game and sun timers).
-     */
-    public void stopAllTimers() {
-        if (gameTimer != null) gameTimer.stop();
-    }
-
-    /**
-     * Clears the message label after a delay.
-     * @param ms Milliseconds to wait before clearing
-     */
-    public void clearMessageAfterDelay(int ms) {
-        Timer clearMsgTimer = new Timer(ms, e -> setMessage(""));
-        clearMsgTimer.setRepeats(false);
-        clearMsgTimer.start();
-    }
-
-    /**
-     * Gets the time left in the game.
-     * @return Seconds remaining
-     */
-    public int getTimeLeft() {
-        return timeLeft;
-    }
-
-    public String getTileText(int row, int col) {
-        return tiles[row][col].getText();
-    }
-} 
+}
