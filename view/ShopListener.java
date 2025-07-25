@@ -14,6 +14,8 @@ import javax.swing.JLayeredPane;
 import javax.swing.SwingUtilities;
 import javax.swing.JPanel;
 
+import controller.GameController;
+
 public class ShopListener extends MouseAdapter {
 
     private JLabel sunflower, peashooter, cherry;
@@ -23,26 +25,34 @@ public class ShopListener extends MouseAdapter {
     ImageIcon image;
     Point initialCLick;
     private GameView gameView; // added gameView para ma-access ung board mismo
+    private GameController controller;
+    int plantIndex = 0;
+    
 
-    public ShopListener(JLabel p1, JLabel p2, JLabel p3, JLayeredPane layers, GameView gameView) { // also added it as a parameter
+    public ShopListener(JLabel p1, JLabel p2, JLabel p3, JLayeredPane layers, GameView gameView, GameController controller) { // also added it as a parameter
         sunflower = p1;
         peashooter = p2;
         cherry = p3;
         this.layers = layers;
         this.gameView = gameView;
+        this.controller = controller;
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         Object source = e.getSource();
         ImageIcon image = null;
-
-        if (source == sunflower) {
+        System.out.println("Sun count: " + controller.getUser().getSunCount());// debuggggggg
+        
+        if (source == sunflower && controller.getUser().getSunCount() >= 50 ) {
             image = new ImageIcon("C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\Sunflower.png");
-        } else if (source == peashooter) {
+            plantIndex = 1;
+        } else if (source == peashooter && controller.getUser().getSunCount() >= 100) {
             image = new ImageIcon("C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\Peashooter.png");
-        } else if (source == cherry) {
+            plantIndex = 2;
+        } else if (source == cherry && controller.getUser().getSunCount() >= 150) {
             image = new ImageIcon("C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\Cherry.png");
+            plantIndex = 3;
         }
 
         if (image != null) {
@@ -87,6 +97,16 @@ public class ShopListener extends MouseAdapter {
                 int[] indices = new int[2];
                 JPanel cell = gameView.getCellAtPoint(mousePoint, indices);
                 if (cell != null) {
+                    if(plantIndex == 1){
+                        controller.getUser().buyPlant(50);
+                        controller.getView().updateSunCounter(controller.getUser().getSunCount());
+                    }else if(plantIndex == 2){
+                        controller.getUser().buyPlant(100);
+                        controller.getView().updateSunCounter(controller.getUser().getSunCount());
+                    }else if(plantIndex == 3){
+                        controller.getUser().buyPlant(150);
+                        controller.getView().updateSunCounter(controller.getUser().getSunCount());
+                    }
                     cell.removeAll();
                     JLabel plant = new JLabel(image);
                     cell.add(plant);
@@ -97,6 +117,7 @@ public class ShopListener extends MouseAdapter {
             layers.remove(drag);
             layers.repaint();
             drag = null;
+
         }
     }
 

@@ -293,7 +293,7 @@ public class GameView extends JFrame {
             customFont = Font
                     .createFont(Font.TRUETYPE_FONT,
                             new File("C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\Chalkboard.ttc"))
-                    .deriveFont(24f);
+                    .deriveFont(18f);
             sunCount.setFont(customFont);
         } catch (FontFormatException e) {
         } catch (IOException e) {

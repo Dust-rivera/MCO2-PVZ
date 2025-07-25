@@ -23,7 +23,7 @@ public class SunDropExample extends JFrame {
 
         sunCounterLabel = new JLabel("0");
         sunCounterLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        sunCounterLabel.setBounds(20, 20, 100, 30);
+        sunCounterLabel.setBounds(20, 20, 100, 40);
         layers.add(sunCounterLabel, Integer.valueOf(10));
 
         // Spawn a sun every 5 seconds

@@ -53,9 +53,9 @@ public class User {
      * @param amount the amount of sun board has
      * @param board the board to be updated
      */
-    public void collectSun(int amount, Board board){
+    public void collectSun(Board board){
         board.setSun();
-        sunCount += (amount * 25);
+        sunCount += (25);
 
     }
 }

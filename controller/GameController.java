@@ -214,7 +214,7 @@ public class GameController{
         JLabel cherry = view.getCherryPack();
 
         // ADDED MULTIPLE MOUSE MOTION LISTENERS FOR THE SHOP LISTENER  
-        ShopListener shopListener = new ShopListener(sunflower, peashooter, cherry, view.getLayers(), view);
+        ShopListener shopListener = new ShopListener(sunflower, peashooter, cherry, view.getLayers(), view, this);
         sunflower.addMouseListener(shopListener);
         sunflower.addMouseMotionListener(shopListener);
         peashooter.addMouseListener(shopListener);
