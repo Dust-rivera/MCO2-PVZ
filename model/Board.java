@@ -20,6 +20,7 @@ public class Board {
     private boolean running = true;
     private int numRows;
     private int numCols;
+    private int SUN_GENERATE_TIME = 10000; 
 
     /**
      * This creates a board object given the player
@@ -40,6 +41,10 @@ public class Board {
                 board[i][j] = new Tile();
             }
         }
+    }
+
+    public int getSUN_GENERATE_TIME() {
+        return SUN_GENERATE_TIME;
     }
 
     /**
@@ -180,7 +185,7 @@ public class Board {
      * 
      * @param board the board to be updated
      */
-    public void input(Board board) {
+    /*public void input(Board board) {
         if (player.getInput().equalsIgnoreCase("exit")) {
             this.setRunning(false);
         } else if (player.getInput().startsWith("S") || player.getInput().startsWith("s")) {
@@ -242,7 +247,7 @@ public class Board {
             this.setMessage("Invalid command");
 
         }
-    }
+    }*/
 
     /**
      * This updates all the zombies on the board
@@ -258,7 +263,7 @@ public class Board {
 
             // FIRST: Check if zombie is already dead (from previous damage)
             if (zombie.isDead()) {
-                board[row][col].removeZombie(zombie);
+                //board[row][col].removeZombie(zombie);
                 zombiesToRemove.add(zombie);
                 this.setMessage("Zombie at (" + (row + 1) + ", " + (col + 1) + ") died and was removed.");
                 continue; // Skip to next zombie
@@ -289,7 +294,7 @@ public class Board {
                     tile.setPlant(null);
                     System.out.println("Plant at (" + (row + 1) + ", " + (col + 1) + ") died.");
                 }
-            } else {
+            } /*else {
                 // No plant: zombie can move
                 // Check if path is clear (no zombies in front)
                 if (col > 0 && board[row][col - 1].getZombies().size() == 0) {
@@ -298,7 +303,7 @@ public class Board {
                     board[row][col - 1].addZombie(zombie);
                 }
                 // If path is blocked, zombie stays in place
-            }
+            }*/
         }
 
         // Remove all dead zombies from the main list
@@ -343,7 +348,7 @@ public class Board {
      * @param zombie the zombie object to be placed on the board
      */
     public void placeZombie(int row, int col, Zombie zombie) {
-        board[row][col].addZombie(zombie);
+        //board[row][col].addZombie(zombie);
         zombieList.add(zombie);
     }
 
@@ -412,7 +417,7 @@ public class Board {
      * This displays what the board look like
      * with the plants and zombies on the board
      */
-    public void display() {
+    /*public void display() {
         for (int i = 0; i < numRows; i++) {
             System.out.println("---------------------------------------------");
             for (int j = 0; j < numCols; j++) {
@@ -447,7 +452,7 @@ public class Board {
         System.out.println("Sun dropped: " + this.getSunCount());
         System.out.println("Sun Points: " + player.getSunCount());
         System.out.print("Enter command: ");
-    }
+    }*/
 
     // Fix spawnZombie(int row) to use correct x/y
     public void spawnZombie(int row) {
@@ -457,7 +462,7 @@ public class Board {
             Zombie zombie = new Zombie(row); // row = yPosition
             zombie.setXPosition(col); // col = xPosition
             zombie.setYPosition(row); // row = yPosition
-            tile.addZombie(zombie);
+            //tile.addZombie(zombie);
             zombieList.add(zombie); // Add to global zombie list for updating
         }
     }
