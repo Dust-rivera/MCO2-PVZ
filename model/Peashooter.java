@@ -4,9 +4,7 @@
  * @version 1.0
  */
 package model;
-public class Peashooter extends Plant implements PlantMechanics {
-    public static int peashooterCD;
-    private static final int PEASHOOTER_REGEN = 30;
+public class Peashooter extends Plant{
 
     /**
      * This creates a Peashooter object given its x and y position
@@ -15,18 +13,17 @@ public class Peashooter extends Plant implements PlantMechanics {
      */
     public Peashooter(int x, int y){
         super(100, 60, x, y, 6, 9, 20, 30);
-        peashooterCD = 0; 
     }
 
     /** This updates the Peashooter given the board
      * @param board the board to be updated
      */
     @Override
-    public void plantTurn(Board board){
+    public void update(Board board){
         this.increaseTick();
 
-        if(peashooterCD != 0) 
-            peashooterCD--;
+        if(Plant.peashooterCD != 0) 
+            Plant.peashooterCD--;
 
         if(this.getTick() % this.getSPEED() == 0){
             Tile tile = board.getTile(this.getXPosition(), this.getYPosition());
@@ -53,17 +50,5 @@ public class Peashooter extends Plant implements PlantMechanics {
                 }
             }
         }
-    }
-
-    /**
-     * Gets the cooldown for Peashooter
-     * @return cooldown in ticks
-     */
-    public static int getpeaShooterCD() {
-        return peashooterCD;
-    }
-
-    public static int getRegen() {
-        return PEASHOOTER_REGEN;
     }
 }

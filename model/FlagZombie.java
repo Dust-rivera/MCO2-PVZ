@@ -5,21 +5,13 @@ package model;
  * @author Rivera, Dustine Gian
  * @version 1.0
  */
-public class FlagZombie extends Zombie implements ZombieMechanics {
+public class FlagZombie extends Zombie {
+    public static final int FLAG_HEALTH = 70;
     public static final int FLAG_DAMAGE = 10;
-    public static final int FLAG_SPEED = 6;
+    public static final int FLAG_SPEED = 12; // Faster than normal
 
-    public FlagZombie() {
-        super(70, 0, FLAG_DAMAGE, FLAG_SPEED); 
+    public FlagZombie(int yPosition) {
+        super(yPosition);
+        // Optionally override speed/logic in Board if needed
     }
-
-    public static int getDamage() {
-        return FLAG_DAMAGE;
-    }
-
-
-    public static int getSpeed() {
-        return FLAG_SPEED;
-    }
-
 } 

@@ -5,20 +5,12 @@ package model;
  * @author Rivera, Dustine Gian
  * @version 1.0
  */
-public class NormalZombie extends Zombie implements ZombieMechanics {
+public class NormalZombie extends Zombie {
+    public static final int NORMAL_HEALTH = 70;
     public static final int NORMAL_DAMAGE = 10;
-    public static final int NORMAL_SPEED = 4;
 
-    public NormalZombie() {
-        super(70, 0, NORMAL_DAMAGE, NORMAL_SPEED); 
+    public NormalZombie(int yPosition) {
+        super(yPosition);
+        // Optionally set health/damage if needed
     }
-
-    public static  int getDamage() {
-        return NORMAL_DAMAGE;
-    }
-
-    public static int getSpeed() {
-        return NORMAL_SPEED;
-    }
-
 } 
