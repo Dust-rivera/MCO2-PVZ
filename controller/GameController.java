@@ -213,11 +213,14 @@ public class GameController{
         JLabel peashooter = view.getPeashooterPack();
         JLabel cherry = view.getCherryPack();
 
-
-        ShopListener shopListener = new ShopListener(sunflower, peashooter, cherry, view.getLayers());
+        // ADDED MULTIPLE MOUSE MOTION LISTENERS FOR THE SHOP LISTENER  
+        ShopListener shopListener = new ShopListener(sunflower, peashooter, cherry, view.getLayers(), view);
         sunflower.addMouseListener(shopListener);
+        sunflower.addMouseMotionListener(shopListener);
         peashooter.addMouseListener(shopListener);
+        peashooter.addMouseMotionListener(shopListener);
         cherry.addMouseListener(shopListener);
+        cherry.addMouseMotionListener(shopListener);
 
 
         //board.getSunflowerPack();
@@ -245,7 +248,7 @@ public class GameController{
     }
 
     private void spawnSun(){
-        ImageIcon sunIcon = new ImageIcon("C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\Sun.png"); // replace path
+        ImageIcon sunIcon = new ImageIcon("C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\Sun.png"); // replace path
         Image scaled = sunIcon.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
         sunIcon = new ImageIcon(scaled);
 

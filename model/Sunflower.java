@@ -4,7 +4,9 @@
  * @version 1.0
  */
 package model;
-public class Sunflower extends Plant{
+public class Sunflower extends Plant implements PlantMechanics {
+    public static int sunflowerCD;
+    private static final int SUNFLOWER_REGEN = 30; // Regeneration rate for Sunflower
 
     /**
      * This creates a Sunflower object given its x and y position
@@ -12,18 +14,19 @@ public class Sunflower extends Plant{
      * @param y the y position of the sunflower
      */
     public Sunflower(int x, int y){
-        super(50, 60, x, y, 24, 0, 0, 0); // 24 ticks = 24 seconds
+        super(50, 60, x, y, 24, 0, 0, 0); 
+        sunflowerCD = 0;
     }
 
-    /** This updates the Peashooter given the board
+    /** This updates the Sunflower given the board
      * @param board the board to be updated
      */
     @Override
-    public void update(Board board){
+    public void plantTurn(Board board){
         this.increaseTick();;
 
-        if(Plant.sunflowerCD != 0) 
-            Plant.sunflowerCD--;
+        if(sunflowerCD != 0) 
+            sunflowerCD--;
         if(this.getTick() % this.getSPEED() == 0){
             board.generateSun();
             this.setTick(0);
@@ -37,5 +40,15 @@ public class Sunflower extends Plant{
     public void generateSun(Board board){
         board.generateSun();
     }
+
+    public static int getsunFlowerCD() {
+        return sunflowerCD;
+    }
+
+    public static int getRegen() {
+        return SUNFLOWER_REGEN;
+    }
+
+
 
 }

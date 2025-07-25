@@ -34,7 +34,7 @@ public class SunDropExample extends JFrame {
     }
 
     private void spawnSun() {
-        ImageIcon sunIcon = new ImageIcon("C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\Sun_PvZ2.png"); // your sun image
+        ImageIcon sunIcon = new ImageIcon("C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\Sun_PvZ2.png"); // your sun image
         Image scaled = sunIcon.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
         sunIcon = new ImageIcon(scaled);
 

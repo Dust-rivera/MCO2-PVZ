@@ -8,6 +8,14 @@ import java.util.ArrayList;
 public class Tile {
 
     private Plant plant = null;
+    private ArrayList<Zombie> zombies;
+
+    /**
+     * Creates a tile object
+     */
+    public Tile(){
+        zombies = new ArrayList<>();
+    }
 
     /**
      * This gets the plant occupying the tile
@@ -18,11 +26,38 @@ public class Tile {
     }
 
     /**
+     * This gets the zombies occupying the tile
+     * @return an ArrayList containing the zombies occupying the tile
+     */
+    public ArrayList<Zombie> getZombies() {
+        return zombies;
+    }
+
+    /**
+     * This gets a specific zombie given the index
+     * @param index the index of zombie to be accessed
+     * @return a Zombie containing specified zombie
+     */
+    public Zombie getZombie(int index){
+        if(!zombies.isEmpty())
+            return zombies.get(index);
+        return null;
+    }
+
+    /**
      * This modifies the plant occupying the tile
      * @param plant the plant to be assigned
      */
     public void setPlant(Plant plant) {
         this.plant = plant;
+    }
+
+    /**
+     * This modifies the zombie occupying the tile
+     * @param zombie The zombie to be assigned
+     */
+    public void addZombie(Zombie zombie) {
+        zombies.add(zombie);
     }
 
     /**
@@ -40,4 +75,20 @@ public class Tile {
         this.plant = null;
     }
 
+    /**
+     * Removes the zombie on the tile
+     * @param index the index of zombie to be removed
+     */
+    public void removeZombie(int index){
+        zombies.remove(index);
+    }
+
+    /**
+     * This removes a zombie from the zombies ArrayList 
+     * given a Zombie Object
+     * @param zombie the Zombie object to be removed from the ArrayList
+     */
+    public void removeZombie(Zombie zombie){
+        zombies.remove(zombie);
+    }
 }

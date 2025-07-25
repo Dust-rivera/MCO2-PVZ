@@ -1,26 +1,31 @@
 /** Represents a Zombie
  * @author Deveza, Jerry King 
  * @author Rivera, Dustine Gian
- * @version 1.0
+ * @version 2.0
  */
 package model;
-public class Zombie {
+import java.util.Random;
+public abstract class Zombie {
 
-    private int xPosition;
-    private int yPosition;
-    private int health = 70;
-    private int attackTick = 0;
-
-    private static final int SPEED = 4; 
-    private final int DAMAGE = 20;
+    protected int xPosition;
+    protected int yPosition;
+    protected int health ;
+    protected int attackTick; 
+    protected int damage;
+    protected int speed;
+    
 
     /**
      * Creates Zombie object given its y position
      * @param yPosition the y position of the zombie
      */
-    public Zombie(int yPosition) { 
-        this.xPosition = 8;        
-        this.yPosition = yPosition;
+    public Zombie(int health, int attackTick, int damage, int speed) { 
+
+        Random random = new Random();
+        this.yPosition = random.nextInt(5);
+        this.xPosition = 8; 
+        this.health = health;
+        this.attackTick = attackTick;
     }
 
     /**
@@ -31,14 +36,6 @@ public class Zombie {
         return attackTick;
     }
     
-    /**
-     * This gets the damage the zombie deals
-     * @return an integer containing the damage the zombie deals
-     */
-    public int getDamage() {
-        return DAMAGE;
-    }
-
     /**
      * This gets the zombie's x position
      * @return an integer containing the zombie's x position
@@ -61,14 +58,6 @@ public class Zombie {
      */
     public int getHealth() {
         return health;
-    }
-
-    /**
-     * This gets the zombie's speed based on how many ticks
-     * @return an integer containing the zombie's speed based on how many ticks
-     */
-    public static int getSpeed(){
-        return SPEED;
     }
 
     /**
@@ -125,4 +114,18 @@ public class Zombie {
     public boolean isDead() {
         return health <= 0;
     }
+    // /**
+    //  * This gets the zombie's damage
+    //  * @return an integer containing the zombie's damage
+    //  */
+    // public int getDamage() {
+    //     return damage;
+    // }
+    // /**
+    //  * This gets the zombie's speed
+    //  * @return an integer containing the zombie's speed
+    //  */
+    // public int getSpeed() {
+    //     return speed;
+    // }
 }

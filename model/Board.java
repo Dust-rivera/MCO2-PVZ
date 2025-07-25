@@ -10,7 +10,7 @@ import java.util.Random;
 public class Board {
 
     private Tile[][] board;
-    private int tickCount = 0;
+    private int tickCount = 0; // aint usedd
     private int secondsPassed = 0;
     private User player;
     private ArrayList<Zombie> zombieList;
@@ -283,7 +283,7 @@ public class Board {
             if (plant != null) {
                 // Combat: zombie attacks plant
                 zombie.incrementAttackTick();
-                plant.decreaseHealth(zombie.getDamage());
+                //plant.decreaseHealth(zombie.getDamage());
                 zombie.resetAttackTick();
                 this.setMessage(
                         "Zombie at (" + (row + 1) + ", " + (col + 1) + ") attacked plant: " + plant.getHealth()
@@ -323,9 +323,9 @@ public class Board {
     public void spawnZombie() {
         Random rand = new Random();
         int row = rand.nextInt(numRows);
-        Zombie zombie = new Zombie(row);
-        zombie.setYPosition(row);
-        placeZombie(row, numCols - 1, zombie);
+        //Zombie zombie = new Zombie(row);
+        //zombie.setYPosition(row);
+        //placeZombie(row, numCols - 1, zombie);
         if (!(secondsPassed >= 171 && secondsPassed <= 180)) {
             this.setMessage("Zombie spawned at (" + (row + 1) + ", 8) at time: " + secondsPassed);
         }
@@ -403,14 +403,14 @@ public class Board {
             for (int c = 0; c < numCols; c++) {
                 Plant plant = board[r][c].getPlant();
                 if (plant != null) {
-                    board[r][c].getPlant().update(this);
+                    //board[r][c].getPlant().update(this);
                 }
             }
         }
 
-        if (tickCount % Zombie.getSpeed() == 0) {
-            moveZombies();
-        }
+        // if (tickCount % Zombie.getSpeed() == 0) {
+        //     moveZombies();
+        // }
     }
 
     /**
@@ -459,11 +459,11 @@ public class Board {
         int col = getCol() - 1; // far right column
         Tile tile = getTile(row, col);
         if (tile != null) {
-            Zombie zombie = new Zombie(row); // row = yPosition
-            zombie.setXPosition(col); // col = xPosition
-            zombie.setYPosition(row); // row = yPosition
-            //tile.addZombie(zombie);
-            zombieList.add(zombie); // Add to global zombie list for updating
+           // Zombie zombie = new Zombie(row); // row = yPosition
+            // zombie.setXPosition(col); // col = xPosition
+            // zombie.setYPosition(row); // row = yPosition
+            // //tile.addZombie(zombie);
+            // zombieList.add(zombie); // Add to global zombie list for updating
         }
     }
 

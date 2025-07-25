@@ -5,22 +5,30 @@ package model;
  * @author Rivera, Dustine Gian
  * @version 1.0
  */
-public class CherryBomb extends Plant {
-    public static final int COST = 150;
-    public static final int HEALTH = 9999; // Not relevant, explodes instantly
-    public static final int REGEN = 40;
-    public static int cherryBombCD = 0;
-
+public class CherryBomb extends Plant implements PlantMechanics {
+    public static int cherrybombCD;
+    private static final int CHERRY_REGEN = 30; // to be changed
     public CherryBomb(int x, int y) {
-        super(COST, HEALTH, x, y, 0, 1, 9999, 9999); // Massive damage, instant
+        super(150, 9999, x, y, 0, 1, 9999, 9999); // Massive damage, instant
     }
 
     /**
      * Triggers the explosion effect (to be implemented in Board/Controller)
      */
     @Override
-    public void update(Board board) {
-        // Explosion logic handled in Board/Controller
+    public void plantTurn(Board board) {
+        this.increaseTick();
+
+        if (cherrybombCD != 0) {
+            cherrybombCD--;
+        }
+
+        if (this.getTick() % this.getSPEED() == 0) {
+            // Trigger explosion effect
+            board.triggerCherryBombExplosion(this.getXPosition(), this.getYPosition());
+            this.setTick(0); // Reset tick after explosion
+        }
+
     }
 
     /**
@@ -28,6 +36,10 @@ public class CherryBomb extends Plant {
      * @return cooldown in ticks
      */
     public static int getCherryBombCD() {
-        return cherryBombCD;
+        return cherrybombCD;
     }
+    public static int getRegen() {
+        return CHERRY_REGEN;
+    }
+   
 } 

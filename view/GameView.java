@@ -251,6 +251,8 @@ import java.awt.FontFormatException;
 import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
+import java.awt.Point;
+import java.awt.Rectangle;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -282,27 +284,30 @@ public class GameView extends JFrame {
 
     JLayeredPane layers = new JLayeredPane();
 
+    // MADE THIS PUBLIC SO IT COULD BE ACCESSIBLE 
+    public JPanel[][] gridCells = new JPanel[5][9];
+
     public GameView() {
 
         try {
             customFont = Font
                     .createFont(Font.TRUETYPE_FONT,
-                            new File("C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\Chalkboard.ttc"))
+                            new File("C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\Chalkboard.ttc"))
                     .deriveFont(24f);
             sunCount.setFont(customFont);
         } catch (FontFormatException e) {
         } catch (IOException e) {
         }
 
-        ImageIcon icon = new ImageIcon("C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\logo.png");
+        ImageIcon icon = new ImageIcon("C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\logo.png");
         ImageIcon bg = new ImageIcon(
-                "C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\PC Computer - Plants vs Zombies - Day.png");
-        ImageIcon shop = new ImageIcon("C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\shop border.png");
+                "C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\PC Computer - Plants vs Zombies - Day.png");
+        ImageIcon shop = new ImageIcon("C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\shop border.png");
         ImageIcon sunflowerPk = new ImageIcon(
-                "C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\SunflowerPack.png");
+                "C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\SunflowerPack.png");
         ImageIcon peashooterPk = new ImageIcon(
-                "C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\PeashooterPack.png");
-        ImageIcon cherryPk = new ImageIcon("C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\CherryPack.png");
+                "C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\PeashooterPack.png");
+        ImageIcon cherryPk = new ImageIcon("C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\CherryPack.png");
 
         board = new JPanel(new GridLayout(5, 9, 5, 7));
         board.setBounds(110, 100, 700, 450);
@@ -310,7 +315,7 @@ public class GameView extends JFrame {
         // board.setVisi(true);
         board.setOpaque(false);
 
-        JPanel[][] gridCells = new JPanel[5][9];
+        
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 9; col++) {
                 gridCells[row][col] = new JPanel();
@@ -320,7 +325,7 @@ public class GameView extends JFrame {
             }
         }
 
-        sunCount.setBounds(37, 56, 15, 15);
+        sunCount.setBounds(25, 50, 29, 29);
         // sunCount.setOpaque(true);
 
         Image image = sunflowerPk.getImage();
@@ -426,6 +431,30 @@ public class GameView extends JFrame {
 
     public JLayeredPane getLayers() {
         return layers;
+    }
+
+    /**
+     * Returns the cell JPanel at the given point (relative to the board), or null if none.
+     * Also returns the indices via an int[2] array: [row, col].
+     */
+    public JPanel getCellAtPoint(Point p, int[] indices) {
+        System.out.println("Mouse point: " + p);
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 9; col++) {
+                JPanel cell = gridCells[row][col];
+                Rectangle bounds = cell.getBounds();
+                System.out.println("Cell [" + row + "][" + col + "] bounds: " + bounds);
+                if (bounds.contains(p)) {
+                    System.out.println("Found cell at [" + row + "][" + col + "]");
+                    if (indices != null && indices.length >= 2) {
+                        indices[0] = row;
+                        indices[1] = col;
+                    }
+                    return cell;
+                }
+            }
+        }
+        return null;
     }
 
     public static void main(String[] args) {
