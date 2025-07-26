@@ -52,6 +52,7 @@ public class GameController {
     ImageIcon image;
     Point initialCLick;
     int plantSelect;
+    int gameTime = 180;
 
     User user = new User();
 
@@ -66,6 +67,8 @@ public class GameController {
         startSpawningZombies();
         this.zombieList = new ArrayList<>();
         System.out.println(view.getHeight());
+
+        progress();
 
         shop();
 
@@ -84,6 +87,18 @@ public class GameController {
                 System.out.println("Dragging at X=" + e.getX() + ", Y=" + e.getY());
             }
         });
+    }
+
+    private void progress() {
+
+        Timer timer = new Timer(1000, e -> decreaseTime());
+        timer.start();
+    }
+
+    private void decreaseTime() {
+        gameTime--;
+        view.getProgressBar().setValue(gameTime);
+        //view.getLayers().repaint();
     }
 
     private void shop() {
@@ -119,8 +134,8 @@ public class GameController {
 
         if (image != null) {
             // Resize image
-            //Image img = image.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-            //image = new ImageIcon(img);
+            // Image img = image.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+            // image = new ImageIcon(img);
 
             // Create new draggable JLabel
             drag = new JLabel(image);
@@ -161,10 +176,10 @@ public class GameController {
                     if (plantSelect == 0) {
                         Sunflower p = new Sunflower(indices[0], indices[1]);
                         placePlant(indices, p, cell);
-                    }else if(plantSelect == 1){
+                    } else if (plantSelect == 1) {
                         Peashooter p = new Peashooter(indices[0], indices[1]);
                         placePlant(indices, p, cell);
-                    }else if(plantSelect == 2){
+                    } else if (plantSelect == 2) {
                         CherryBomb p = new CherryBomb(indices[0], indices[1]);
                         placePlant(indices, p, cell);
                     }
@@ -195,48 +210,100 @@ public class GameController {
         }
     }
 
-    private void plantUpdate(Plant p, JPanel cell){
-        if(p instanceof Sunflower){
+    private void plantUpdate(Plant p, JPanel cell) {
+        if (p instanceof Sunflower) {
             Timer update = new Timer(24000, e -> generateSunSunflower(cell));
             update.start();
-        }else if(p  instanceof Peashooter){
-            Timer update = new Timer(500, e -> checkRow(cell));
+        } else if (p instanceof Peashooter) {
+            Timer update = new Timer(1500, e -> checkRow(cell));
             update.start();
         }
     }
 
-    private void checkRow(JPanel cell){
+    private void checkRow(JPanel cell) {
         int row = -1;
-
-        for(int i = 0; i < 5; i++){
-            for(int j = 0; j < 9; j++){
-                if(view.getGridCells()[j][i] == cell){
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (view.getGridCells()[i][j] == cell) {
                     row = i;
                     break;
                 }
             }
         }
+
+        if (row != -1 && isZombieInSameRow(row, cell.getX())) {
+            shootPea(cell);
+        }
     }
 
     private boolean isZombieInSameRow(int row, int plantX) {
-    for (Component comp : view.getLayers().get.getComponents()) { // assuming you have a zombie layer
-        if (comp instanceof JLabel) {
-            JLabel zombieLabel = (JLabel) comp;
-            Rectangle zombieBounds = zombieLabel.getBounds();
-            
-            int zombieY = zombieBounds.y;
-            int zombieRow = getRowFromY(zombieY);
-            
-            if (zombieRow == row && zombieBounds.x > plantX) {
-                return true; // Zombie ahead in the same row
+        for (Component comp : view.getLayers().getComponents()) {
+            if (comp instanceof JLabel) {
+                JLabel zombieLabel = (JLabel) comp;
+
+                // Check if this JLabel is actually a zombie
+                if (zombieLabel.getIcon() != null &&
+                        zombieLabel.getIcon().toString().contains("Zombie")) { // crude check
+                    Rectangle zombieBounds = zombieLabel.getBounds();
+
+                    int zombieY = zombieBounds.y;
+                    int zombieRow = getRowFromY(zombieY);
+
+                    // Zombie is in the same row AND to the right of the plant
+                    if (zombieRow == row && zombieBounds.x > plantX) {
+                        System.out.println("ZOMBIE!!");
+                        return true;
+                    }
+                }
             }
         }
+        return false;
     }
-    return false;
-}
 
+    private int getRowFromY(int y) {
+        if (y < 120)
+            return 0;
+        else if (y < 210)
+            return 1;
+        else if (y < 300)
+            return 2;
+        else if (y < 390)
+            return 3;
+        else
+            return 4;
+    }
 
-    private void generateSunSunflower(JPanel cell){
+    private void shootPea(JPanel cell) {
+        ImageIcon peaIcon = new ImageIcon("view\\assets\\Pea_p.png");
+        JLabel peaLabel = new JLabel(peaIcon);
+
+        // Convert cell position to layered pane coordinates
+        Point point = SwingUtilities.convertPoint(cell.getParent(), cell.getLocation(), view.getLayers());
+        int startX = point.x + cell.getWidth() - 10;
+        int startY = point.y + (cell.getHeight() - 20) / 2;
+
+        peaLabel.setBounds(startX, startY, 20, 20);
+        view.getLayers().add(peaLabel, Integer.valueOf(3));
+
+        Timer peaTimer = new Timer(20, new ActionListener() {
+            int x = startX;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                x += 5;
+                if (x > view.getWidth()) {
+                    ((Timer) e.getSource()).stop();
+                    view.getLayers().remove(peaLabel);
+                    view.getLayers().repaint();
+                } else {
+                    peaLabel.setBounds(x, startY, 20, 20);
+                }
+            }
+        });
+        peaTimer.start();
+    }
+
+    private void generateSunSunflower(JPanel cell) {
 
         Point point = SwingUtilities.convertPoint(cell.getParent(), cell.getLocation(), view.getLayers());
         int x = point.x + (cell.getWidth() - 70) / 2;
@@ -334,25 +401,27 @@ public class GameController {
         return user;
     }
 
-    //private JLayeredPane layers;
-    //private static int zombieCount;
+    // private JLayeredPane layers;
+    // private static int zombieCount;
     private Random random = new Random();
     private ArrayList<Zombie> zombieList;
 
-    private void startSpawningZombies(){
+    private void startSpawningZombies() {
         Timer startTimer = new Timer(1000, e -> spawnZombie());
         Timer Brains = new Timer(10000, e -> playWavFile("view\\audio\\Groan_brains1.wav"));
         startTimer.start();
         Brains.start();
     }
+
     public void spawnZombie() {
         ImageIcon zombieIcon = new ImageIcon("view\\gifs\\Zombie80.gif");
-        //Image scaled = zombieIcon.getImage();//.getScaledInstance(70, 70, Image.SCALE_SMOOTH);
-        //zombieIcon = new ImageIcon(scaled);
+        // Image scaled = zombieIcon.getImage();//.getScaledInstance(70, 70,
+        // Image.SCALE_SMOOTH);
+        // zombieIcon = new ImageIcon(scaled);
 
         JLabel zombieLabel = new JLabel(zombieIcon);
         int yCoordinate;
-        switch(random.nextInt(5)) {
+        switch (random.nextInt(5)) {
             case 0:
                 yCoordinate = 75;
                 break;
@@ -374,7 +443,7 @@ public class GameController {
         }
 
         int startX = 800;
-        zombieLabel.setBounds(startX, yCoordinate,zombieIcon.getIconWidth(), zombieIcon.getIconHeight());
+        zombieLabel.setBounds(startX, yCoordinate, zombieIcon.getIconWidth(), zombieIcon.getIconHeight());
         view.addZombie(zombieLabel);
         zombieList.add(new NormalZombie());
 
@@ -383,27 +452,27 @@ public class GameController {
             int x = startX;
 
             @Override
-            public void actionPerformed(ActionEvent e){
-                
+            public void actionPerformed(ActionEvent e) {
+
                 x -= .2;
                 if (x < -100) {
-                    ((Timer)e.getSource()).stop();
+                    ((Timer) e.getSource()).stop();
                 }
                 zombieLabel.setBounds(x, yCoordinate, zombieIcon.getIconWidth(), zombieIcon.getIconHeight());
 
-               
                 int boardX = 110;
                 int boardY = 100;
-                int tileWidth = 77;  
-                int tileHeight = 90; 
-                int zombieX = (int)x - boardX;
+                int tileWidth = 77;
+                int tileHeight = 90;
+                int zombieX = (int) x - boardX;
                 int zombieY = yCoordinate + 100 - boardY;
                 int col = zombieX / tileWidth;
                 int row = zombieY / tileHeight;
                 if (row >= 0 && row < 5 && col >= 0 && col < 9) {
                     int displayCol = col + 1;
                     int displayRow = row + 1;
-                    //System.out.println("Zombie is on tile: (" + displayCol + "," + displayRow + ")");
+                    // System.out.println("Zombie is on tile: (" + displayCol + "," + displayRow +
+                    // ")");
                 }
             }
         });
@@ -415,29 +484,29 @@ public class GameController {
             // Get the audio file
             File audioFile = new File(filePath);
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
-            
+
             // Get audio format
             AudioFormat format = audioStream.getFormat();
-            
+
             // Create data line info
             DataLine.Info info = new DataLine.Info(Clip.class, format);
-            
+
             // Check if system supports the data line
             if (!AudioSystem.isLineSupported(info)) {
                 System.out.println("Line not supported");
                 return;
             }
-            
+
             // Get and open data line
             Clip audioClip = (Clip) AudioSystem.getLine(info);
             audioClip.open(audioStream);
-            
+
             // Start playing
             audioClip.start();
-            
+
             // Optional: Wait for the sound to finish
             // audioClip.drain();
-            
+
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }

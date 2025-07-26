@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 
 // import javafx.scene.effect.Light.Point;
 // import javafx.scene.shape.Rectangle;
@@ -36,7 +37,8 @@ public class GameView extends JFrame {
 
     JPanel board;
 
-    // ArrayList<JLabel> suns = new ArrayList<>();
+    JLayeredPane progress = new JLayeredPane();
+    JProgressBar progressBar = new JProgressBar();
 
     // JLabel shopLabel = new JLabel();
     // JLabel shopLabel = new JLabel();
@@ -64,6 +66,33 @@ public class GameView extends JFrame {
         ImageIcon peashooterPk = new ImageIcon(
                 "view\\assets\\PeashooterPack.png");
         ImageIcon cherryPk = new ImageIcon("view\\assets\\CherryPack.png");
+
+        progress.setBounds(bg.getIconWidth() - 300, 10, 250, 30);
+
+        progressBar.setBounds(0, 0, 250, 30);
+        progressBar.setMinimum(0);
+        progressBar.setMaximum(180);
+        progressBar.setValue(180);
+        progressBar.setForeground(Color.decode("#6AA84F"));
+        progressBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+
+        ImageIcon progressFlag1 = new ImageIcon("view\\assets\\Progress2.png");
+        JLabel flag1 = new JLabel(progressFlag1);
+        flag1.setBounds(200, 2, progressFlag1.getIconWidth(), progressFlag1.getIconHeight());
+        ImageIcon progressFlag2 = new ImageIcon("view\\assets\\Progress2.png");
+        JLabel flag2 = new JLabel(progressFlag2);
+        flag2.setBounds(130, 2, progressFlag1.getIconWidth(), progressFlag1.getIconHeight());
+        ImageIcon progressFlag3 = new ImageIcon("view\\assets\\Progress2.png");
+        JLabel flag3 = new JLabel(progressFlag3);
+        flag3.setBounds(50, 2, progressFlag1.getIconWidth(), progressFlag1.getIconHeight());
+
+        progress.add(flag1, Integer.valueOf(5));
+        progress.add(flag2, Integer.valueOf(5));
+        progress.add(flag3, Integer.valueOf(5));
+
+        progress.add(progressBar, Integer.valueOf(1));
+
+        layers.add(progress, Integer.valueOf(5));
 
         board = new JPanel(new GridLayout(5, 9, 5, 7));
         board.setBounds(110, 100, 700, 450);
@@ -104,7 +133,8 @@ public class GameView extends JFrame {
         cherryPack.setIcon(cherryPk);
         cherryPack.setBounds(173, 5, cherryPk.getIconWidth(), cherryPk.getIconHeight());
 
-        // ShopListener listener = new ShopListener(peashooterPack, cherryPack, backGround);
+        // ShopListener listener = new ShopListener(peashooterPack, cherryPack,
+        // backGround);
         // sunflowerPack.addMouseListener(listener);
         // peashooterPack.addMouseListener(listener);
         // cherryPack.addMouseListener(listener);
@@ -197,11 +227,10 @@ public class GameView extends JFrame {
         return gridCells;
     }
 
-    public JPanel getZombieLayer(){
-        return layers.get
+    public JProgressBar getProgressBar() {
+        return progressBar;
     }
 
-    
     public static void main(String[] args) {
         new GameView();
     }
