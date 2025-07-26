@@ -292,22 +292,22 @@ public class GameView extends JFrame {
         try {
             customFont = Font
                     .createFont(Font.TRUETYPE_FONT,
-                            new File("C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\Chalkboard.ttc"))
+                            new File("view\\assets\\Chalkboard.ttc"))
                     .deriveFont(18f);
             sunCount.setFont(customFont);
         } catch (FontFormatException e) {
         } catch (IOException e) {
         }
 
-        ImageIcon icon = new ImageIcon("C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\logo.png");
+        ImageIcon icon = new ImageIcon("view\\assets\\logo.png");
         ImageIcon bg = new ImageIcon(
-                "C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\PC Computer - Plants vs Zombies - Day.png");
+                "view\\assets\\PC Computer - Plants vs Zombies - Day.png");
         ImageIcon shop = new ImageIcon("C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\shop border.png");
         ImageIcon sunflowerPk = new ImageIcon(
-                "C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\SunflowerPack.png");
+                "view\\assets\\SunflowerPack.png");
         ImageIcon peashooterPk = new ImageIcon(
-                "C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\PeashooterPack.png");
-        ImageIcon cherryPk = new ImageIcon("C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\CherryPack.png");
+                "view\\assets\\PeashooterPack.png");
+        ImageIcon cherryPk = new ImageIcon("view\\assets\\CherryPack.png");
 
         board = new JPanel(new GridLayout(5, 9, 5, 7));
         board.setBounds(110, 100, 700, 450);
@@ -395,6 +395,11 @@ public class GameView extends JFrame {
 
     public void addSun(JLabel sun) {
         layers.add(sun, Integer.valueOf(5));
+        layers.repaint();
+    }
+
+    public void addZombie(JLabel zombie) {
+        layers.add(zombie, Integer.valueOf(5));
         layers.repaint();
     }
 

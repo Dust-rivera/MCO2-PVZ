@@ -4,7 +4,7 @@
 //  * Controller class that manages the interaction between the model and view
 //  * @author Deveza, Jerry King 
 //  * @author Rivera, Dustine Gian
-//  * @version 2.0
+//  * @version 3.0
 //  */
 // import model.*;
 // import view.*;
@@ -185,16 +185,24 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import java.awt.Image;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+
 //import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import model.Board;
+import model.NormalZombie;
 import model.User;
+import model.Zombie;
 import view.GameView;
 import view.ShopListener;
 import view.SunClickListener;
 
+import java.util.ArrayList;
 import java.util.Random;
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
 
 public class GameController{
 
@@ -205,8 +213,12 @@ public class GameController{
     GameView view = new GameView();
 
     public GameController(){
+        playSound("view\\audio\\Background.wav");
+        this.layers = view.getLayers();
+        this.zombieList = new ArrayList<>();
         view.updateSunCounter(user.getSunCount());
         startSunDrop();
+        startSpawningZombies();
         System.out.println(view.getHeight());
 
         JLabel sunflower = view.getSunflowerPack();
@@ -214,7 +226,7 @@ public class GameController{
         JLabel cherry = view.getCherryPack();
 
         // ADDED MULTIPLE MOUSE MOTION LISTENERS FOR THE SHOP LISTENER  
-        ShopListener shopListener = new ShopListener(sunflower, peashooter, cherry, view.getLayers(), view, this);
+        ShopListener shopListener = new ShopListener(sunflower, peashooter, cherry, view.getLayers(), this);
         sunflower.addMouseListener(shopListener);
         sunflower.addMouseMotionListener(shopListener);
         peashooter.addMouseListener(shopListener);
@@ -248,7 +260,7 @@ public class GameController{
     }
 
     private void spawnSun(){
-        ImageIcon sunIcon = new ImageIcon("C:\\Users\\river\\Desktop\\MCO2-PVZ-main BRANCH\\view\\assets\\Sun.png"); // replace path
+        ImageIcon sunIcon = new ImageIcon("view\\assets\\Sun.png"); // replace path
         Image scaled = sunIcon.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
         sunIcon = new ImageIcon(scaled);
 
@@ -287,4 +299,120 @@ public class GameController{
         return user;
     }
 
+    private JLayeredPane layers;
+    //private static int zombieCount;
+    private Random random = new Random();
+    private ArrayList<Zombie> zombieList;
+
+    private void startSpawningZombies(){
+        Timer startTimer = new Timer(1000, e -> spawnZombie());
+        Timer Brains = new Timer(10000, e -> playWavFile("view\\audio\\Groan_brains1.wav"));
+        startTimer.start();
+        Brains.start();
+    }
+    public void spawnZombie() {
+        ImageIcon zombieIcon = new ImageIcon("view\\gifs\\Flag1.gif");
+        // Image scaled = zombieIcon.getImage();//.getScaledInstance(70, 70, Image.SCALE_SMOOTH);
+        // zombieIcon = new ImageIcon(scaled);
+
+        JLabel zombieLabel = new JLabel(zombieIcon);
+        int yCoordinate;
+        switch(random.nextInt(5)) {
+            case 0:
+                yCoordinate = 75;
+                break;
+            case 1:
+                yCoordinate = 170;
+                break;
+            case 2:
+                yCoordinate = 260;
+                break;
+            case 3:
+                yCoordinate = 350;
+                break;
+            case 4:
+                yCoordinate = 440;
+                break;
+            default:
+                yCoordinate = 0;
+                break;
+        }
+
+        int startX = 800;
+        zombieLabel.setBounds(startX, yCoordinate,zombieIcon.getIconWidth(), zombieIcon.getIconHeight());
+        view.addZombie(zombieLabel);
+        zombieList.add(new NormalZombie());
+
+        Timer zombieWalking = new Timer(30, new ActionListener() {
+            int x = startX;
+
+            @Override
+            public void actionPerformed(ActionEvent e){
+                x -= .2;
+                if (x < -100) {
+                    ((Timer)e.getSource()).stop();
+                }
+                zombieLabel.setBounds(x, yCoordinate, zombieIcon.getIconWidth(), zombieIcon.getIconHeight());
+
+               
+                int boardX = 110;
+                int boardY = 100;
+                int tileWidth = 77;  
+                int tileHeight = 90; 
+                int zombieX = (int)x - boardX;
+                int zombieY = yCoordinate + 100 - boardY;
+                int col = zombieX / tileWidth;
+                int row = zombieY / tileHeight;
+                if (row >= 0 && row < 5 && col >= 0 && col < 9) {
+                    int displayCol = col + 1;
+                    int displayRow = row + 1;
+                    System.out.println("Zombie is on tile: (" + displayCol + "," + displayRow + ")");
+                }
+            }
+        });
+        zombieWalking.start();
+    }
+
+    public void playWavFile(String filePath) {
+        try {
+            // Get the audio file
+            File audioFile = new File(filePath);
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+            
+            // Get audio format
+            AudioFormat format = audioStream.getFormat();
+            
+            // Create data line info
+            DataLine.Info info = new DataLine.Info(Clip.class, format);
+            
+            // Check if system supports the data line
+            if (!AudioSystem.isLineSupported(info)) {
+                System.out.println("Line not supported");
+                return;
+            }
+            
+            // Get and open data line
+            Clip audioClip = (Clip) AudioSystem.getLine(info);
+            audioClip.open(audioStream);
+            
+            // Start playing
+            audioClip.start();
+            
+            // Optional: Wait for the sound to finish
+            // audioClip.drain();
+            
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void playSound(String filePath) {
+        try {
+            Clip clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(new File(filePath)));
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

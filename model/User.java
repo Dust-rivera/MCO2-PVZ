@@ -13,7 +13,7 @@ public class User {
      * This creates a User object
      */
     public User(){
-        sunCount = 50;
+        sunCount = 1500;
     }
     
     /**
