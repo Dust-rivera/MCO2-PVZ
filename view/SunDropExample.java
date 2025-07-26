@@ -23,7 +23,7 @@ public class SunDropExample extends JFrame {
 
         sunCounterLabel = new JLabel("0");
         sunCounterLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        sunCounterLabel.setBounds(20, 20, 100, 40);
+        sunCounterLabel.setBounds(20, 20, 100, 30);
         layers.add(sunCounterLabel, Integer.valueOf(10));
 
         // Spawn a sun every 5 seconds
@@ -34,7 +34,7 @@ public class SunDropExample extends JFrame {
     }
 
     private void spawnSun() {
-        ImageIcon sunIcon = new ImageIcon("view\\assets\\Sun_PvZ2.png"); // your sun image
+        ImageIcon sunIcon = new ImageIcon("C:\\Users\\devez\\Desktop\\MCO2-PVZ-main\\view\\assets\\Sun_PvZ2.png"); // your sun image
         Image scaled = sunIcon.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
         sunIcon = new ImageIcon(scaled);
 

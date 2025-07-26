@@ -10,9 +10,8 @@ import java.util.Random;
 public class Board {
 
     private Tile[][] board;
-    private int tickCount = 0; // aint usedd
+    private int tickCount = 0;
     private int secondsPassed = 0;
-    private User player;
     private ArrayList<Zombie> zombieList;
     private int sunCount = 0;
     private boolean finalWaveFlag = true;
@@ -30,7 +29,6 @@ public class Board {
      * @param col    the number of columns to be created
      */
     public Board(User player, int row, int col) {
-        this.player = player;
         this.zombieList = new ArrayList<>();
         numRows = row;
         numCols = col;
@@ -136,6 +134,10 @@ public class Board {
             }
         }
         return -1;
+    }
+
+    public Tile[][] getBoard() {
+        return board;
     }
 
     /**
@@ -253,7 +255,7 @@ public class Board {
      * This updates all the zombies on the board
      * in a certain amount of ticks
      */
-    public void moveZombies() {
+    /*public void moveZombies() {
         ArrayList<Zombie> zombiesToRemove = new ArrayList<>();
 
         for (Zombie zombie : zombieList) {
@@ -283,7 +285,7 @@ public class Board {
             if (plant != null) {
                 // Combat: zombie attacks plant
                 zombie.incrementAttackTick();
-                //plant.decreaseHealth(zombie.getDamage());
+                plant.decreaseHealth(zombie.getDamage());
                 zombie.resetAttackTick();
                 this.setMessage(
                         "Zombie at (" + (row + 1) + ", " + (col + 1) + ") attacked plant: " + plant.getHealth()
@@ -303,12 +305,12 @@ public class Board {
                     board[row][col - 1].addZombie(zombie);
                 }
                 // If path is blocked, zombie stays in place
-            }*/
+            }
         }
 
         // Remove all dead zombies from the main list
         zombieList.removeAll(zombiesToRemove);
-    }
+    }*/
 
     /**
      * This increases the sun count by one
@@ -320,25 +322,25 @@ public class Board {
     /**
      * This spawn a zombie on the board at the last column and on a random row
      */
-    public void spawnZombie() {
+    /*public void spawnZombie() {
         Random rand = new Random();
         int row = rand.nextInt(numRows);
-        //Zombie zombie = new Zombie(row);
-        //zombie.setYPosition(row);
-        //placeZombie(row, numCols - 1, zombie);
+        Zombie zombie = new Zombie(row);
+        zombie.setYPosition(row);
+        placeZombie(row, numCols - 1, zombie);
         if (!(secondsPassed >= 171 && secondsPassed <= 180)) {
             this.setMessage("Zombie spawned at (" + (row + 1) + ", 8) at time: " + secondsPassed);
         }
-    }
+    }*/
 
     /**
      * This spawns a wave of zombies on the board
      */
-    public void spawnWaveOfZombies() {
+    /*public void spawnWaveOfZombies() {
         for (int i = 0; i < numRows; i++) {
             spawnZombie();
         }
-    }
+    }*/
 
     /**
      * This places the zombie on the board given the zombie object, row, and column
@@ -359,20 +361,12 @@ public class Board {
      * @param col   the column in which the plant will be placed
      * @param plant the plant object to be placed on the board
      */
-    public void placePlant(int row, int col, Plant plant) {
-        if (!board[row][col].isPlantOccupied()) {
-            board[row][col].setPlant(plant);
-            player.buyPlant(plant.getCost());
-            this.setMessage("Placed plant at (" + (row + 1) + ", " + (col + 1) + ")");
-        } else {
-            this.setMessage("Tile (" + (row + 1) + ", " + (col + 1) + ") is already occupied.");
-        }
-    }
+    
 
     /**
      * This updates the board's logic every tick
      */
-    public void update() {
+    /*public void update() {
         tickCount++;
         secondsPassed++; // Increment every update to match GUI timer
 
@@ -403,15 +397,15 @@ public class Board {
             for (int c = 0; c < numCols; c++) {
                 Plant plant = board[r][c].getPlant();
                 if (plant != null) {
-                    //board[r][c].getPlant().update(this);
+                    board[r][c].getPlant().update(this);
                 }
             }
         }
 
-        // if (tickCount % Zombie.getSpeed() == 0) {
-        //     moveZombies();
-        // }
-    }
+        if (tickCount % Zombie.getSpeed() == 0) {
+            moveZombies();
+        }
+    }*/
 
     /**
      * This displays what the board look like
@@ -455,16 +449,16 @@ public class Board {
     }*/
 
     // Fix spawnZombie(int row) to use correct x/y
-    public void spawnZombie(int row) {
+    /*public void spawnZombie(int row) {
         int col = getCol() - 1; // far right column
         Tile tile = getTile(row, col);
         if (tile != null) {
-           // Zombie zombie = new Zombie(row); // row = yPosition
-            // zombie.setXPosition(col); // col = xPosition
-            // zombie.setYPosition(row); // row = yPosition
-            // //tile.addZombie(zombie);
-            // zombieList.add(zombie); // Add to global zombie list for updating
+            Zombie zombie = new Zombie(row); // row = yPosition
+            zombie.setXPosition(col); // col = xPosition
+            zombie.setYPosition(row); // row = yPosition
+            //tile.addZombie(zombie);
+            zombieList.add(zombie); // Add to global zombie list for updating
         }
-    }
+    }*/
 
 }

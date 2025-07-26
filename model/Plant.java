@@ -1,20 +1,26 @@
 /** Represents a Plant
  * @author Deveza, Jerry King 
  * @author Rivera, Dustine Gian
- * @version 2.0
+ * @version 1.0
  */
 
 package model;
-public abstract class Plant {
-    protected int xPosition;
-    protected int yPosition;
-    protected int cost;
-    protected int health;
-    protected int tick = 0;
-    protected int range;
-    protected int damage;
-    protected int dirDamage;
-    protected final int SPEED;
+public class Plant {
+    private int xPosition;
+    private int yPosition;
+    private int cost;
+    private int health;
+    private int tick = 0;
+    private int range;
+    private int damage;
+    private int dirDamage;
+    private final int SPEED;
+
+    public static final int SUNFLOWER_REGEN = 30;
+    public static final int PEASHOOTER_REGEN = 30;
+
+    public static int sunflowerCD = 0;
+    public static int peashooterCD = 0;
 
 
     /**
@@ -28,7 +34,7 @@ public abstract class Plant {
      * @param damage the amount of damage plant deals
      * @param dirDamage the amount of damage the plant deals close range
      */
-    public Plant(int cost, int health, int x, int y, int speed, int range, int damage, int dirDamage) {
+    public Plant(int cost, int health, int x, int y, int speed, int range, int damage, int dirDamage){
         xPosition = x;
         yPosition = y;
         this.cost = cost;
@@ -39,13 +45,27 @@ public abstract class Plant {
         this.dirDamage = dirDamage;
     }
 
-    // /**
-    //  * This updates the plant
-    //  * @param board the board object to be updated
-    //  */
-    // public abstract void update(Board board){    
-    // }
-    public abstract void plantTurn(Board board);
+    /**
+     * This updates the plant
+     * @param board the board object to be updated
+     */
+    public void update(Board board){}
+
+    /**
+     * This gets the peashooter's cooldown time
+     * @return an integer containing the peashooter's cooldown time
+     */
+    public static int getPeashooterCD() {
+        return peashooterCD;
+    }
+
+    /**
+     * This gets the sunflower's cooldown time
+     * @return an integer containing the sunflower's cooldown time
+     */
+    public static int getSunflowerCD() {
+        return sunflowerCD;
+    }
 
     /**
      * This gets the cost of the plant
@@ -149,23 +169,4 @@ public abstract class Plant {
     public boolean isDead(){
         return health <= 0;
     }
-    /**
-     * This gets the plant's cooldown time
-     * @return an integer containing the plant's cooldown time
-     */
-    // public int getcoolDown() {
-    //     return cooldown;
-    // }
-
-    // public void setCooldown(int cooldown) {
-    //     this.cooldown = cooldown;
-    // }
-    /**
-     * This gets the plant's regeneration rate
-     * @return an integer containing the plant's regeneration rate
-     */
-    // public int getRegen() {
-    //     return REGEN;
-    // }
-
 }

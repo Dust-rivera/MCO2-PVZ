@@ -13,7 +13,7 @@ public class User {
      * This creates a User object
      */
     public User(){
-        sunCount = 1500;
+        sunCount = 500;
     }
     
     /**
@@ -55,7 +55,7 @@ public class User {
      */
     public void collectSun(Board board){
         board.setSun();
-        sunCount += (25);
+        sunCount += 25;
 
     }
 }
