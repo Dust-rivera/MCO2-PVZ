@@ -5,6 +5,8 @@
  */
 package model;
 import java.util.Random;
+
+import javax.swing.JLabel;
 public abstract class Zombie {
 
     protected int xPosition;
@@ -13,6 +15,8 @@ public abstract class Zombie {
     protected int attackTick; 
     protected int damage;
     protected int speed;
+    protected JLabel label;
+    protected int row; // Added row field
     
 
     /**
@@ -26,6 +30,13 @@ public abstract class Zombie {
         this.xPosition = 8; 
         this.health = health;
         this.attackTick = attackTick;
+    }
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
     }
 
     /**
@@ -82,6 +93,14 @@ public abstract class Zombie {
      */
     public void takeDamage(int damage){
         health -= damage;
+        if (isDead() && label != null) {
+            label.getParent().remove(label);
+            label = null;
+        }
+    }
+
+    public JLabel getLabel() {
+        return label;
     }
 
     /**
@@ -128,4 +147,12 @@ public abstract class Zombie {
     // public int getSpeed() {
     //     return speed;
     // }
+    /**
+     * This sets the JLabel linked to the zombie
+     * @param label the JLabel displaying the zombie
+     */
+    public void setLabel(JLabel label) {
+        this.label = label;
+    }
+
 }

@@ -43,7 +43,6 @@ import controller.GameController;
 public class SunClickListener implements MouseListener{
 
     JLabel sunLabel;
-    int count = 0;
     GameController controller;
 
     public SunClickListener(JLabel sunLabel, GameController controller){
@@ -54,11 +53,7 @@ public class SunClickListener implements MouseListener{
     @Override
     public void mouseClicked(MouseEvent e) {
         // TODO Auto-generated method stub
-        controller.getView().removeSun(sunLabel);
-        controller.getUser().collectSun(controller.getBoard());
-        controller.getView().updateSunCounter(controller.getUser().getSunCount());
-        
-        System.out.println(controller.getUser().getSunCount());
+        controller.sunClick(sunLabel);
         // throw new UnsupportedOperationException("Unimplemented method 'mouseClicked'");
     }
 
