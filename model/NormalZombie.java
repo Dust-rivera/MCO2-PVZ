@@ -13,11 +13,12 @@ public class NormalZombie extends Zombie implements ZombieMechanics {
         super(70, 0, NORMAL_DAMAGE, NORMAL_SPEED); 
     }
 
-    public static  int getDamage() {
+    @Override
+    public int getDamage() {
         return NORMAL_DAMAGE;
     }
-
-    public static int getSpeed() {
+    @Override
+    public int getSpeed() {
         return NORMAL_SPEED;
     }
 

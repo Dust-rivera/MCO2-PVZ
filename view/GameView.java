@@ -1,15 +1,18 @@
 package view;
 
 import java.awt.Image;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -31,6 +34,14 @@ public class GameView extends JFrame {
     JLabel peashooterPack = new JLabel();
     JLabel cherryPack = new JLabel();
 
+    JLabel shovel = new JLabel();
+
+    CardLayout cardLayout = new CardLayout();
+    JPanel container = new JPanel(cardLayout);
+    JButton lvl1 = new JButton("Level 1");
+    JButton lvl2 = new JButton("Level 2");
+    JButton lvl3 = new JButton("Level 3");
+
     public JPanel[][] gridCells = new JPanel[5][9];
 
     Font customFont;
@@ -46,6 +57,29 @@ public class GameView extends JFrame {
     JLayeredPane layers = new JLayeredPane();
 
     public GameView() {
+
+        ImageIcon menuBg = new ImageIcon("view\\assets\\PvZMenu.jpg");
+        JPanel menu = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(menuBg.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        menu.setLayout(null);
+        
+        lvl1.setBounds(200, 300, 100, 50);
+        lvl1.setForeground(Color.GRAY);
+        lvl2.setBounds(400, 300, 100, 50);
+        lvl2.setForeground(Color.GRAY);
+        lvl3.setBounds(600, 300, 100, 50);
+        lvl3.setForeground(Color.GRAY);
+
+        menu.add(lvl1);
+        menu.add(lvl2);
+        menu.add(lvl3);
+
+        container.add(menu, "Menu");
 
         try {
             customFont = Font
@@ -66,6 +100,10 @@ public class GameView extends JFrame {
         ImageIcon peashooterPk = new ImageIcon(
                 "view\\assets\\PeashooterPack.png");
         ImageIcon cherryPk = new ImageIcon("view\\assets\\CherryPack.png");
+
+        ImageIcon shovelPic = new ImageIcon("view\\assets\\Shovel2.png");
+        shovel.setIcon(shovelPic);
+        shovel.setBounds(shop.getIconWidth() + 5, 10, shovelPic.getIconWidth(), shovelPic.getIconHeight());
 
         progress.setBounds(bg.getIconWidth() - 300, 10, 250, 30);
 
@@ -94,7 +132,7 @@ public class GameView extends JFrame {
 
         layers.add(progress, Integer.valueOf(5));
 
-        board = new JPanel(new GridLayout(5, 9, 5, 7));
+        board = new JPanel(new GridLayout(5, 9));
         board.setBounds(110, 100, 700, 450);
         board.setBackground(Color.GREEN);
         // board.setVisi(true);
@@ -145,7 +183,7 @@ public class GameView extends JFrame {
         shopLabel.setIcon(shop);
         shopLabel.setBounds(5, 0, shop.getIconWidth(), shop.getIconHeight());
 
-        sunflowerPack.setOpaque(true);
+        // sunflowerPack.setOpaque(true);
 
         layers.add(backGround, Integer.valueOf(0));
         layers.add(shopLabel, Integer.valueOf(1));
@@ -153,17 +191,26 @@ public class GameView extends JFrame {
         layers.add(peashooterPack, Integer.valueOf(2));
         layers.add(cherryPack, Integer.valueOf(2));
         layers.add(sunCount, Integer.valueOf(2));
+        layers.add(shovel, Integer.valueOf(2));
         layers.add(board, Integer.valueOf(3));
 
+        container.add(layers, "Game1");
+
+        cardLayout.show(container, "Menu");
+
+        this.add(container);
         this.setIconImage(icon.getImage());
         this.setTitle("Plants vs. Zombies");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setSize(bg.getIconWidth(), bg.getIconHeight());
-        this.setLayout(null);
+        //this.setLayout(null);
         this.setLocationRelativeTo(null);
+        this.setSize(881, 600);
         this.setVisible(true);
-        this.add(layers);
+        
+
+        
     }
 
     // public void drawSunCount(Graphics2D g){
@@ -229,6 +276,30 @@ public class GameView extends JFrame {
 
     public JProgressBar getProgressBar() {
         return progressBar;
+    }
+
+    public JLabel getShovel() {
+        return shovel;
+    }
+
+    public JButton getLvl1() {
+        return lvl1;
+    }
+
+    public JButton getLvl2() {
+        return lvl2;
+    }
+
+    public JButton getLvl3() {
+        return lvl3;
+    }
+
+    public CardLayout getCardLayout() {
+        return cardLayout;
+    }
+
+    public JPanel getContainerP() {
+        return container;
     }
 
     public static void main(String[] args) {

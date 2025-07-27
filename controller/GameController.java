@@ -15,6 +15,8 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+
 import java.awt.Image;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,7 +35,9 @@ import model.Peashooter;
 import model.User;
 import model.Zombie;
 import view.GameView;
+import view.MenuListener;
 import view.ShopListener;
+import view.ShovelListener;
 import view.SunClickListener;
 
 import java.util.ArrayList;
@@ -47,12 +51,19 @@ public class GameController {
     JLabel sunflower;
     JLabel peashooter;
     JLabel cherry;
+    JLabel shovel;
     private JLabel drag = new JLabel();
     private int offsetX, offsetY;
     ImageIcon image;
     Point initialCLick;
     int plantSelect;
     int gameTime = 180;
+
+    JButton lvl1;
+    JButton lvl2;
+    JButton lvl3;
+
+    boolean wave = false;
 
     User user = new User();
 
@@ -61,16 +72,8 @@ public class GameController {
     GameView view = new GameView();
 
     public GameController() {
-        playSound("view\\audio\\Background.wav");
-        view.updateSunCounter(user.getSunCount());
-        startSunDrop();
-        startSpawningZombies();
-        this.zombieList = new ArrayList<>();
-        System.out.println(view.getHeight());
 
-        progress();
-
-        shop();
+        menu();
 
         // board.getSunflowerPack();
 
@@ -89,16 +92,150 @@ public class GameController {
         });
     }
 
+    private void menu() {
+        lvl1 = view.getLvl1();
+        lvl2 = view.getLvl2();
+        lvl3 = view.getLvl3();
+
+        MenuListener menuListener = new MenuListener(this);
+        lvl1.addActionListener(menuListener);
+        lvl2.addActionListener(menuListener);
+        lvl3.addActionListener(menuListener);
+    }
+
+    public void lvlSelect(ActionEvent e) {
+        Object source = e.getSource();
+
+        if (source == lvl1) {
+            view.getCardLayout().show(view.getContainerP(), "Game1");
+            playSound("view\\audio\\Background.wav");
+            view.updateSunCounter(user.getSunCount());
+            startSunDrop();
+            // startSpawningZombies();
+            this.zombieList = new ArrayList<>();
+            this.zombieLabels = new ArrayList<>();
+            System.out.println(view.getHeight());
+            progress();
+            shop();
+            shovel();
+        }
+    }
+
+    private void shovel() {
+        shovel = view.getShovel();
+
+        ShovelListener shovelListener = new ShovelListener(this);
+        shovel.addMouseListener(shovelListener);
+        shovel.addMouseMotionListener(shovelListener);
+    }
+
+    public void elementPressed(ImageIcon image, MouseEvent e){
+        if (image != null) {
+            drag = new JLabel(image);
+
+            // Get mouse position relative to layered pane
+            Point point = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view.getLayers());
+
+            drag.setBounds(point.x - image.getIconWidth() / 2,
+                    point.y - image.getIconHeight() / 2,
+                    image.getIconWidth(), image.getIconHeight());
+
+            view.getLayers().add(drag, Integer.valueOf(3));
+            view.getLayers().repaint();
+            offsetX = point.x - drag.getX();
+            offsetY = point.y - drag.getY();
+            this.image = image; // used in mouse released
+        }
+    }
+
+    public void shovelPressed(MouseEvent e) {
+
+        ImageIcon image = null;
+
+        image = new ImageIcon("view\\assets\\Shovel1.png");
+
+        elementPressed(image, e);
+        
+    }
+
+    public void shovelReleased(MouseEvent e) {
+        if (drag != null) {
+            JPanel grid = null;
+            for (int i = 0; i < view.getLayers().getComponentCount(); i++) {
+                if (view.getLayers().getComponent(i) instanceof JPanel
+                        && view.getLayers().getComponent(i).getBounds().width == 700
+                        && view.getLayers().getComponent(i).getBounds().height == 450) { // this is the board
+                    grid = (JPanel) view.getLayers().getComponent(i);
+                    break;
+                }
+            }
+            if (board != null && this.getView() != null) {
+                Point mousePoint = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), grid);
+                int[] indices = new int[2];
+                JPanel cell = getCellAtPoint(mousePoint, indices);
+                System.out.println(indices[0]);
+                System.out.println(indices[1]);
+                if (cell != null && board.getTile(indices[0], indices[1]).isPlantOccupied()) {
+
+                    removePlant(indices, cell);
+                }
+            }
+            view.getLayers().remove(drag);
+            view.getLayers().repaint();
+            drag = null;
+        }
+    }
+
+    private void removePlant(int[] indices, JPanel cell) {
+
+        board.getBoard()[indices[0]][indices[1]].removePlant();
+        cell.removeAll();
+        cell.revalidate();
+        cell.repaint();
+
+        board.getTile(indices[0], indices[1]).toS();
+        System.out.println(board.getTile(indices[0], indices[1]).isPlantOccupied());
+    }
+
     private void progress() {
 
-        Timer timer = new Timer(1000, e -> decreaseTime());
+        Timer timer = new Timer(100, e -> decreaseTime());
         timer.start();
     }
 
     private void decreaseTime() {
         gameTime--;
         view.getProgressBar().setValue(gameTime);
-        //view.getLayers().repaint();
+        // view.getLayers().repaint();
+
+        if (gameTime >= 100 && gameTime < 150 && gameTime % 10 == 0) {
+            spawnZombie();
+        } else if (gameTime >= 40 && gameTime <= 100 && gameTime % 5 == 0) {
+            spawnZombie();
+        } else if (gameTime > 10 && gameTime <= 40 && gameTime % 3 == 0) {
+            spawnZombie();
+        } else if (gameTime < 10 && !wave) {
+            wave = true;
+            spawnWave();
+        } else if (gameTime == 0) {
+            // finalWaveFlag = false;
+            // this.setMessage("A wave of zombies has appeared");
+            // spawnWaveOfZombies();
+            System.out.println("Game Finished");
+            System.exit(0);
+        }
+
+        // if(gameTime == 170){
+        // System.out.println("Game Finished");
+        // System.exit(0);
+        // }
+
+    }
+
+    private void spawnWave() {
+        for (int i = 0; i < 7; i++) {
+            spawnZombie();
+        }
     }
 
     private void shop() {
@@ -132,27 +269,7 @@ public class GameController {
             plantSelect = 2;
         }
 
-        if (image != null) {
-            // Resize image
-            // Image img = image.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-            // image = new ImageIcon(img);
-
-            // Create new draggable JLabel
-            drag = new JLabel(image);
-
-            // Get mouse position relative to layered pane
-            Point point = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view.getLayers());
-
-            drag.setBounds(point.x - image.getIconWidth() / 2,
-                    point.y - image.getIconHeight() / 2,
-                    image.getIconWidth(), image.getIconHeight());
-
-            view.getLayers().add(drag, Integer.valueOf(2));
-            view.getLayers().repaint();
-            offsetX = point.x - drag.getX();
-            offsetY = point.y - drag.getY();
-            this.image = image; // used in mouse released
-        }
+        elementPressed(image, e);
     }
 
     public void shopReleased(MouseEvent e) {
@@ -172,7 +289,7 @@ public class GameController {
                 JPanel cell = getCellAtPoint(mousePoint, indices);
                 System.out.println(indices[0]);
                 System.out.println(indices[1]);
-                if (cell != null || !board.getTile(indices[0], indices[1]).isPlantOccupied()) {
+                if (cell != null && !board.getTile(indices[0], indices[1]).isPlantOccupied()) {
                     if (plantSelect == 0) {
                         Sunflower p = new Sunflower(indices[0], indices[1]);
                         placePlant(indices, p, cell);
@@ -194,7 +311,6 @@ public class GameController {
     private void placePlant(int[] indices, Plant p, JPanel cell) {
         if (user.getSunCount() >= p.getCost()) {
 
-            view.updateSunCounter(user.getSunCount());
             board.getBoard()[indices[0]][indices[1]].setPlant(p);
             user.buyPlant(p.getCost());
             JLabel plant = new JLabel(image);
@@ -202,8 +318,9 @@ public class GameController {
             cell.revalidate();
             cell.repaint();
             board.getTile(indices[0], indices[1]).toS();
-
+            view.updateSunCounter(user.getSunCount());
             plantUpdate(p, cell);
+            System.out.println(board.getTile(indices[0], indices[1]).isPlantOccupied());
 
         } else {
             p = null;
@@ -232,7 +349,7 @@ public class GameController {
         }
 
         if (row != -1 && isZombieInSameRow(row, cell.getX())) {
-            shootPea(cell);
+            shootPea(cell, row);
         }
     }
 
@@ -273,7 +390,7 @@ public class GameController {
             return 4;
     }
 
-    private void shootPea(JPanel cell) {
+    private void shootPea(JPanel cell, int row) {
         ImageIcon peaIcon = new ImageIcon("view\\assets\\Pea_p.png");
         JLabel peaLabel = new JLabel(peaIcon);
 
@@ -285,18 +402,62 @@ public class GameController {
         peaLabel.setBounds(startX, startY, 20, 20);
         view.getLayers().add(peaLabel, Integer.valueOf(3));
 
+        Zombie target = null;
+        for (Zombie zombie : zombieList) {
+            
+            if (!zombie.isDead() && zombie.getYPosition() == row && zombie.getXPosition() > startX) {
+                target = zombie;
+                break;
+            }
+        }
+        //if (target == null) return;
+
+    
+        Zombie lockedZombie = target;
+
         Timer peaTimer = new Timer(20, new ActionListener() {
             int x = startX;
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 x += 5;
-                if (x > view.getWidth()) {
+
+                // Only attack locked zombie
+                //System.out.println("tite " + lockedZombie.isDead());
+                System.out.println("TITE " + Math.abs(lockedZombie.getXPosition() - x));
+
+                if (!lockedZombie.isDead() && Math.abs(lockedZombie.getXPosition() - x) <= 5) {
+                    lockedZombie.takeDamage(20);
+                    ImageIcon explosion = new ImageIcon("view\\assets\\peax.png");
+                    peaLabel.setIcon(explosion);
+                    int explosionWidth = explosion.getIconWidth();
+                    int explosionHeight = explosion.getIconHeight();
+                    peaLabel.setBounds(x - explosionWidth / 2, startY - explosionHeight / 2, explosionWidth, explosionHeight);
+                    ((Timer) e.getSource()).stop();
+                    
+                    new Timer(100, evt -> {
+                        view.getLayers().remove(peaLabel);
+                        view.getLayers().repaint();
+                    }).start();
+    
+                    if (lockedZombie.isDead()) {
+                        int index = zombieList.indexOf(lockedZombie);
+                        System.out.println("zombie tite " + lockedZombie);
+                        System.out.println("zombie index " + zombieLabels.get(index));
+                        view.getLayers().remove(zombieLabels.get(index));
+                        view.getLayers().repaint();
+                        zombieList.remove(lockedZombie);
+                    }
+                    return;
+                }
+
+                if (x > view.getLayers().getWidth()) {
                     ((Timer) e.getSource()).stop();
                     view.getLayers().remove(peaLabel);
                     view.getLayers().repaint();
                 } else {
                     peaLabel.setBounds(x, startY, 20, 20);
+                    view.getLayers().repaint();
                 }
             }
         });
@@ -382,7 +543,7 @@ public class GameController {
         fallTimer.start();
     }
 
-    public void shopDrag(MouseEvent e) {
+    public void imgDrag(MouseEvent e) {
         if (drag != null) {
             Point p = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), view.getLayers());
             drag.setLocation(p.x - offsetX, p.y - offsetY);
@@ -405,12 +566,59 @@ public class GameController {
     // private static int zombieCount;
     private Random random = new Random();
     private ArrayList<Zombie> zombieList;
+    private ArrayList<JLabel> zombieLabels;
 
-    private void startSpawningZombies() {
-        Timer startTimer = new Timer(1000, e -> spawnZombie());
-        Timer Brains = new Timer(10000, e -> playWavFile("view\\audio\\Groan_brains1.wav"));
-        startTimer.start();
-        Brains.start();
+    /*
+     * private void startSpawningZombies() {
+     * Timer startTimer = new Timer(1000, e -> spawnZombie());
+     * Timer Brains = new Timer(10000, e ->
+     * playWavFile("view\\audio\\Groan_brains1.wav"));
+     * startTimer.start();
+     * Brains.start();
+     * }
+     */
+
+     private void eatPlant(Zombie zombie, Timer walkTimer) {
+
+        System.out.println(walkTimer);
+
+        int index = zombieList.indexOf(zombie);
+        int row = zombie.getYPosition();
+        int zombieX = (int) zombie.getXPosition();
+    
+        for (int col = 0; col < 9; col++) {
+            Plant plant = board.getTile(row, col).getPlant();
+            if (plant != null) {
+                JPanel cell = view.getGridCells()[row][col];
+                Point cellPoint = SwingUtilities.convertPoint(cell.getParent(), cell.getLocation(), view.getLayers());
+                int cellX = cellPoint.x;
+    
+                if (Math.abs(cellX - zombieX) <= 40) {
+                    walkTimer.stop();
+                    JLabel zombieLabel = zombieLabels.get(index);
+                    zombieLabel.setIcon(new ImageIcon("view/gifs/NormalZombieEating.gif"));
+    
+                    final int capturedCol = col;
+                    Timer eatTimer = new Timer(800, null);
+                    eatTimer.addActionListener(evt -> {
+                        plant.decreaseHealth(zombie.getDamage());
+    
+                        if (plant.isDead()) {
+                            eatTimer.stop();
+                            board.getTile(row, capturedCol).removePlant();
+                            cell.removeAll();
+                            cell.revalidate();
+                            cell.repaint();
+    
+                            zombieLabel.setIcon(new ImageIcon("view/gifs/Zombie80.gif"));
+                            walkTimer.start();
+                        }
+                    });
+                    eatTimer.start();
+                    break;
+                }
+            }
+        }
     }
 
     public void spawnZombie() {
@@ -419,33 +627,33 @@ public class GameController {
         // Image.SCALE_SMOOTH);
         // zombieIcon = new ImageIcon(scaled);
 
+        NormalZombie zombie = new NormalZombie();
+
         JLabel zombieLabel = new JLabel(zombieIcon);
         int yCoordinate;
-        switch (random.nextInt(5)) {
-            case 0:
-                yCoordinate = 75;
-                break;
-            case 1:
-                yCoordinate = 170;
-                break;
-            case 2:
-                yCoordinate = 260;
-                break;
-            case 3:
-                yCoordinate = 350;
-                break;
-            case 4:
-                yCoordinate = 440;
-                break;
-            default:
-                yCoordinate = 0;
-                break;
+        int row = random.nextInt(5);
+        switch (row) {
+            case 0: yCoordinate = 75; break;
+            case 1: yCoordinate = 170; break;
+            case 2: yCoordinate = 260; break;
+            case 3: yCoordinate = 350; break;
+            case 4: yCoordinate = 440; break;
+            default: yCoordinate = 0; break;
         }
 
         int startX = 800;
+
+        zombie.setXPosition(startX);
+        zombie.setYPosition(row);
         zombieLabel.setBounds(startX, yCoordinate, zombieIcon.getIconWidth(), zombieIcon.getIconHeight());
         view.addZombie(zombieLabel);
-        zombieList.add(new NormalZombie());
+
+        zombieLabels.add(zombieLabel);
+        zombieList.add(zombie);
+
+        //System.out.println(zombieLabels.get(0));
+        //System.out.println(zombieList.get(0));
+        Timer[] zombieWalkingRef = new Timer[1];
 
         Timer zombieWalking = new Timer(30, new ActionListener() {
 
@@ -455,27 +663,36 @@ public class GameController {
             public void actionPerformed(ActionEvent e) {
 
                 x -= .2;
-                if (x < -100) {
+                if (x == 0) {
                     ((Timer) e.getSource()).stop();
+                    int index = zombieList.indexOf(zombie);
+                    //System.out.println("zombie index " + zombie);
+                    //System.out.println("zombie index " + zombieLabels.get(index));
+                    view.getLayers().remove(zombieLabels.get(index));
+                    zombieLabels.remove(index);
+                    zombieList.remove(zombie);
+                    view.getLayers().repaint();
                 }
+                zombie.setXPosition(x);
                 zombieLabel.setBounds(x, yCoordinate, zombieIcon.getIconWidth(), zombieIcon.getIconHeight());
-
-                int boardX = 110;
-                int boardY = 100;
-                int tileWidth = 77;
-                int tileHeight = 90;
-                int zombieX = (int) x - boardX;
-                int zombieY = yCoordinate + 100 - boardY;
-                int col = zombieX / tileWidth;
-                int row = zombieY / tileHeight;
-                if (row >= 0 && row < 5 && col >= 0 && col < 9) {
-                    int displayCol = col + 1;
-                    int displayRow = row + 1;
-                    // System.out.println("Zombie is on tile: (" + displayCol + "," + displayRow +
-                    // ")");
-                }
+                eatPlant(zombie, zombieWalkingRef[0]);
+                // int boardX = 110;
+                // int boardY = 100;
+                // int tileWidth = 77;
+                // int tileHeight = 90;
+                // int zombieX = (int) x - boardX;
+                // int zombieY = yCoordinate + 100 - boardY;
+                // int col = zombieX / tileWidth;
+                // int row = zombieY / tileHeight;
+                // if (row >= 0 && row < 5 && col >= 0 && col < 9) {
+                //     int displayCol = col + 1;
+                //     int displayRow = row + 1;
+                //     // System.out.println("Zombie is on tile: (" + displayCol + "," + displayRow +
+                //     // ")");
+                
             }
         });
+        zombieWalkingRef[0] = zombieWalking;
         zombieWalking.start();
     }
 

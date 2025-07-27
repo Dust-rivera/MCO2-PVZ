@@ -12,10 +12,11 @@ public class ConeheadZombie extends Zombie implements ZombieMechanics {
     public ConeheadZombie(int yPosition) {
         super(140, 0, CONEHEAD_DAMAGE, CONEHEAD_SPEED);
     }
-    public static  int getDamage() {
+
+    public int getDamage() {
         return CONEHEAD_DAMAGE;
     }
-    public static int getSpeed() {
+    public int getSpeed() {
         return CONEHEAD_SPEED;
     }
 } 

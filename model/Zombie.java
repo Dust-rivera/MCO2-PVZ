@@ -23,7 +23,7 @@ public abstract class Zombie {
 
         Random random = new Random();
         this.yPosition = random.nextInt(5);
-        this.xPosition = 8; 
+        this.xPosition = 800; 
         this.health = health;
         this.attackTick = attackTick;
     }
@@ -114,6 +114,10 @@ public abstract class Zombie {
     public boolean isDead() {
         return health <= 0;
     }
+
+    public abstract int getDamage();
+    public abstract int getSpeed();
+
     // /**
     //  * This gets the zombie's damage
     //  * @return an integer containing the zombie's damage
@@ -128,4 +132,6 @@ public abstract class Zombie {
     // public int getSpeed() {
     //     return speed;
     // }
+
+    
 }
