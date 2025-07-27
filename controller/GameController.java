@@ -442,6 +442,46 @@ public class GameController {
         Brains.start();
     } 
 
+    private void eatPlant(Zombie zombie, Timer walkTimer) {
+        int row = zombie.getYPosition();
+        int zombieX = (int) zombie.getXPosition();
+    
+        for (int col = 0; col < 9; col++) {
+            Plant plant = board.getTile(row, col).getPlant();
+            if (plant != null) {
+                JPanel cell = view.getGridCells()[row][col];
+                Point cellPoint = SwingUtilities.convertPoint(cell.getParent(), cell.getLocation(), view.getLayers());
+                int cellX = cellPoint.x;
+    
+                if (Math.abs(cellX - zombieX) <= 7) {
+                    walkTimer.stop();
+                    JLabel zombieLabel = zombie.getLabel();
+                    zombieLabel.setIcon(new ImageIcon("view/gifs/NormalZombieEating.gif"));
+    
+                    final int capturedCol = col;
+                    Timer eatTimer = new Timer(800, null);
+                    eatTimer.addActionListener(evt -> {
+                        plant.decreaseHealth(zombie.getDamage());
+    
+                        if (plant.isDead()) {
+                            eatTimer.stop();
+                            board.getTile(row, capturedCol).removePlant();
+                            cell.removeAll();
+                            cell.revalidate();
+                            cell.repaint();
+    
+                            zombieLabel.setIcon(new ImageIcon("view/gifs/Zombie80.gif"));
+                            walkTimer.start();
+                        }
+                    });
+                    eatTimer.start();
+                    break;
+                }
+            }
+        }
+    }
+    
+    
     public void spawnZombie() {
         ImageIcon zombieIcon = new ImageIcon("view\\gifs\\Zombie80.gif");
         NormalZombie zombie = new NormalZombie();
@@ -465,6 +505,7 @@ public class GameController {
         
         view.addZombie(zombieLabel);
         zombieList.add(zombie);
+        Timer[] zombieWalkingRef = new Timer[1];
         Timer zombieWalking = new Timer(30, new ActionListener() {
 
             int x = startX;
@@ -487,23 +528,10 @@ public class GameController {
                 }
                 zombie.setXPosition(x);
                 zombieLabel.setBounds(x, yCoordinate, zombieIcon.getIconWidth(), zombieIcon.getIconHeight());
-
-                // int boardX = 110;
-                // int boardY = 100;
-                // int tileWidth = 77;
-                // int tileHeight = 90;
-                // int zombieX = (int) x - boardX;
-                // int zombieY = yCoordinate + 100 - boardY;
-                // int col = zombieX / tileWidth;
-                // int row = zombieY / tileHeight;
-                // if (row >= 0 && row < 5 && col >= 0 && col < 9) {
-                //     int displayCol = col + 1;
-                //     int displayRow = row + 1;
-                //     System.out.println("Zombie is on tile: (" + displayCol + "," + displayRow +
-                //     ")");
-                // }
+                eatPlant(zombie, zombieWalkingRef[0]);
             }
         });
+        zombieWalkingRef[0] = zombieWalking;
         zombieWalking.start();
     }
 

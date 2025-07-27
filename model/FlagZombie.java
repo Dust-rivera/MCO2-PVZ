@@ -12,13 +12,13 @@ public class FlagZombie extends Zombie implements ZombieMechanics {
     public FlagZombie() {
         super(70, 0, FLAG_DAMAGE, FLAG_SPEED); 
     }
-
-    public static int getDamage() {
+    @Override
+    public int getDamage() {
         return FLAG_DAMAGE;
     }
 
-
-    public static int getSpeed() {
+    @Override
+    public int getSpeed() {
         return FLAG_SPEED;
     }
 

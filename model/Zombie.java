@@ -38,7 +38,9 @@ public abstract class Zombie {
     public void setRow(int row) {
         this.row = row;
     }
-
+    
+    public abstract int getDamage();
+    public abstract int getSpeed();
     /**
      * This gets the attack tick of the zombie
      * @return an integer containing the attack tick
