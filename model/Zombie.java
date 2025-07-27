@@ -10,7 +10,6 @@ public abstract class Zombie {
     protected int xPosition;
     protected int yPosition;
     protected int health ;
-    protected int attackTick; 
     protected int damage;
     protected int speed;
     
@@ -19,22 +18,15 @@ public abstract class Zombie {
      * Creates Zombie object given its y position
      * @param yPosition the y position of the zombie
      */
-    public Zombie(int health, int attackTick, int damage, int speed) { 
+    public Zombie(int health, int damage, int speed) { 
 
         Random random = new Random();
         this.yPosition = random.nextInt(5);
         this.xPosition = 800; 
         this.health = health;
-        this.attackTick = attackTick;
+        this.speed = speed;
     }
 
-    /**
-     * This gets the attack tick of the zombie
-     * @return an integer containing the attack tick
-     */
-    public int getAttackTick() {
-        return attackTick;
-    }
     
     /**
      * This gets the zombie's x position
@@ -84,19 +76,6 @@ public abstract class Zombie {
         health -= damage;
     }
 
-    /**
-     * This increases attack tick
-     */
-    public void incrementAttackTick() {
-        attackTick++;
-    }
-
-    /**
-     * This resets attack tick
-     */
-    public void resetAttackTick() {
-        attackTick = 0;
-    }
 
     /**
      * This moves the zombie's x position one unit to the left
@@ -115,8 +94,13 @@ public abstract class Zombie {
         return health <= 0;
     }
 
-    public abstract int getDamage();
-    public abstract int getSpeed();
+    public int getDamage(){
+        return damage;
+    }
+
+    public int getSpeed(){
+        return speed;
+    }
 
     // /**
     //  * This gets the zombie's damage

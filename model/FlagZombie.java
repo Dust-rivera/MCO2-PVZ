@@ -6,20 +6,11 @@ package model;
  * @version 1.0
  */
 public class FlagZombie extends Zombie implements ZombieMechanics {
-    public static final int FLAG_DAMAGE = 10;
-    public static final int FLAG_SPEED = 6;
+
+    // public static final int FLAG_DAMAGE = 10;
+    // public static final int FLAG_SPEED = 6;
 
     public FlagZombie() {
-        super(70, 0, FLAG_DAMAGE, FLAG_SPEED); 
+        super(70, 10, 6); 
     }
-
-    public int getDamage() {
-        return FLAG_DAMAGE;
-    }
-
-
-    public int getSpeed() {
-        return FLAG_SPEED;
-    }
-
 } 

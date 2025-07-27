@@ -6,17 +6,10 @@ package model;
  * @version 1.0
  */
 public class ConeheadZombie extends Zombie implements ZombieMechanics {
-    public static final int CONEHEAD_SPEED = 4; 
-    public static final int CONEHEAD_DAMAGE = 10;
+    // public static final int CONEHEAD_SPEED = 4; 
+    // public static final int CONEHEAD_DAMAGE = 10;
 
-    public ConeheadZombie(int yPosition) {
-        super(140, 0, CONEHEAD_DAMAGE, CONEHEAD_SPEED);
-    }
-
-    public int getDamage() {
-        return CONEHEAD_DAMAGE;
-    }
-    public int getSpeed() {
-        return CONEHEAD_SPEED;
+    public ConeheadZombie() {
+        super(140, 10, 4);
     }
 } 

@@ -42,7 +42,7 @@ public class GameView extends JFrame {
     JButton lvl2 = new JButton("Level 2");
     JButton lvl3 = new JButton("Level 3");
 
-    public JPanel[][] gridCells = new JPanel[5][9];
+    public JPanel[][] gridCells;
 
     Font customFont;
 
@@ -92,8 +92,10 @@ public class GameView extends JFrame {
         }
 
         ImageIcon icon = new ImageIcon("view\\assets\\logo.png");
-        ImageIcon bg = new ImageIcon(
-                "view\\assets\\PC Computer - Plants vs Zombies - Day.png");
+        //ImageIcon bg = new ImageIcon(
+          //      "view\\assets\\lvl1.png"); // test
+
+             //   backGround.setIcon(bg);
         ImageIcon shop = new ImageIcon("view\\assets\\shop border.png");
         ImageIcon sunflowerPk = new ImageIcon(
                 "view\\assets\\SunflowerPack.png");
@@ -101,12 +103,29 @@ public class GameView extends JFrame {
                 "view\\assets\\PeashooterPack.png");
         ImageIcon cherryPk = new ImageIcon("view\\assets\\CherryPack.png");
 
+        JPanel lose = new JPanel();
+        ImageIcon losePic = new ImageIcon("view\\assets\\PvZ1ZombiesWon.png");
+        JLabel loseLabel = new JLabel(losePic);
+        loseLabel.setBounds(30, 400, losePic.getIconWidth(), losePic.getIconHeight());
+        lose.setBackground(Color.BLACK);
+        lose.add(loseLabel);
+
+        container.add(lose, "Lose");
+
+        JPanel win = new JPanel();
+        ImageIcon winPic = new ImageIcon("view\\assets\\win.png");
+        JLabel winLabel = new JLabel(winPic);
+        win.setBackground(Color.BLACK);
+        win.add(winLabel);
+
+        container.add(win, "Win");
+
+
         ImageIcon shovelPic = new ImageIcon("view\\assets\\Shovel2.png");
         shovel.setIcon(shovelPic);
         shovel.setBounds(shop.getIconWidth() + 5, 10, shovelPic.getIconWidth(), shovelPic.getIconHeight());
 
-        progress.setBounds(bg.getIconWidth() - 300, 10, 250, 30);
-
+        progress.setBounds(881 - 300, 10, 250, 30);
         progressBar.setBounds(0, 0, 250, 30);
         progressBar.setMinimum(0);
         progressBar.setMaximum(180);
@@ -132,20 +151,21 @@ public class GameView extends JFrame {
 
         layers.add(progress, Integer.valueOf(5));
 
-        board = new JPanel(new GridLayout(5, 9));
-        board.setBounds(110, 100, 700, 450);
-        board.setBackground(Color.GREEN);
-        // board.setVisi(true);
-        board.setOpaque(false);
+        //board = new JPanel(new GridLayout(r, c));
+        //board = new JPanel(new GridLayout(r, c));
+        //board.setBounds(110, 100, 700, 450);
+        //board.setBounds(110, 280, 700, 90);
 
-        for (int row = 0; row < 5; row++) {
-            for (int col = 0; col < 9; col++) {
-                gridCells[row][col] = new JPanel();
-                gridCells[row][col].setOpaque(false);
-                gridCells[row][col].setBorder(BorderFactory.createLineBorder(Color.RED)); // So background is visible
-                board.add(gridCells[row][col]);
-            }
-        }
+        //board.setOpaque(false);
+
+        // for (int row = 0; row < r; row++) {
+        //     for (int col = 0; col < c; col++) {
+        //         gridCells[row][col] = new JPanel();
+        //         gridCells[row][col].setOpaque(false);
+        //         gridCells[row][col].setBorder(BorderFactory.createLineBorder(Color.RED)); // So background is visible
+        //         board.add(gridCells[row][col]);
+        //     }
+        // }
 
         sunCount.setBounds(25, 50, 29, 29);
         // sunCount.setOpaque(true);
@@ -162,7 +182,7 @@ public class GameView extends JFrame {
         newImg = image.getScaledInstance(50, 65, Image.SCALE_SMOOTH);
         cherryPk = new ImageIcon(newImg);
 
-        layers.setBounds(0, 0, bg.getIconWidth(), bg.getIconHeight());
+        layers.setBounds(0, 0, 881, 600);
 
         sunflowerPack.setIcon(sunflowerPk);
         sunflowerPack.setBounds(73, 5, sunflowerPk.getIconWidth(), sunflowerPk.getIconHeight());
@@ -177,8 +197,8 @@ public class GameView extends JFrame {
         // peashooterPack.addMouseListener(listener);
         // cherryPack.addMouseListener(listener);
 
-        backGround.setIcon(bg);
-        backGround.setBounds(0, 0, bg.getIconWidth(), bg.getIconHeight());
+        //backGround.setIcon(bg);
+        backGround.setBounds(0, 0, 881, 600);
 
         shopLabel.setIcon(shop);
         shopLabel.setBounds(5, 0, shop.getIconWidth(), shop.getIconHeight());
@@ -192,18 +212,20 @@ public class GameView extends JFrame {
         layers.add(cherryPack, Integer.valueOf(2));
         layers.add(sunCount, Integer.valueOf(2));
         layers.add(shovel, Integer.valueOf(2));
-        layers.add(board, Integer.valueOf(3));
+        //layers.add(board, Integer.valueOf(3));
 
-        container.add(layers, "Game1");
+        container.add(layers, "Game");
 
         cardLayout.show(container, "Menu");
+        //cardLayout.show(container, "Lose");
+
 
         this.add(container);
         this.setIconImage(icon.getImage());
         this.setTitle("Plants vs. Zombies");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-        this.setSize(bg.getIconWidth(), bg.getIconHeight());
+        this.setSize(881, 600);
         //this.setLayout(null);
         this.setLocationRelativeTo(null);
         this.setSize(881, 600);
@@ -300,6 +322,22 @@ public class GameView extends JFrame {
 
     public JPanel getContainerP() {
         return container;
+    }
+
+    public JLabel getBackGround() {
+        return backGround;
+    }
+
+    public JPanel getBoard() {
+        return board;
+    }
+
+    public void setBoard(JPanel board) {
+        this.board = board;
+    }
+
+    public void setGridCells(JPanel[][] gridCells) {
+        this.gridCells = gridCells;
     }
 
     public static void main(String[] args) {
