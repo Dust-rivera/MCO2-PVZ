@@ -12,7 +12,7 @@ public class Peashooter extends Plant{
      * @param y the y position of the peashooter
      */
     public Peashooter(int x, int y){
-        super(100, 60, x, y, 6, 9, 20, 30);
+        super(100, 60, x, y, 6, 9, 20, 30, 7500);
     }
 
     /** This updates the Peashooter given the board

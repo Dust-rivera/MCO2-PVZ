@@ -11,6 +11,6 @@ public class FlagZombie extends Zombie implements ZombieMechanics {
     // public static final int FLAG_SPEED = 6;
 
     public FlagZombie() {
-        super(70, 10, 6); 
+        super(70, 10, 8); 
     }
 } 

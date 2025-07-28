@@ -35,6 +35,7 @@ import java.io.IOException;
 import model.Board;
 import model.CherryBomb;
 import model.ConeheadZombie;
+import model.FlagZombie;
 import model.NormalZombie;
 import model.Peashooter;
 import model.User;
@@ -45,13 +46,11 @@ import view.ShopListener;
 import view.ShovelListener;
 import view.SunClickListener;
 
-
 import java.util.ArrayList;
 import java.util.Random;
 
 import model.Sunflower;
 import model.Plant;
-
 
 public class GameController {
 
@@ -85,6 +84,9 @@ public class GameController {
     int boardHeight;
     int boardRow;
     int boardCol;
+
+    int sunflowerCD = 0;
+    int peashooterCD = 0;
 
     boolean wave = false;
 
@@ -132,38 +134,29 @@ public class GameController {
         Object source = e.getSource();
 
         if (source == lvl1) {
-            view.getCardLayout().show(view.getContainerP(), "Game");
-            playSound("view\\audio\\Background.wav");
-            view.updateSunCounter(user.getSunCount());
-            startSunDrop();
-            // startSpawningZombies();
 
             setupMap(90, 1, 9, 280);
             view.getBackGround().setIcon(new ImageIcon("view\\assets\\lvl1.png"));
-            this.zombieList = new ArrayList<>();
-            this.zombieLabels = new ArrayList<>();
-            // System.out.println(view.getHeight());
-            waveNum = 9;
-            progress();
-            shop();
-            shovel();
-        }else if(source == lvl2){
 
-        }else if(source == lvl3){
-            view.getCardLayout().show(view.getContainerP(), "Game");
-            playSound("view\\audio\\Background.wav");
-            view.updateSunCounter(user.getSunCount());
-            startSunDrop();
+            // System.out.println(view.getHeight());
+            waveNum = 5;
+
+        } else if (source == lvl2) {
+
+            // startSpawningZombies();
+
+            setupMap(270, 3, 9, 190);
+            view.getBackGround().setIcon(new ImageIcon("view\\assets\\lvl2.png"));
+            // System.out.println(view.getHeight());
+            waveNum = 7;
+
+        } else if (source == lvl3) {
+
             // startSpawningZombies();
             setupMap(450, 5, 9, 100);
             view.getBackGround().setIcon(new ImageIcon("view\\assets\\lvl3.png"));
-            this.zombieList = new ArrayList<>();
-            this.zombieLabels = new ArrayList<>();
             // System.out.println(view.getHeight());
             waveNum = 9;
-            progress();
-            shop();
-            shovel();
         }
     }
 
@@ -171,7 +164,21 @@ public class GameController {
         boardHeight = h;
         boardRow = r;
         boardCol = c;
-        //view = new GameView(r, c);
+
+        view.getCardLayout().show(view.getContainerP(), "Game");
+        playBgSound("view\\audio\\Background.wav");
+        view.updateSunCounter(user.getSunCount());
+        startSunDrop();
+
+        this.zombieList = new ArrayList<>();
+        this.zombieLabels = new ArrayList<>();
+
+        progress();
+        shop();
+        shovel();
+        // startSpawningZombies();
+
+        // view = new GameView(r, c);
         view.setBoard(new JPanel(new GridLayout(r, c)));
         view.getBoard().setOpaque(false);
         view.getBoard().setBounds(110, y, boardWidth, h);
@@ -180,7 +187,8 @@ public class GameController {
             for (int col = 0; col < c; col++) {
                 view.getGridCells()[row][col] = new JPanel();
                 view.getGridCells()[row][col].setOpaque(false);
-                view.getGridCells()[row][col].setBorder(BorderFactory.createLineBorder(Color.RED)); // So background is visible
+                view.getGridCells()[row][col].setBorder(BorderFactory.createLineBorder(Color.RED)); // So background is
+                                                                                                    // visible
                 view.getBoard().add(view.getGridCells()[row][col]);
             }
         }
@@ -240,7 +248,7 @@ public class GameController {
                     break;
                 }
             }
-            if (board != null && this.getView() != null) {
+            if (board != null && view != null) {
                 Point mousePoint = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), grid);
                 int[] indices = new int[2];
                 JPanel cell = getCellAtPoint(mousePoint, indices);
@@ -280,11 +288,11 @@ public class GameController {
         // view.getLayers().repaint();
 
         if (gameTime >= 100 && gameTime < 150 && gameTime % 10 == 0) {
-            spawnZombie();
+            zombiePick();
         } else if (gameTime >= 40 && gameTime <= 100 && gameTime % 5 == 0) {
-            spawnZombie();
+            zombiePick();
         } else if (gameTime > 10 && gameTime <= 40 && gameTime % 3 == 0) {
-            spawnZombie();
+            zombiePick();
         } else if (gameTime < 10 && !wave) {
             wave = true;
             spawnWave();
@@ -315,6 +323,9 @@ public class GameController {
         }
 
         gameMusic.stop();
+
+        System.out.println(gameMusic.isRunning());
+
         playSound("view\\audio\\Win.wav");
 
         try {
@@ -326,8 +337,11 @@ public class GameController {
     }
 
     private void spawnWave() {
-        for (int i = 0; i < waveNum; i++) {
-            spawnZombie();
+
+        spawnFlag();
+
+        for (int i = 0; i < waveNum - 1; i++) {
+            zombiePick();
         }
     }
 
@@ -351,13 +365,17 @@ public class GameController {
         Object source = e.getSource();
         ImageIcon image = null;
 
-        if (source == sunflower && this.getUser().getSunCount() >= 50) {
+        if (source == sunflower && user.getSunCount() >= 50) {
+            if (sunflowerCD != 0)
+                return;
             image = new ImageIcon("view\\gifs\\Sunflower.gif");
             plantSelect = 0;
-        } else if (source == peashooter && this.getUser().getSunCount() >= 100) {
+        } else if (source == peashooter && user.getSunCount() >= 100) {
+            if (peashooterCD != 0)
+                return;
             image = new ImageIcon("view\\gifs\\Peashooter.gif");
             plantSelect = 1;
-        } else if (source == cherry && this.getUser().getSunCount() >= 150) {
+        } else if (source == cherry && user.getSunCount() >= 150) {
             image = new ImageIcon("view\\assets\\Cherry3.png");
             plantSelect = 2;
         }
@@ -376,7 +394,7 @@ public class GameController {
                     break;
                 }
             }
-            if (board != null && this.getView() != null) {
+            if (board != null && view != null) {
                 Point mousePoint = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), grid);
                 int[] indices = new int[2];
                 JPanel cell = getCellAtPoint(mousePoint, indices);
@@ -418,6 +436,33 @@ public class GameController {
 
         } else {
             p = null;
+            return;
+        }
+
+        if (p instanceof Sunflower) {
+            sunflowerCD = p.getRegenTime();
+            Timer recharge = new Timer(500, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    sunflowerCD -= 500;
+                    if (sunflowerCD <= 0) {
+                        ((Timer) e.getSource()).stop();
+                    }
+                }
+            });
+            recharge.start();
+        } else if (p instanceof Peashooter) {
+            peashooterCD = p.getRegenTime();
+            Timer recharge = new Timer(500, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    peashooterCD -= 500;
+                    if (peashooterCD <= 0) {
+                        ((Timer) e.getSource()).stop();
+                    }
+                }
+            });
+            recharge.start();
         }
     }
 
@@ -433,6 +478,7 @@ public class GameController {
 
     private void checkRow(JPanel cell) {
         int row = -1;
+
         for (int i = 0; i < boardRow; i++) {
             for (int j = 0; j < boardCol; j++) {
                 if (view.getGridCells()[i][j] == cell) {
@@ -443,11 +489,13 @@ public class GameController {
         }
 
         if (row != -1 && isZombieInSameRow(row, cell.getX())) {
+            System.out.println("ROW" + row);
             shootPea(cell, row);
         }
     }
 
     private boolean isZombieInSameRow(int row, int plantX) {
+
         for (Component comp : view.getLayers().getComponents()) {
             if (comp instanceof JLabel) {
                 JLabel zombieLabel = (JLabel) comp;
@@ -459,6 +507,8 @@ public class GameController {
 
                     int zombieY = zombieBounds.y;
                     int zombieRow = getRowFromY(zombieY);
+
+                    System.out.println("ROW " + zombieRow);
 
                     // Zombie is in the same row AND to the right of the plant
                     if (zombieRow == row && zombieBounds.x > plantX) {
@@ -472,16 +522,28 @@ public class GameController {
     }
 
     private int getRowFromY(int y) {
-        if (y < 120)
+
+        if (boardRow == 5) {
+            if (y < 120)
+                return 0;
+            else if (y < 210)
+                return 1;
+            else if (y < 300)
+                return 2;
+            else if (y < 390)
+                return 3;
+            else
+                return 4;
+        } else if (boardRow == 3) {
+            if (y < 210)
+                return 0;
+            else if (y < 300)
+                return 1;
+            else
+                return 2;
+        } else {
             return 0;
-        else if (y < 210)
-            return 1;
-        else if (y < 300)
-            return 2;
-        else if (y < 390)
-            return 3;
-        else
-            return 4;
+        }
     }
 
     private void shootPea(JPanel cell, int row) {
@@ -492,6 +554,10 @@ public class GameController {
         Point point = SwingUtilities.convertPoint(cell.getParent(), cell.getLocation(), view.getLayers());
         int startX = point.x + cell.getWidth() - 10;
         int startY = point.y + (cell.getHeight() - 20) / 2;
+
+        int[] indicies = new int[2];
+
+        getCellAtPoint(point, indicies);
 
         peaLabel.setBounds(startX, startY, 20, 20);
         view.getLayers().add(peaLabel, Integer.valueOf(3));
@@ -517,10 +583,13 @@ public class GameController {
 
                 // Only attack locked zombie
                 // System.out.println("tite " + lockedZombie.isDead());
-                System.out.println("TITE " + Math.abs(lockedZombie.getXPosition() - x));
+                // System.out.println("TITE " + Math.abs(lockedZombie.getXPosition() - x));
 
                 if (!lockedZombie.isDead() && Math.abs(lockedZombie.getXPosition() - x) <= 5) {
-                    lockedZombie.takeDamage(20);
+                    if(Math.abs(lockedZombie.getXPosition() - x) <= startX + 20)
+                        lockedZombie.takeDamage(30);
+                    else
+                        lockedZombie.takeDamage(20);
                     ImageIcon explosion = new ImageIcon("view\\assets\\peax.png");
                     peaLabel.setIcon(explosion);
                     int explosionWidth = explosion.getIconWidth();
@@ -555,6 +624,7 @@ public class GameController {
                 }
             }
         });
+
         peaTimer.start();
     }
 
@@ -579,7 +649,7 @@ public class GameController {
         System.out.println("Mouse point: " + p);
         for (int row = 0; row < boardRow; row++) {
             for (int col = 0; col < boardCol; col++) {
-                JPanel[][] grid = this.getView().getGridCells();
+                JPanel[][] grid = view.getGridCells();
                 JPanel cell = grid[row][col];
                 Rectangle bounds = cell.getBounds();
                 System.out.println("Cell [" + row + "][" + col + "] bounds: " + bounds);
@@ -644,17 +714,17 @@ public class GameController {
         }
     }
 
-    public Board getBoard() {
-        return board;
-    }
+    // public Board getBoard() {
+    // return board;
+    // }
 
-    public GameView getView() {
-        return view;
-    }
+    // public GameView getView() {
+    // return view;
+    // }
 
-    public User getUser() {
-        return user;
-    }
+    // public User getUser() {
+    // return user;
+    // }
 
     // private JLayeredPane layers;
     // private static int zombieCount;
@@ -677,7 +747,7 @@ public class GameController {
         int row = zombie.getYPosition();
         int zombieX = (int) zombie.getXPosition();
 
-        for (int col = 0; col < 9; col++) {
+        for (int col = 0; col < boardCol; col++) {
             Plant plant = board.getTile(row, col).getPlant();
             if (plant != null) {
                 JPanel cell = view.getGridCells()[row][col];
@@ -712,7 +782,17 @@ public class GameController {
         }
     }
 
-    public void spawnZombie() {
+    private void spawnFlag(){
+
+        final ImageIcon zombieIcon = new ImageIcon("view\\gifs\\Flag1.gif");
+        final Zombie zombie = new FlagZombie();
+
+        JLabel zombieLabel = new JLabel(zombieIcon);
+
+        spawnZombie(zombie, zombieLabel, zombieIcon);
+    }
+
+    private void zombiePick() {
 
         ImageIcon zombieIconT = null;
         Zombie zombieT = null;
@@ -740,49 +820,87 @@ public class GameController {
              * break;
              */
         }
-
-        // ImageIcon zombieIcon = new ImageIcon("view\\gifs\\Zombie80.gif");
-        // Image scaled = zombieIcon.getImage();//.getScaledInstance(70, 70,
-        // Image.SCALE_SMOOTH);
-        // zombieIcon = new ImageIcon(scaled);
-
-        // NormalZombie zombie = new NormalZombie();
-
         zombie = zombieT;
         zombieIcon = zombieIconT;
 
         JLabel zombieLabel = new JLabel(zombieIcon);
+
+        spawnZombie(zombie, zombieLabel, zombieIcon);
+    }
+
+    private void spawnZombie(Zombie zombie, JLabel zombieLabel, ImageIcon zombieIcon) {
+
         int yCoordinate;
 
-        int row = -1;
+        int row = random.nextInt(boardRow);
+        // if (boardRow == 5) {
+        // row = ; // 0 to 4
+        // } else if (boardRow == 3) {
+        // row = random.nextInt(3) + 1; // 1 to 3
+        // } else if (boardRow == 1) {
+        // row = 2; // constant
+        // }
+
         if (boardRow == 5) {
-            row = random.nextInt(5); // 0 to 4
+            switch (row) {
+                case 0:
+                    yCoordinate = 75;
+                    break;
+                case 1:
+                    yCoordinate = 170;
+                    break;
+                case 2:
+                    yCoordinate = 260;
+                    break;
+                case 3:
+                    yCoordinate = 350;
+                    break;
+                case 4:
+                    yCoordinate = 440;
+                    break;
+                default:
+                    yCoordinate = 0;
+                    break;
+            }
         } else if (boardRow == 3) {
-            row = random.nextInt(3) + 1; // 1 to 3
-        } else if (boardRow == 1) {
-            row = 2; // constant
+            switch (row) {
+                case 0:
+                    yCoordinate = 170;
+                    break;
+                case 1:
+                    yCoordinate = 260;
+                    break;
+                case 2:
+                    yCoordinate = 350;
+                    break;
+                default:
+                    yCoordinate = 0;
+                    break;
+            }
+        } else {
+            yCoordinate = 260;
         }
 
-        switch (row) {
-            case 0:
-                yCoordinate = 75;
-                break;
-            case 1:
-                yCoordinate = 170;
-                break;
-            case 2:
-                yCoordinate = 260;
-                break;
-            case 3:
-                yCoordinate = 350;
-                break;
-            case 4:
-                yCoordinate = 440;
-                break;
-            default:
-                yCoordinate = 0;
-                break;
-        }
+        // switch (row) {
+        // case 0:
+        // yCoordinate = 75;
+        // break;
+        // case 1:
+        // yCoordinate = 170;
+        // break;
+        // case 2:
+        // yCoordinate = 260;
+        // break;
+        // case 3:
+        // yCoordinate = 350;
+        // break;
+        // case 4:
+        // yCoordinate = 440;
+        // break;
+        // default:
+        // yCoordinate = 0;
+        // break;
+        // }
 
         int startX = 800;
 
@@ -897,11 +1015,23 @@ public class GameController {
         }
     }
 
-    public void playSound(String filePath) {
+    public void playBgSound(String filePath) {
         try {
             gameMusic = AudioSystem.getClip();
             gameMusic.open(AudioSystem.getAudioInputStream(new File(filePath)));
             gameMusic.start();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void playSound(String filePath) {
+        try {
+            Clip gameSound = AudioSystem.getClip();
+            gameSound.open(AudioSystem.getAudioInputStream(new File(filePath)));
+            gameSound.start();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

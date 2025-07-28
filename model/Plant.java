@@ -15,12 +15,7 @@ public class Plant {
     private int damage;
     private int dirDamage;
     private final int SPEED;
-
-    public static final int SUNFLOWER_REGEN = 30;
-    public static final int PEASHOOTER_REGEN = 30;
-
-    public static int sunflowerCD = 0;
-    public static int peashooterCD = 0;
+    private int regenTime;
 
 
     /**
@@ -34,7 +29,7 @@ public class Plant {
      * @param damage the amount of damage plant deals
      * @param dirDamage the amount of damage the plant deals close range
      */
-    public Plant(int cost, int health, int x, int y, int speed, int range, int damage, int dirDamage){
+    public Plant(int cost, int health, int x, int y, int speed, int range, int damage, int dirDamage, int regen){
         xPosition = x;
         yPosition = y;
         this.cost = cost;
@@ -43,6 +38,7 @@ public class Plant {
         this.range = range;
         this.damage = damage;
         this.dirDamage = dirDamage;
+        this.regenTime = regen;
     }
 
     /**
@@ -55,16 +51,20 @@ public class Plant {
      * This gets the peashooter's cooldown time
      * @return an integer containing the peashooter's cooldown time
      */
-    public static int getPeashooterCD() {
-        return peashooterCD;
-    }
+    // public static int getPeashooterCD() {
+    //     return peashooterCD;
+    // }
 
-    /**
-     * This gets the sunflower's cooldown time
-     * @return an integer containing the sunflower's cooldown time
-     */
-    public static int getSunflowerCD() {
-        return sunflowerCD;
+    // /**
+    //  * This gets the sunflower's cooldown time
+    //  * @return an integer containing the sunflower's cooldown time
+    //  */
+    // public static int getSunflowerCD() {
+    //     return sunflowerCD;
+    // }
+
+    public int getRegenTime() {
+        return regenTime;
     }
 
     /**

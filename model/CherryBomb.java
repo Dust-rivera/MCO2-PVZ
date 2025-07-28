@@ -12,7 +12,7 @@ public class CherryBomb extends Plant {
     public static int cherryBombCD = 0;
 
     public CherryBomb(int x, int y) {
-        super(COST, HEALTH, x, y, 0, 1, 9999, 9999); // Massive damage, instant
+        super(COST, HEALTH, x, y, 0, 1, 9999, 9999, 50000); // Massive damage, instant
     }
 
     /**
