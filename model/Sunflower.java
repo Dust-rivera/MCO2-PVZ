@@ -12,7 +12,7 @@ public class Sunflower extends Plant{
      * @param y the y position of the sunflower
      */
     public Sunflower(int x, int y){
-        super(50, 60, x, y, 24, 0, 0, 0, 7500); // 24 ticks = 24 seconds
+        super(50, 150, x, y, 0, 0, 0, 0, 30000); // 24 ticks = 24 seconds
     }
 
     /** This updates the Peashooter given the board
@@ -34,8 +34,8 @@ public class Sunflower extends Plant{
      * This generates sun and adds to the sun count of the board
      * @param board the board to be updated
      */
-    public void generateSun(Board board){
-        board.generateSun();
-    }
+    // public void generateSun(Board board){
+    //     board.generateSun();
+    //}
 
 }

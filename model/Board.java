@@ -5,18 +5,15 @@ package model;
  * @author Rivera, Dustine Gian
  * @version 1.0
  */
-import java.util.ArrayList;
-import java.util.Random;
+//import java.util.ArrayList;
 public class Board {
 
     private Tile[][] board;
-    private int tickCount = 0;
-    private int secondsPassed = 0;
-    private ArrayList<Zombie> zombieList;
-    private int sunCount = 0;
-    private boolean finalWaveFlag = true;
-    private String message = "";
-    private boolean running = true;
+    //private ArrayList<Zombie> zombieList;
+    //private int sunCount = 0;
+    private boolean finalWaveFlag = false;
+    //private String message = "";
+    //private boolean running = true;
     private int numRows;
     private int numCols;
     private int SUN_GENERATE_TIME = 10000; 
@@ -29,7 +26,7 @@ public class Board {
      * @param col    the number of columns to be created
      */
     public Board(User player, int row, int col) {
-        this.zombieList = new ArrayList<>();
+        //this.zombieList = new ArrayList<>();
         numRows = row;
         numCols = col;
 
@@ -50,18 +47,18 @@ public class Board {
      * 
      * @return an integer containing the board's sun count
      */
-    public int getSunCount() {
-        return sunCount;
-    }
+    // public int getSunCount() {
+    //     return sunCount;
+    // }
 
     /**
      * This gets the board's zombie array list
      * 
      * @return an array list containing all the zombies on the board
      */
-    public ArrayList<Zombie> getZombieList() {
-        return zombieList;
-    }
+    // public ArrayList<Zombie> getZombieList() {
+    //     return zombieList;
+    // }
 
     /**
      * This gets the state of the finaWaveFlag boolean
@@ -77,18 +74,18 @@ public class Board {
      * 
      * @return a String containing the board's message
      */
-    public String getMessage() {
-        return message;
-    }
+    // public String getMessage() {
+    //     return message;
+    // }
 
-    /**
-     * This gets the state of the running boolean
-     * 
-     * @return a boolean containing the state of the running variable
-     */
-    public boolean getRunning() {
-        return running;
-    }
+    // /**
+    //  * This gets the state of the running boolean
+    //  * 
+    //  * @return a boolean containing the state of the running variable
+    //  */
+    // public boolean getRunning() {
+    //     return running;
+    // }
 
     /**
      * This gets the number of rows of the board
@@ -157,30 +154,34 @@ public class Board {
         return -1;
     }
 
+    public void setFinalWaveFlag(boolean finalWaveFlag) {
+        this.finalWaveFlag = finalWaveFlag;
+    }
+
     /**
      * This modifies the board's message
      * 
      * @param string the string to modify the board's message
      */
-    public void setMessage(String string) {
-        message = string;
-    }
+    // public void setMessage(String string) {
+    //     message = string;
+    // }
 
-    /**
-     * This modifies the state of the running variable
-     * 
-     * @param bool the boolean to modify the sate of the running variable
-     */
-    public void setRunning(boolean bool) {
-        running = bool;
-    }
+    // /**
+    //  * This modifies the state of the running variable
+    //  * 
+    //  * @param bool the boolean to modify the sate of the running variable
+    //  */
+    // public void setRunning(boolean bool) {
+    //     running = bool;
+    // }
 
     /**
      * This sets the sun count back to zero
      */
-    public void setSun() {
-        sunCount = 0;
-    }
+    // public void setSun() {
+    //     sunCount = 0;
+    // }
 
     /**
      * This updates the board based on the player's input
@@ -315,9 +316,9 @@ public class Board {
     /**
      * This increases the sun count by one
      */
-    public void generateSun() {
-        sunCount++;
-    }
+    // public void generateSun() {
+    //     sunCount++;
+    // }
 
     /**
      * This spawn a zombie on the board at the last column and on a random row
@@ -349,10 +350,10 @@ public class Board {
      * @param col    the column in which the zombie will be placed
      * @param zombie the zombie object to be placed on the board
      */
-    public void placeZombie(int row, int col, Zombie zombie) {
-        //board[row][col].addZombie(zombie);
-        zombieList.add(zombie);
-    }
+    // public void placeZombie(int row, int col, Zombie zombie) {
+    //     //board[row][col].addZombie(zombie);
+    //     zombieList.add(zombie);
+    // }
 
     /**
      * This places the plant on the board given the plant object, row, and column

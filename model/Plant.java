@@ -45,7 +45,7 @@ public class Plant {
      * This updates the plant
      * @param board the board object to be updated
      */
-    public void update(Board board){}
+    //public void update(Board board){}
 
     /**
      * This gets the peashooter's cooldown time

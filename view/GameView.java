@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
 
@@ -33,6 +32,7 @@ public class GameView extends JFrame {
     JLabel sunflowerPack = new JLabel();
     JLabel peashooterPack = new JLabel();
     JLabel cherryPack = new JLabel();
+    JLabel wallnutPack = new JLabel();
 
     JLabel shovel = new JLabel();
 
@@ -41,6 +41,13 @@ public class GameView extends JFrame {
     JButton lvl1 = new JButton("Level 1");
     JButton lvl2 = new JButton("Level 2");
     JButton lvl3 = new JButton("Level 3");
+
+    JLabel mow1 = new JLabel();
+    JLabel mow2 = new JLabel();
+    JLabel mow3 = new JLabel();
+    JLabel mow4 = new JLabel();
+    JLabel mow5 = new JLabel();
+
 
     public JPanel[][] gridCells;
 
@@ -57,6 +64,28 @@ public class GameView extends JFrame {
     JLayeredPane layers = new JLayeredPane();
 
     public GameView() {
+
+        ImageIcon mow = new ImageIcon("view\\assets\\Lawn_Mower.png");
+        mow1.setIcon(mow);
+        mow1.setBounds(50, 110, mow.getIconWidth(), mow.getIconHeight());
+        layers.add(mow1, Integer.valueOf(4));
+
+        mow2.setIcon(mow);
+        mow2.setBounds(50, 210, mow.getIconWidth(), mow.getIconHeight());
+        layers.add(mow2, Integer.valueOf(4));
+
+        mow3.setIcon(mow);
+        mow3.setBounds(50, 295, mow.getIconWidth(), mow.getIconHeight());
+        layers.add(mow3, Integer.valueOf(4));
+
+        mow4.setIcon(mow);
+        mow4.setBounds(50, 390, mow.getIconWidth(), mow.getIconHeight());
+        layers.add(mow4, Integer.valueOf(4));
+
+        mow5.setIcon(mow);
+        mow5.setBounds(50, 490, mow.getIconWidth(), mow.getIconHeight());
+        layers.add(mow5, Integer.valueOf(4));
+        
 
         ImageIcon menuBg = new ImageIcon("view\\assets\\PvZMenu.jpg");
         JPanel menu = new JPanel() {
@@ -102,6 +131,7 @@ public class GameView extends JFrame {
         ImageIcon peashooterPk = new ImageIcon(
                 "view\\assets\\PeashooterPack.png");
         ImageIcon cherryPk = new ImageIcon("view\\assets\\CherryPack.png");
+        ImageIcon wallnutPk = new ImageIcon("view\\assets\\WallnutPack.png");
 
         JPanel lose = new JPanel();
         ImageIcon losePic = new ImageIcon("view\\assets\\PvZ1ZombiesWon.png");
@@ -182,6 +212,10 @@ public class GameView extends JFrame {
         newImg = image.getScaledInstance(50, 65, Image.SCALE_SMOOTH);
         cherryPk = new ImageIcon(newImg);
 
+        image = wallnutPk.getImage();
+        newImg = image.getScaledInstance(50, 65, Image.SCALE_SMOOTH);
+        wallnutPk = new ImageIcon(newImg);
+
         layers.setBounds(0, 0, 881, 600);
 
         sunflowerPack.setIcon(sunflowerPk);
@@ -190,6 +224,8 @@ public class GameView extends JFrame {
         peashooterPack.setBounds(123, 5, peashooterPk.getIconWidth(), peashooterPk.getIconHeight());
         cherryPack.setIcon(cherryPk);
         cherryPack.setBounds(173, 5, cherryPk.getIconWidth(), cherryPk.getIconHeight());
+        wallnutPack.setIcon(wallnutPk);
+        wallnutPack.setBounds(223, 5, wallnutPk.getIconWidth(), wallnutPk.getIconHeight());
 
         // ShopListener listener = new ShopListener(peashooterPack, cherryPack,
         // backGround);
@@ -210,6 +246,7 @@ public class GameView extends JFrame {
         layers.add(sunflowerPack, Integer.valueOf(2));
         layers.add(peashooterPack, Integer.valueOf(2));
         layers.add(cherryPack, Integer.valueOf(2));
+        layers.add(wallnutPack, Integer.valueOf(2));
         layers.add(sunCount, Integer.valueOf(2));
         layers.add(shovel, Integer.valueOf(2));
         // layers.add(board, Integer.valueOf(3));
@@ -285,6 +322,18 @@ public class GameView extends JFrame {
         return cherryPack;
     }
 
+    public void setCherryPack(JLabel cherryPack) {
+        this.cherryPack = cherryPack;
+    }
+
+    public JLabel getWallnutPack() {
+        return wallnutPack;
+    }
+
+    public void setWallnutPack(JLabel wallnutPack) {
+        this.wallnutPack = wallnutPack;
+    }
+
     public JLayeredPane getLayers() {
         return layers;
     }
@@ -335,6 +384,26 @@ public class GameView extends JFrame {
 
     public void setGridCells(JPanel[][] gridCells) {
         this.gridCells = gridCells;
+    }
+
+    public JLabel getMow1() {
+        return mow1;
+    }
+
+    public JLabel getMow2() {
+        return mow2;
+    }
+
+    public JLabel getMow3() {
+        return mow3;
+    }
+
+    public JLabel getMow4() {
+        return mow4;
+    }
+
+    public JLabel getMow5() {
+        return mow5;
     }
 
     public static void main(String[] args) {

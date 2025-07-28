@@ -7,7 +7,7 @@ package model;
 public class User {
 
     private int sunCount;
-    private String input;
+    //private String input;
 
     /** 
      * This creates a User object
@@ -28,17 +28,17 @@ public class User {
      * This gets the user's keyboard input
      * @return a String containing the user's keyboard input
      */
-    public String getInput(){
-        return input;
-    }
+    // public String getInput(){
+    //     return input;
+    // }
 
     /**
      * This sets the input by the user's keyboard input
      * @param input the user's keyboard input
      */
-    public void setInput(String input){
-        this.input = input;
-    }
+    // public void setInput(String input){
+    //     this.input = input;
+    // }
 
     /**
      * This deduct the user's sun count by the amount/cost of plant
@@ -54,7 +54,7 @@ public class User {
      * @param board the board to be updated
      */
     public void collectSun(Board board){
-        board.setSun();
+        //board.setSun();
         sunCount += 25;
 
     }
