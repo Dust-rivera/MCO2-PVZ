@@ -3,6 +3,6 @@ package model;
 
 public class BucketheadZombie extends Zombie implements ZombieMechanics {
    public BucketheadZombie() {
-      super(800, 10, 4);
+      super(210, 10, 4);
    }
 }

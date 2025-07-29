@@ -67,7 +67,7 @@ public class GameController {
     private ArrayList<Zombie> zombieList;
     private ArrayList<JLabel> zombieLabels;
 
-    private int plantSelect;
+    private int plantSelect = -1;
     private int gameTime = 180;
     private int waveNum;
 
@@ -395,12 +395,16 @@ public class GameController {
                     if (plantSelect == 0) {
                         Sunflower p = new Sunflower(indices[0], indices[1]);
                         placePlant(indices, p, cell);
+                        plantSelect = -1;
                     } else if (plantSelect == 1) {
                         Peashooter p = new Peashooter(indices[0], indices[1]);
                         placePlant(indices, p, cell);
+                        plantSelect = -1;
                     } else if (plantSelect == 2) {
                         CherryBomb p = new CherryBomb(indices[0], indices[1]);
                         placePlant(indices, p, cell);
+                        plantSelect = -1;
+
                         cell.removeAll();
                         cell.revalidate();
                         cell.repaint();
@@ -434,6 +438,7 @@ public class GameController {
                     } else if (plantSelect == 3) {
                         Wallnut p = new Wallnut(indices[0], indices[1]);
                         placePlant(indices, p, cell);
+                        plantSelect = -1;
                     }
                 }
             }
@@ -444,6 +449,7 @@ public class GameController {
     }
 
     private void placePlant(int[] indices, Plant p, JPanel cell) {
+
         if (user.getSunCount() >= p.getCost()) {
 
             board.getBoard()[indices[0]][indices[1]].setPlant(p);
@@ -492,7 +498,7 @@ public class GameController {
                 }
             });
             recharge.start();
-        } else if (plantSelect == 2) {
+        } else if (p instanceof CherryBomb) {
             cherrybombCD = p.getRegenTime();
             ImageIcon originalCherryIcon = (ImageIcon) cherry.getIcon();
             cherry.setIcon(getTransparentIcon(originalCherryIcon, 0.4f));
@@ -507,7 +513,7 @@ public class GameController {
                 }
             });
             recharge.start();
-        } else if (plantSelect == 3) {
+        } else if (p instanceof Wallnut) {
             wallnutCD = p.getRegenTime();
             ImageIcon originalWallnutIcon = (ImageIcon) wallnut.getIcon();
             wallnut.setIcon(getTransparentIcon(originalWallnutIcon, 0.4f));
