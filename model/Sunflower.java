@@ -4,44 +4,27 @@
  * @version 1.0
  */
 package model;
-public class Sunflower extends Plant{
+
+public class Sunflower extends Plant {
 
     private static int COST = 50;
 
     /**
      * This creates a Sunflower object given its x and y position
+     * 
      * @param x the x position of the sunflower
      * @param y the y position of the sunflower
      */
-    public Sunflower(int x, int y){
+    public Sunflower(int x, int y) {
         super(50, 150, x, y, 0, 0, 0, 0, 30000); // 24 ticks = 24 seconds
     }
 
+    /**
+     * This gets peashooter's cost
+     * @return an integer containing the cost of peashooter
+     */
     public static int getCostStatic() {
         return COST;
     }
-
-    /** This updates the Peashooter given the board
-     * @param board the board to be updated
-     */
-    // @Override
-    // public void update(Board board){
-    //     this.increaseTick();;
-
-    //     if(Plant.sunflowerCD != 0) 
-    //         Plant.sunflowerCD--;
-    //     if(this.getTick() % this.getSPEED() == 0){
-    //         board.generateSun();
-    //         this.setTick(0);
-    //     }
-    // }
-    
-    /**
-     * This generates sun and adds to the sun count of the board
-     * @param board the board to be updated
-     */
-    // public void generateSun(Board board){
-    //     board.generateSun();
-    //}
 
 }

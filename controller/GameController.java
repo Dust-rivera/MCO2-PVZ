@@ -1,3 +1,10 @@
+/**
+ * The game Controller that bridges the model and the GUI,
+ * also handles all the logic
+ * @author Deveza, Jerry King 
+ * @author Rivera, Dustine Gian
+ * @version 23.1
+ */
 package controller;
 
 import java.awt.Color;
@@ -11,14 +18,8 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
 import javax.swing.Timer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,8 +29,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.BorderFactory;
 
 import java.io.File;
-import java.io.IOException;
-
 import model.Board;
 import model.BucketheadZombie;
 import model.CherryBomb;
@@ -59,7 +58,7 @@ public class GameController {
     private JLabel wallnut;
     private JLabel shovel;
 
-    private JLabel drag = new JLabel();
+    private JLabel drag;
     private int offsetX, offsetY;
 
     private ImageIcon image;
@@ -90,12 +89,15 @@ public class GameController {
     private int cherrybombCD = 0;
     private int wallnutCD = 0;
 
-    User user = new User();
+    private User user = new User();
 
-    Board board = new Board(user, 5, 9);
+    private Board board = new Board(user, 5, 9);
 
-    GameView view = new GameView();
+    private GameView view = new GameView();
 
+    /**
+     * Constructs a new GameController, initializes the menu
+     */
     public GameController() {
 
         menu();
@@ -114,6 +116,9 @@ public class GameController {
         });
     }
 
+    /**
+     * Sets up the main menu buttons and their listeners
+     */
     private void menu() {
 
         lvl1 = view.getLvl1();
@@ -126,6 +131,10 @@ public class GameController {
         lvl3.addActionListener(menuListener);
     }
 
+    /**
+     * Handles level selection based on the button pressed
+     * @param e the ActionEvent triggered by a level button
+     */
     public void lvlSelect(ActionEvent e) {
         Object source = e.getSource();
 
@@ -134,9 +143,7 @@ public class GameController {
             setupMap(90, 1, 9, 280);
             view.getBackGround().setIcon(new ImageIcon("view\\assets\\lvl1.png"));
             view.getLayers().remove(cherry);
-            view.setCherryPack(null);
             view.getLayers().remove(wallnut);
-            view.setWallnutPack(null);
             view.getLayers().remove(view.getMow1());
             view.getLayers().remove(view.getMow2());
             view.getLayers().remove(view.getMow4());
@@ -149,7 +156,6 @@ public class GameController {
             setupMap(270, 3, 9, 190);
             view.getBackGround().setIcon(new ImageIcon("view\\assets\\lvl2.png"));
             view.getLayers().remove(wallnut);
-            view.setWallnutPack(null);
             view.getLayers().remove(view.getMow1());
             view.getLayers().remove(view.getMow5());
             waveNum = 7;
@@ -162,6 +168,13 @@ public class GameController {
         }
     }
 
+    /**
+     * Sets up the game board and initializes the map for the selected level
+     * @param h the board height
+     * @param r the number of rows
+     * @param c the number of columns
+     * @param y the y-position of the board relative to the frame
+     */
     private void setupMap(int h, int r, int c, int y) {
         boardHeight = h;
         boardRow = r;
@@ -197,6 +210,9 @@ public class GameController {
         view.getLayers().repaint();
     }
 
+    /**
+     * Sets up the shovel and its listeners
+     */
     private void shovel() {
         shovel = view.getShovel();
 
@@ -205,25 +221,10 @@ public class GameController {
         shovel.addMouseMotionListener(shovelListener);
     }
 
-    public void elementPressed(ImageIcon image, MouseEvent e) {
-        if (image != null) {
-            drag = new JLabel(image);
-
-            // Get mouse position relative to layered pane
-            Point point = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view.getLayers());
-
-            drag.setBounds(point.x - image.getIconWidth() / 2,
-                    point.y - image.getIconHeight() / 2,
-                    image.getIconWidth(), image.getIconHeight());
-
-            view.getLayers().add(drag, Integer.valueOf(3));
-            view.getLayers().repaint();
-            offsetX = point.x - drag.getX();
-            offsetY = point.y - drag.getY();
-            this.image = image; // used in mouse released
-        }
-    }
-
+    /**
+     * Handles the event when the shovel is pressed
+     * @param e the MouseEvent triggered
+     */
     public void shovelPressed(MouseEvent e) {
 
         ImageIcon image = null;
@@ -234,6 +235,10 @@ public class GameController {
 
     }
 
+    /**
+     * Handles the event when the shovel is released
+     * @param e the MouseEvent triggered
+     */
     public void shovelReleased(MouseEvent e) {
         if (drag != null) {
             JPanel grid = null;
@@ -260,6 +265,11 @@ public class GameController {
         }
     }
 
+    /**
+     * Removes a plant from the board and cell at the specified indices
+     * @param indices the row and column indices
+     * @param cell the JPanel cell to remove the plant from
+     */
     private void removePlant(int[] indices, JPanel cell) {
 
         board.getBoard()[indices[0]][indices[1]].removePlant();
@@ -267,14 +277,43 @@ public class GameController {
         cell.revalidate();
         cell.repaint();
 
-        board.getTile(indices[0], indices[1]).toS();
     }
 
+    /**
+     * Handles the event when a draggable element is pressed.
+     * @param image the ImageIcon to drag
+     * @param e the MouseEvent triggered
+     */
+    public void elementPressed(ImageIcon image, MouseEvent e) {
+        if (image != null) {
+            drag = new JLabel(image);
+
+            // Get mouse position relative to layered pane
+            Point point = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view.getLayers());
+
+            drag.setBounds(point.x - image.getIconWidth() / 2,
+                    point.y - image.getIconHeight() / 2,
+                    image.getIconWidth(), image.getIconHeight());
+
+            view.getLayers().add(drag, Integer.valueOf(3));
+            view.getLayers().repaint();
+            offsetX = point.x - drag.getX();
+            offsetY = point.y - drag.getY();
+            this.image = image; // used in mouse released
+        }
+    }
+
+    /**
+     * Starts the game timer and initializes the game progress
+     */
     private void progress() {
         gameTimer = new Timer(1000, e -> decreaseTime());
         gameTimer.start();
     }
 
+    /**
+     * Decreases the game time and updates the progress bar
+     */
     private void decreaseTime() {
         gameTime--;
         view.getProgressBar().setValue(gameTime);
@@ -300,6 +339,9 @@ public class GameController {
 
     }
 
+    /**
+     * Executes gamewin logic when the player wins
+     */
     private void gameWin() {
 
         for (int i = 0; i < zombieWalkTimers.size(); i++) {
@@ -319,6 +361,9 @@ public class GameController {
         view.getCardLayout().show(view.getContainerP(), "Win");
     }
 
+    /**
+     * Spawns a wave of zombies
+     */
     private void spawnWave() {
 
         spawnFlag();
@@ -328,6 +373,9 @@ public class GameController {
         }
     }
 
+    /**
+     * initializes the shop and its listeners
+     */
     private void shop() {
 
         sunflower = view.getSunflowerPack();
@@ -346,6 +394,10 @@ public class GameController {
         wallnut.addMouseMotionListener(shopListener);
     }
 
+    /**
+     * Handles the event when a shop item (seed pack) is pressed
+     * @param e the MouseEvent triggered
+     */
     public void shopPressed(MouseEvent e) {
 
         Object source = e.getSource();
@@ -376,6 +428,10 @@ public class GameController {
         elementPressed(image, e);
     }
 
+    /**
+     * Handles the event when a shop item (seed pack) is released
+     * @param e the MouseEvent triggered
+     */
     public void shopReleased(MouseEvent e) {
         if (drag != null) {
             JPanel grid = null;
@@ -448,6 +504,12 @@ public class GameController {
         }
     }
 
+    /**
+     * Places a plant on the board and updates the GUI
+     * @param indices the row and column indices
+     * @param p the Plant to place
+     * @param cell the JPanel cell to add the plant to
+     */
     private void placePlant(int[] indices, Plant p, JPanel cell) {
 
         if (user.getSunCount() >= p.getCost()) {
@@ -459,7 +521,6 @@ public class GameController {
             cell.add(plant);
             cell.revalidate();
             cell.repaint();
-            board.getTile(indices[0], indices[1]).toS();
             view.updateSunCounter(user.getSunCount());
             plantUpdate(p, cell);
 
@@ -531,6 +592,12 @@ public class GameController {
         }
     }
 
+    /**
+     * Returns an updated version of the given icon
+     * @param icon the original ImageIcon
+     * @param opacity the opacity (0.0f to 1.0f)
+     * @return a new ImageIcon with the specified opacity
+     */
     private ImageIcon getTransparentIcon(ImageIcon icon, float opacity) {
         int w = icon.getIconWidth();
         int h = icon.getIconHeight();
@@ -543,6 +610,11 @@ public class GameController {
         return new ImageIcon(image);
     }
 
+    /**
+     * Updates the plant's behavior after being placed
+     * @param p the Plant placed
+     * @param cell the JPanel cell containing the plant
+     */
     private void plantUpdate(Plant p, JPanel cell) {
         if (p instanceof Sunflower) {
             Timer update = new Timer(24000, e -> generateSunSunflower(cell));
@@ -553,6 +625,10 @@ public class GameController {
         }
     }
 
+    /**
+     * Checks if there is a zombie in the same row as the peashooter
+     * @param cell the JPanel cell containing the plant
+     */
     private void checkRow(JPanel cell) {
         int row = -1;
         int col = -1;
@@ -572,6 +648,12 @@ public class GameController {
         }
     }
 
+    /**
+     * Checks if a zombie is in the same row and to the right of the plant
+     * @param row the row to check
+     * @param plantX the x-position of the plant
+     * @return true if a zombie is present, false otherwise
+     */
     private boolean isZombieInSameRow(int row, int plantX) {
 
         for (JLabel zombieLabel : zombieLabels) {
@@ -589,6 +671,11 @@ public class GameController {
         return false;
     }
 
+    /**
+     * Gets the row index from a y-coordinate
+     * @param y the y-coordinate
+     * @return the row index
+     */
     private int getRowFromY(int y) {
 
         if (boardRow == 5) {
@@ -614,6 +701,12 @@ public class GameController {
         }
     }
 
+    /**
+     * Animates and handles the logic for a peashooter shooting a pea
+     * @param cell the JPanel cell containing the peashooter
+     * @param row the row index
+     * @param col the column index
+     */
     private void shootPea(JPanel cell, int row, int col) {
         ImageIcon peaIcon = new ImageIcon("view\\assets\\Pea_p.png");
         JLabel peaLabel = new JLabel(peaIcon);
@@ -679,6 +772,10 @@ public class GameController {
         peaTimer.start();
     }
 
+    /**
+     * Generates a sun from a sunflower and adds it to the game view
+     * @param cell the JPanel cell containing the sunflower
+     */
     private void generateSunSunflower(JPanel cell) {
 
         Point point = SwingUtilities.convertPoint(cell.getParent(), cell.getLocation(), view.getLayers());
@@ -696,6 +793,12 @@ public class GameController {
 
     }
 
+    /**
+     * Gets the cell at a given point and sets the indices array
+     * @param p the Point to check
+     * @param indices an array to store the row and column indices
+     * @return the JPanel cell at the point, or null if not found
+     */
     public JPanel getCellAtPoint(Point p, int[] indices) {
         for (int row = 0; row < boardRow; row++) {
             for (int col = 0; col < boardCol; col++) {
@@ -714,17 +817,27 @@ public class GameController {
         return null;
     }
 
+    /**
+     * Handles the event when a sun is clicked
+     * @param sunLabel the JLabel representing the sun
+     */
     public void sunClick(JLabel sunLabel) {
         view.removeSun(sunLabel);
         user.collectSun(board);
         view.updateSunCounter(user.getSunCount());
     }
 
+    /**
+     * Starts the timer for random sun drops.
+     */
     private void startSunDrop() {
         Timer startTimer = new Timer(board.getSUN_GENERATE_TIME(), e -> spawnSun());
         startTimer.start();
     }
 
+    /**
+     * Spawns a sun at a random position and animates its fall.
+     */
     private void spawnSun() {
         ImageIcon sunIcon = new ImageIcon("view\\assets\\Sun.png"); // replace path
         Image scaled = sunIcon.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
@@ -754,6 +867,10 @@ public class GameController {
         fallTimer.start();
     }
 
+    /**
+     * Handles dragging of images with the mouse
+     * @param e the MouseEvent triggered
+     */
     public void imgDrag(MouseEvent e) {
         if (drag != null) {
             Point p = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), view.getLayers());
@@ -761,6 +878,11 @@ public class GameController {
         }
     }
 
+    /**
+     * Handles the explosion logic for the Cherry Bomb
+     * @param centerRow the center row of the explosion
+     * @param centerCol the center column of the explosion
+     */
     private void cherryBombExplode(int centerRow, int centerCol) {
         // Calculate the bounds of the 3x3 area
         int startRow = Math.max(0, centerRow - 1);
@@ -797,6 +919,11 @@ public class GameController {
         }
     }
 
+    /**
+     * Handles the logic for a zombie eating a plant
+     * @param zombie the Zombie eating
+     * @param walkTimer the Timer controlling the zombie's movement
+     */
     private void eatPlant(Zombie zombie, Timer walkTimer) {
 
         int index = zombieList.indexOf(zombie);
@@ -844,6 +971,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Spawns a Flag Zombie at the start of a wave
+     */
     private void spawnFlag() {
 
         final ImageIcon zombieIcon = new ImageIcon("view\\gifs\\Flag1.gif");
@@ -854,6 +984,9 @@ public class GameController {
         spawnZombie(zombie, zombieLabel, zombieIcon);
     }
 
+    /**
+     * Randomly selects and spawns a zombie
+     */
     private void zombiePick() {
 
         ImageIcon zombieIconT = null;
@@ -885,6 +1018,12 @@ public class GameController {
         spawnZombie(zombie, zombieLabel, zombieIcon);
     }
 
+    /**
+     * Spawns a zombie and animates its movement
+     * @param zombie the Zombie to spawn
+     * @param zombieLabel the JLabel representing the zombie
+     * @param zombieIcon the ImageIcon for the zombie
+     */
     private void spawnZombie(Zombie zombie, JLabel zombieLabel, ImageIcon zombieIcon) {
 
         int yCoordinate;
@@ -1000,6 +1139,10 @@ public class GameController {
         zombieWalking.start();
     }
 
+     /**
+     * Animates the movement of a lawn mower and removes zombies in its path
+     * @param lMow the JLabel representing the lawn mower
+     */
     private void moveMow(JLabel lMow) {
 
         int y = lMow.getY();
@@ -1044,36 +1187,11 @@ public class GameController {
         mow.start();
     }
 
-    public void playWavFile(String filePath) {
-        try {
-            // Get the audio file
-            File audioFile = new File(filePath);
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
-
-            // Get audio format
-            AudioFormat format = audioStream.getFormat();
-
-            // Create data line info
-            DataLine.Info info = new DataLine.Info(Clip.class, format);
-
-            // Check if system supports the data line
-            if (!AudioSystem.isLineSupported(info)) {
-                return;
-            }
-
-            // Get and open data line
-            Clip audioClip = (Clip) AudioSystem.getLine(info);
-            audioClip.open(audioStream);
-
-            // Start playing
-            audioClip.start();
-
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void playBgSound(String filePath) {
+    /**
+     * Plays the background music for the game
+     * @param filePath the path to the audio file
+     */
+    private void playBgSound(String filePath) {
         try {
             gameMusic = AudioSystem.getClip();
             gameMusic.open(AudioSystem.getAudioInputStream(new File(filePath)));
@@ -1084,7 +1202,11 @@ public class GameController {
         }
     }
 
-    public void playSound(String filePath) {
+    /**
+     * Plays a sound effect
+     * @param filePath the path to the audio file
+     */
+    private void playSound(String filePath) {
         try {
             Clip gameSound = AudioSystem.getClip();
             gameSound.open(AudioSystem.getAudioInputStream(new File(filePath)));

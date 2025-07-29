@@ -1,5 +1,12 @@
 package view;
 
+/**
+ * This class represents the main GUI of the PvZ game
+ * 
+ * @author Deveza, Jerry King
+ * @author Rivera, Dustine Gian
+ * @version 21.0
+ */
 import java.awt.Image;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -20,41 +27,44 @@ import javax.swing.JProgressBar;
 
 public class GameView extends JFrame {
 
-    JLabel backGround = new JLabel();
-    JLabel shopLabel = new JLabel();
-    JLabel sunCount = new JLabel();
+    private JLabel backGround = new JLabel();
+    private JLabel shopLabel = new JLabel();
+    private JLabel sunCount = new JLabel();
 
-    JLabel sunflowerPack = new JLabel();
-    JLabel peashooterPack = new JLabel();
-    JLabel cherryPack = new JLabel();
-    JLabel wallnutPack = new JLabel();
+    private JLabel sunflowerPack = new JLabel();
+    private JLabel peashooterPack = new JLabel();
+    private JLabel cherryPack = new JLabel();
+    private JLabel wallnutPack = new JLabel();
 
-    JLabel shovel = new JLabel();
+    private JLabel shovel = new JLabel();
 
-    CardLayout cardLayout = new CardLayout();
-    JPanel container = new JPanel(cardLayout);
+    private CardLayout cardLayout = new CardLayout();
+    private JPanel container = new JPanel(cardLayout);
 
-    JButton lvl1 = new JButton("Level 1");
-    JButton lvl2 = new JButton("Level 2");
-    JButton lvl3 = new JButton("Level 3");
+    private JButton lvl1 = new JButton("Level 1");
+    private JButton lvl2 = new JButton("Level 2");
+    private JButton lvl3 = new JButton("Level 3");
 
-    JLabel mow1 = new JLabel();
-    JLabel mow2 = new JLabel();
-    JLabel mow3 = new JLabel();
-    JLabel mow4 = new JLabel();
-    JLabel mow5 = new JLabel();
+    private JLabel mow1 = new JLabel();
+    private JLabel mow2 = new JLabel();
+    private JLabel mow3 = new JLabel();
+    private JLabel mow4 = new JLabel();
+    private JLabel mow5 = new JLabel();
 
     public JPanel[][] gridCells;
 
-    Font customFont;
+    private Font customFont;
 
-    JPanel board;
+    private JPanel board;
 
-    JLayeredPane progress = new JLayeredPane();
-    JProgressBar progressBar = new JProgressBar();
+    private JLayeredPane progress = new JLayeredPane();
+    private JProgressBar progressBar = new JProgressBar();
 
-    JLayeredPane layers = new JLayeredPane();
+    private JLayeredPane layers = new JLayeredPane();
 
+    /**
+     * This creates the main GUI of the game using JLayeredPane
+     */
     public GameView() {
 
         ImageIcon mow = new ImageIcon("view\\assets\\Lawn_Mower.png");
@@ -225,136 +235,224 @@ public class GameView extends JFrame {
 
     }
 
+    /**
+     * This sets the board variable with the passed JPanel
+     * 
+     * @param board a JPanel in grid layout representing the tiles for the plants
+     */
     public void setBoard(JPanel board) {
         this.board = board;
     }
 
+    /**
+     * This sets the gridCells with a 2D array of JPanels representing each tile
+     * 
+     * @param gridCells a 2D array containing JPanels
+     */
     public void setGridCells(JPanel[][] gridCells) {
         this.gridCells = gridCells;
     }
 
-    public void setCherryPack(JLabel cherryPack) {
-        this.cherryPack = cherryPack;
-    }
-
-    public void setWallnutPack(JLabel wallnutPack) {
-        this.wallnutPack = wallnutPack;
-    }
-
-    @Override
-    public int getHeight() {
-        return super.getHeight();
-    }
-
-    @Override
-    public int getWidth() {
-        return super.getWidth();
-    }
-
+    /**
+     * This gets the JLabel containing the suncount
+     * @return a JLabel containing the suncount
+     */
     public JLabel getSunCount() {
         return sunCount;
     }
 
+    /**
+     * This gets the JLabel containing the sunflowerPack
+     * @return a JLabel containing the sunflowerPack
+     */
     public JLabel getSunflowerPack() {
         return sunflowerPack;
     }
 
+    /**
+     * This gets the JLabel containing the peashooterPack
+     * @return a JLabel containing the peashooterPack
+     */
     public JLabel getPeashooterPack() {
         return peashooterPack;
     }
 
+    /**
+     * This gets the JLabel containing the cherryPack
+     * @return a JLabel containing the cherryPack
+     */
     public JLabel getCherryPack() {
         return cherryPack;
     }
 
+    /**
+     * This gets the JLabel containing the wallnutpack
+     * @return a JLabel containing the wallnutpack
+     */
     public JLabel getWallnutPack() {
         return wallnutPack;
     }
 
+    /**
+     * This gets the JLayeredPane containing the layers of the display
+     * @return a JLayeredPane containing layers variable
+     */
     public JLayeredPane getLayers() {
         return layers;
     }
 
+    /**
+     * This gets the JPanel 2D array containing the JPanels representing a tile
+     * @return a JPanel 2D array containing the gridCells variable
+     */
     public JPanel[][] getGridCells() {
         return gridCells;
     }
 
+    /**
+     * This gets the JProgressBar containing the progressbar of the game
+     * @return a JProgressBar containing the progressBar variable
+     */
     public JProgressBar getProgressBar() {
         return progressBar;
     }
 
+    /**
+     * This gets the JLabel containing the shovel of the game
+     * @return a JLabel containing the shovel variable
+     */
     public JLabel getShovel() {
         return shovel;
     }
 
+    /**
+     * This gets the JButton of the first button of the game main menu
+     * @return a JButton containing lvl1 variable
+     */
     public JButton getLvl1() {
         return lvl1;
     }
 
+    /**
+     * This gets the JButton of the second button of the game main menu
+     * @return a JButton containing lvl2 variable
+     */
     public JButton getLvl2() {
         return lvl2;
     }
 
+    /**
+     * This gets the JButton of the third button of the game main menu
+     * @return a JButton containing lvl3 variable
+     */
     public JButton getLvl3() {
         return lvl3;
     }
 
+    /**
+     * This gets the CardLayout of the different scenes of the game
+     * @return a CardLayout containing the cardLayout variable
+     */
     public CardLayout getCardLayout() {
         return cardLayout;
     }
 
+    /**
+     * This gets the JPanel containing cardLayout
+     * @return a JPanel containing the container variable
+     */
     public JPanel getContainerP() {
         return container;
     }
 
+    /**
+     * This gets the JLabel containing the game's background image 
+     * @return a JLabel for the game's background
+     */
     public JLabel getBackGround() {
         return backGround;
     }
 
+    /**
+     * This gets the JPanel of the board where plants are placed
+     * @return a JPanel containing the board variable
+     */
     public JPanel getBoard() {
         return board;
     }
 
+    /**
+     * This gets the JLabel for the first lawn mower
+     * @return a JLabel representing the first lawn mower
+     */
     public JLabel getMow1() {
         return mow1;
     }
 
+    /**
+     * This gets the JLabel for the second lawn mower
+     * @return a JLabel representing the second lawn mower 
+     */
     public JLabel getMow2() {
         return mow2;
     }
 
+    /**
+     * This gets the JLabel for the third lawn mower
+     * @return a JLabel representing the third lawn mower
+     */
     public JLabel getMow3() {
         return mow3;
     }
 
+    /**
+     * This gets the JLabel for the fourth lawn mower
+     * @return a JLabel representing the fourth lawn mower
+     */
     public JLabel getMow4() {
         return mow4;
     }
 
+    /**
+     * This gets the JLabel for the fifth lawn mower
+     * @return a JLabel representing the fifth lawn mower
+     */
     public JLabel getMow5() {
         return mow5;
     }
 
+    /**
+     * This updates the sun counter display with the given count.
+     * @param count the new sun count to display
+     */
     public void updateSunCounter(int count) {
         sunCount.setText(String.valueOf(count));
     }
 
+    /**
+     * Adds a zombie JLabel to the game display.
+     * @param zombie the JLabel representing the zombie
+     */
     public void addZombie(JLabel zombie) {
         layers.add(zombie, Integer.valueOf(5));
         layers.repaint();
     }
 
+    /**
+     * Adds a sun JLabel to the game display.
+     * @param sun the JLabel representing the sun
+     */
     public void addSun(JLabel sun) {
         layers.add(sun, Integer.valueOf(5));
         layers.repaint();
     }
 
+    /**
+     * Removes a sun JLabel from the game display.
+     * @param sun the JLabel representing the sun
+     */
     public void removeSun(JLabel sun) {
         layers.remove(sun);
         layers.repaint();
-    }
-
-    public static void main(String[] args) {
-        new GameView();
     }
 }

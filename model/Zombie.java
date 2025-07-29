@@ -1,4 +1,4 @@
-/** Represents a Zombie
+/** Represents a Zombie abstarct
  * @author Deveza, Jerry King 
  * @author Rivera, Dustine Gian
  * @version 2.0
@@ -13,10 +13,11 @@ public abstract class Zombie {
     protected int damage;
     protected int speed;
     
-
     /**
-     * Creates Zombie object given its y position
-     * @param yPosition the y position of the zombie
+     * Creates Zombie object given its health, damage, and speed
+     * @param health
+     * @param damage
+     * @param speed
      */
     public Zombie(int health, int damage, int speed) { 
 
@@ -53,6 +54,22 @@ public abstract class Zombie {
     }
 
     /**
+     * This the zombie's damage
+     * @return an integer containing the zombie's damage
+     */
+    public int getDamage(){
+        return damage;
+    }
+
+    /**
+     * This the zombie's speed
+     * @return an integer containing the zombie's speed
+     */
+    public int getSpeed(){
+        return speed;
+    }
+
+    /**
      * This modifies the zombie's y position
      * @param y the new y position of zombie
      */
@@ -76,16 +93,6 @@ public abstract class Zombie {
         health -= damage;
     }
 
-
-    /**
-     * This moves the zombie's x position one unit to the left
-     */
-    public void move() {
-        if (xPosition > 0) {
-            xPosition -= 1;
-        }
-    }
-
     /**
      * This checks if the zombie's health is equal or below 0
      * @return a boolean if the zombie's health is equal or below 0
@@ -93,29 +100,6 @@ public abstract class Zombie {
     public boolean isDead() {
         return health <= 0;
     }
-
-    public int getDamage(){
-        return damage;
-    }
-
-    public int getSpeed(){
-        return speed;
-    }
-
-    // /**
-    //  * This gets the zombie's damage
-    //  * @return an integer containing the zombie's damage
-    //  */
-    // public int getDamage() {
-    //     return damage;
-    // }
-    // /**
-    //  * This gets the zombie's speed
-    //  * @return an integer containing the zombie's speed
-    //  */
-    // public int getSpeed() {
-    //     return speed;
-    // }
 
     
 }

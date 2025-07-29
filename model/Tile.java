@@ -38,8 +38,4 @@ public class Tile {
     public void removePlant(){
         this.plant = null;
     }
-
-    public void toS(){
-        System.out.println(plant);
-    }
 }
