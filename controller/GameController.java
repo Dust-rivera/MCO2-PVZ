@@ -150,6 +150,10 @@ public class GameController {
             view.setCherryPack(null);
             view.getLayers().remove(wallnut);
             view.setWallnutPack(null);
+            view.getLayers().remove(view.getMow1());
+            view.getLayers().remove(view.getMow2());
+            view.getLayers().remove(view.getMow4());
+            view.getLayers().remove(view.getMow5());
 
             // System.out.println(view.getHeight());
             waveNum = 5;
@@ -161,6 +165,8 @@ public class GameController {
             view.getBackGround().setIcon(new ImageIcon("view\\assets\\lvl2.png"));
             view.getLayers().remove(wallnut);
             view.setWallnutPack(null);
+            view.getLayers().remove(view.getMow1());
+            view.getLayers().remove(view.getMow5());
             // System.out.println(view.getHeight());
             waveNum = 7;
 
@@ -291,7 +297,7 @@ public class GameController {
     }
 
     private void progress() {
-        gameTimer = new Timer(100, e -> decreaseTime());
+        gameTimer = new Timer(1000, e -> decreaseTime());
         gameTimer.start();
     }
 
@@ -595,7 +601,7 @@ public class GameController {
         }
 
         System.out.println(isZombieInSameRow(row, cell.getX()));
-        System.exit(0);
+        // System.exit(0);
 
         if (row != -1 && isZombieInSameRow(row, cell.getX())) {
             System.out.println("COL" + col);
@@ -605,28 +611,45 @@ public class GameController {
 
     private boolean isZombieInSameRow(int row, int plantX) {
 
-        for (Component comp : view.getLayers().getComponents()) {
-            if (comp instanceof JLabel) {
-                JLabel zombieLabel = (JLabel) comp;
+        // for (Component comp : view.getLayers().getComponents()) {
+        // if (comp instanceof JLabel) {
+        // JLabel zombieLabel = (JLabel) comp;
 
-                // Check if this JLabel is actually a zombie
-                if (zombieLabel.getIcon() != null &&
-                        zombieLabel.getIcon().toString().contains("Zombie")) { // crude check
-                    Rectangle zombieBounds = zombieLabel.getBounds();
+        // // Check if this JLabel is actually a zombie
+        // if (zombieLabel.getIcon() != null &&
+        // zombieLabel.getIcon().toString().contains("Zombie")) { // crude check
+        // Rectangle zombieBounds = zombieLabel.getBounds();
 
-                    int zombieY = zombieBounds.y;
-                    int zombieRow = getRowFromY(zombieY);
+        // int zombieY = zombieBounds.y;
+        // int zombieRow = getRowFromY(zombieY);
 
-                    System.out.println("ROW " + zombieRow);
+        // System.out.println("ROW " + zombieRow);
 
-                    // Zombie is in the same row AND to the right of the plant
-                    if (zombieRow == row && zombieBounds.x > plantX) {
-                        System.out.println("ZOMBIE!!");
-                        return true;
-                    }
-                }
+        // // Zombie is in the same row AND to the right of the plant
+        // if (zombieRow == row && zombieBounds.x > plantX) {
+        // System.out.println("ZOMBIE!!");
+        // return true;
+        // }
+        // }
+        // }
+        // }
+
+        for (JLabel zombieLabel : zombieLabels) {
+            // Check if this JLabel is actually a zombie
+            Rectangle zombieBounds = zombieLabel.getBounds();
+
+            int zombieY = zombieBounds.y;
+            int zombieRow = getRowFromY(zombieY);
+
+            System.out.println("ROW " + zombieRow);
+
+            // Zombie is in the same row AND to the right of the plant
+            if (zombieRow == row && zombieBounds.x > plantX) {
+                System.out.println("ZOMBIE!!");
+                return true;
             }
         }
+
         return false;
     }
 
@@ -667,17 +690,19 @@ public class GameController {
         peaLabel.setBounds(startX, startY, 20, 20);
         view.getLayers().add(peaLabel, Integer.valueOf(4));
 
-        Zombie target = null;
-        for (Zombie zombie : zombieList) {
+        // Zombie target = null;
+        // for (Zombie zombie : zombieList) {
 
-            if (!zombie.isDead() && zombie.getYPosition() == row && zombie.getXPosition() > startX) {
-                target = zombie;
-                break;
-            }
-        }
-        // if (target == null) return;
+        //     if (!zombie.isDead() && zombie.getYPosition() == row && zombie.getXPosition() > startX) {
+        //         System.out.println(zombie);
+        //         target = zombie;
+        //         break;
+        //     }
+        // }
+        // if (target == null)
+        //     return;
 
-        Zombie lockedZombie = target;
+        // Zombie lockedZombie = target;
 
         Timer peaTimer = new Timer(20, new ActionListener() {
             int x = startX;
@@ -685,42 +710,77 @@ public class GameController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 x += 5;
-
                 // Only attack locked zombie
                 // System.out.println("tite " + lockedZombie.isDead());
                 // System.out.println("TITE " + Math.abs(lockedZombie.getXPosition() - x));
+                for (Zombie zombie : zombieList) {
+                    // int index = zombieList.indexOf(zombie);
+                    if (!zombie.isDead() && Math.abs(zombie.getXPosition() - x) <= 5) {
+                        if (Math.abs(zombie.getXPosition()) <= startX + 100)
+                            zombie.takeDamage(board.getTile(row, col).getPlant().getDirDamage());
+                        else
+                            zombie.takeDamage(board.getTile(row, col).getPlant().getDamage());
+                        ImageIcon explosion = new ImageIcon("view\\assets\\peax.png");
+                        peaLabel.setIcon(explosion);
+                        int explosionWidth = explosion.getIconWidth();
+                        int explosionHeight = explosion.getIconHeight();
+                        peaLabel.setBounds(x - explosionWidth / 2, startY - explosionHeight / 2, explosionWidth,
+                                explosionHeight);
+                        ((Timer) e.getSource()).stop();
 
-                if (!lockedZombie.isDead() && Math.abs(lockedZombie.getXPosition() - x) <= 5) {
-                    if (Math.abs(lockedZombie.getXPosition()) <= startX + 100)
-                        lockedZombie.takeDamage(board.getTile(row, col).getPlant().getDirDamage());
-                    else
-                        lockedZombie.takeDamage(board.getTile(row, col).getPlant().getDamage());
-                    ImageIcon explosion = new ImageIcon("view\\assets\\peax.png");
-                    peaLabel.setIcon(explosion);
-                    int explosionWidth = explosion.getIconWidth();
-                    int explosionHeight = explosion.getIconHeight();
-                    peaLabel.setBounds(x - explosionWidth / 2, startY - explosionHeight / 2, explosionWidth,
-                            explosionHeight);
-                    ((Timer) e.getSource()).stop();
+                        new Timer(100, evt -> {
+                            view.getLayers().remove(peaLabel);
+                            view.getLayers().repaint();
+                        }).start();
 
-                    new Timer(100, evt -> {
-                        view.getLayers().remove(peaLabel);
-                        view.getLayers().repaint();
-                    }).start();
-
-                    if (lockedZombie.isDead()) {
-                        int index = zombieList.indexOf(lockedZombie);
-                        System.out.println("zombie tite " + lockedZombie);
-                        System.out.println("zombie index " + zombieLabels.get(index));
-                        view.getLayers().remove(zombieLabels.get(index));
-                        view.getLayers().repaint();
-                        zombieList.remove(lockedZombie);
-                        zombieLabels.remove(index);
-                        zombieWalkTimers.get(index).stop();
-                        zombieWalkTimers.remove(index);
+                        if (zombie.isDead()) {
+                            int index = zombieList.indexOf(zombie);
+                            //System.out.println("zombie tite " + lockedZombie);
+                            //System.out.println("zombie index " + zombieLabels.get(index));
+                            view.getLayers().remove(zombieLabels.get(index));
+                            view.getLayers().repaint();
+                            zombieList.remove(zombie);
+                            zombieLabels.remove(index);
+                            zombieWalkTimers.get(index).stop();
+                            zombieWalkTimers.remove(index);
+                        }
+                        return;
                     }
-                    return;
                 }
+
+                // if (!lockedZombie.isDead() && Math.abs(lockedZombie.getXPosition() - x) <= 5)
+                // {
+                // if (Math.abs(lockedZombie.getXPosition()) <= startX + 100)
+                // lockedZombie.takeDamage(board.getTile(row, col).getPlant().getDirDamage());
+                // else
+                // lockedZombie.takeDamage(board.getTile(row, col).getPlant().getDamage());
+                // ImageIcon explosion = new ImageIcon("view\\assets\\peax.png");
+                // peaLabel.setIcon(explosion);
+                // int explosionWidth = explosion.getIconWidth();
+                // int explosionHeight = explosion.getIconHeight();
+                // peaLabel.setBounds(x - explosionWidth / 2, startY - explosionHeight / 2,
+                // explosionWidth,
+                // explosionHeight);
+                // ((Timer) e.getSource()).stop();
+
+                // new Timer(100, evt -> {
+                // view.getLayers().remove(peaLabel);
+                // view.getLayers().repaint();
+                // }).start();
+
+                // if (lockedZombie.isDead()) {
+                // int index = zombieList.indexOf(lockedZombie);
+                // System.out.println("zombie tite " + lockedZombie);
+                // System.out.println("zombie index " + zombieLabels.get(index));
+                // view.getLayers().remove(zombieLabels.get(index));
+                // view.getLayers().repaint();
+                // zombieList.remove(lockedZombie);
+                // zombieLabels.remove(index);
+                // zombieWalkTimers.get(index).stop();
+                // zombieWalkTimers.remove(index);
+                // }
+                // return;
+                // }
 
                 if (x > view.getLayers().getWidth()) {
                     ((Timer) e.getSource()).stop();
@@ -952,25 +1012,19 @@ public class GameController {
 
         int zom = random.nextInt(3);
 
-        // switch (zom) {
-        //     case 0:
+        switch (zom) {
+            case 0:
                 zombieIconT = new ImageIcon("view\\gifs\\Zombie80.gif");
                 zombieT = new NormalZombie();
-        //         break;
-        //     case 1:
-                // zombieIconT = new ImageIcon("view\\gifs\\Cone80.gif");
-                // zombieT = new ConeheadZombie();
-        //         break;
-        //     case 2:
-                // zombieIconT = new ImageIcon("view\\gifs\\Buckethead.gif");
-                // zombieT = new BucketheadZombie();
-                //break;
-            /*
-             * case 3:
-             * yCoordinate = 350;
-             * break;
-             */
-        // }
+                break;
+            case 1:
+                zombieIconT = new ImageIcon("view\\gifs\\ConeheadZombie.gif");
+                zombieT = new ConeheadZombie();
+                break;
+            case 2:
+                zombieIconT = new ImageIcon("view\\gifs\\BucketheadZombie.gif");
+                zombieT = new BucketheadZombie();
+        }
         zombie = zombieT;
         zombieIcon = zombieIconT;
 
@@ -1189,6 +1243,7 @@ public class GameController {
                     int index = zombieList.indexOf(zombie);
                     if (mowX - 50 < zombie.getXPosition() && mowX + 50 > zombie.getXPosition()
                             && getRowFromY(lMow.getY()) == zombie.getYPosition()) {
+                        zombie.takeDamage(9999);
                         view.getLayers().remove(zombieLabels.get(index));
                         view.getLayers().repaint();
                         zombieWalkTimers.get(index).stop();
