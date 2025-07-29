@@ -14,7 +14,6 @@ public class CherryBomb extends Plant {
     }
 
     public static int getCostStatic() {
-        // TODO Auto-generated method stub
         return COST;
     }
 

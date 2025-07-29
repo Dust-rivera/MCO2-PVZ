@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.event.MouseEvent;
-
 import java.awt.event.MouseAdapter;
 
 import controller.GameController;
@@ -24,9 +23,7 @@ public class ShopListener extends MouseAdapter {
         controller.shopReleased(e);
     }
 
-    
-
-    @Override // this is used when the user is dragging the plant, magpapakita ung image na dinadrag mo siya
+    @Override
     public void mouseDragged(MouseEvent e) {
         controller.imgDrag(e);
     }

@@ -18,11 +18,6 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
-// import javafx.scene.effect.Light.Point;
-// import javafx.scene.shape.Rectangle;
-
-//import javafx.scene.text.Font;
-
 public class GameView extends JFrame {
 
     JLabel backGround = new JLabel();
@@ -38,6 +33,7 @@ public class GameView extends JFrame {
 
     CardLayout cardLayout = new CardLayout();
     JPanel container = new JPanel(cardLayout);
+
     JButton lvl1 = new JButton("Level 1");
     JButton lvl2 = new JButton("Level 2");
     JButton lvl3 = new JButton("Level 3");
@@ -48,7 +44,6 @@ public class GameView extends JFrame {
     JLabel mow4 = new JLabel();
     JLabel mow5 = new JLabel();
 
-
     public JPanel[][] gridCells;
 
     Font customFont;
@@ -57,9 +52,6 @@ public class GameView extends JFrame {
 
     JLayeredPane progress = new JLayeredPane();
     JProgressBar progressBar = new JProgressBar();
-
-    // JLabel shopLabel = new JLabel();
-    // JLabel shopLabel = new JLabel();
 
     JLayeredPane layers = new JLayeredPane();
 
@@ -85,7 +77,6 @@ public class GameView extends JFrame {
         mow5.setIcon(mow);
         mow5.setBounds(50, 490, mow.getIconWidth(), mow.getIconHeight());
         layers.add(mow5, Integer.valueOf(4));
-        
 
         ImageIcon menuBg = new ImageIcon("view\\assets\\PvZMenu.jpg");
         JPanel menu = new JPanel() {
@@ -121,10 +112,6 @@ public class GameView extends JFrame {
         }
 
         ImageIcon icon = new ImageIcon("view\\assets\\logo.png");
-        // ImageIcon bg = new ImageIcon(
-        // "view\\assets\\lvl1.png"); // test
-
-        // backGround.setIcon(bg);
         ImageIcon shop = new ImageIcon("view\\assets\\shop border.png");
         ImageIcon sunflowerPk = new ImageIcon(
                 "view\\assets\\SunflowerPack.png");
@@ -180,25 +167,7 @@ public class GameView extends JFrame {
 
         layers.add(progress, Integer.valueOf(5));
 
-        // board = new JPanel(new GridLayout(r, c));
-        // board = new JPanel(new GridLayout(r, c));
-        // board.setBounds(110, 100, 700, 450);
-        // board.setBounds(110, 280, 700, 90);
-
-        // board.setOpaque(false);
-
-        // for (int row = 0; row < r; row++) {
-        // for (int col = 0; col < c; col++) {
-        // gridCells[row][col] = new JPanel();
-        // gridCells[row][col].setOpaque(false);
-        // gridCells[row][col].setBorder(BorderFactory.createLineBorder(Color.RED)); //
-        // So background is visible
-        // board.add(gridCells[row][col]);
-        // }
-        // }
-
         sunCount.setBounds(25, 50, 29, 29);
-        // sunCount.setOpaque(true);
 
         Image image = sunflowerPk.getImage();
         Image newImg = image.getScaledInstance(50, 65, Image.SCALE_SMOOTH);
@@ -227,19 +196,10 @@ public class GameView extends JFrame {
         wallnutPack.setIcon(wallnutPk);
         wallnutPack.setBounds(223, 5, wallnutPk.getIconWidth(), wallnutPk.getIconHeight());
 
-        // ShopListener listener = new ShopListener(peashooterPack, cherryPack,
-        // backGround);
-        // sunflowerPack.addMouseListener(listener);
-        // peashooterPack.addMouseListener(listener);
-        // cherryPack.addMouseListener(listener);
-
-        // backGround.setIcon(bg);
         backGround.setBounds(0, 0, 881, 600);
 
         shopLabel.setIcon(shop);
         shopLabel.setBounds(5, 0, shop.getIconWidth(), shop.getIconHeight());
-
-        // sunflowerPack.setOpaque(true);
 
         layers.add(backGround, Integer.valueOf(0));
         layers.add(shopLabel, Integer.valueOf(1));
@@ -249,12 +209,9 @@ public class GameView extends JFrame {
         layers.add(wallnutPack, Integer.valueOf(2));
         layers.add(sunCount, Integer.valueOf(2));
         layers.add(shovel, Integer.valueOf(2));
-        // layers.add(board, Integer.valueOf(3));
 
         container.add(layers, "Game");
-
         cardLayout.show(container, "Menu");
-        // cardLayout.show(container, "Lose");
 
         this.add(container);
         this.setIconImage(icon.getImage());
@@ -262,38 +219,26 @@ public class GameView extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setSize(881, 600);
-        // this.setLayout(null);
         this.setLocationRelativeTo(null);
         this.setSize(881, 600);
         this.setVisible(true);
 
     }
 
-    // public void drawSunCount(Graphics2D g){
-    // g.setFont(customFont);
-    // g.setColor(Color.BLACK);
-    // FontMetrics metrics = g.getFontMetrics(customFont);
-    // g.drawString(Integer.toString(sunCount), 4
-    // -(metrics.stringWidth(Integer.toString(sunCount))/2), 4);
-    // }
-
-    public void updateSunCounter(int count) {
-        sunCount.setText(String.valueOf(count));
+    public void setBoard(JPanel board) {
+        this.board = board;
     }
 
-    public void addZombie(JLabel zombie) {
-        layers.add(zombie, Integer.valueOf(5));
-        layers.repaint();
+    public void setGridCells(JPanel[][] gridCells) {
+        this.gridCells = gridCells;
     }
 
-    public void addSun(JLabel sun) {
-        layers.add(sun, Integer.valueOf(5));
-        layers.repaint();
+    public void setCherryPack(JLabel cherryPack) {
+        this.cherryPack = cherryPack;
     }
 
-    public void removeSun(JLabel sun) {
-        layers.remove(sun);
-        layers.repaint();
+    public void setWallnutPack(JLabel wallnutPack) {
+        this.wallnutPack = wallnutPack;
     }
 
     @Override
@@ -322,16 +267,8 @@ public class GameView extends JFrame {
         return cherryPack;
     }
 
-    public void setCherryPack(JLabel cherryPack) {
-        this.cherryPack = cherryPack;
-    }
-
     public JLabel getWallnutPack() {
         return wallnutPack;
-    }
-
-    public void setWallnutPack(JLabel wallnutPack) {
-        this.wallnutPack = wallnutPack;
     }
 
     public JLayeredPane getLayers() {
@@ -378,14 +315,6 @@ public class GameView extends JFrame {
         return board;
     }
 
-    public void setBoard(JPanel board) {
-        this.board = board;
-    }
-
-    public void setGridCells(JPanel[][] gridCells) {
-        this.gridCells = gridCells;
-    }
-
     public JLabel getMow1() {
         return mow1;
     }
@@ -404,6 +333,25 @@ public class GameView extends JFrame {
 
     public JLabel getMow5() {
         return mow5;
+    }
+
+    public void updateSunCounter(int count) {
+        sunCount.setText(String.valueOf(count));
+    }
+
+    public void addZombie(JLabel zombie) {
+        layers.add(zombie, Integer.valueOf(5));
+        layers.repaint();
+    }
+
+    public void addSun(JLabel sun) {
+        layers.add(sun, Integer.valueOf(5));
+        layers.repaint();
+    }
+
+    public void removeSun(JLabel sun) {
+        layers.remove(sun);
+        layers.repaint();
     }
 
     public static void main(String[] args) {

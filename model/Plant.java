@@ -5,17 +5,17 @@
  */
 
 package model;
-public class Plant {
-    private int xPosition;
-    private int yPosition;
-    private int cost;
-    private int health;
-    private int tick = 0;
-    private int range;
-    private int damage;
-    private int dirDamage;
-    private final int SPEED;
-    private int regenTime;
+public abstract class Plant {
+    protected int xPosition;
+    protected int yPosition;
+    protected int cost;
+    protected int health;
+    protected int tick = 0;
+    protected int range;
+    protected int damage;
+    protected int dirDamage;
+    protected final int SPEED;
+    protected int regenTime;
 
 
     /**
