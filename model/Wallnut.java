@@ -7,8 +7,14 @@ package model;
  */
 public class Wallnut extends Plant {
 
+    private static int COST = 50;
+
     public Wallnut(int x, int y) {
         super(150, 9999, x, y, 0, 1, 9999, 9999, 50000); // Massive damage, instant
+    }
+
+    public static int getCostStatic() {
+        return COST;
     }
 
     /**

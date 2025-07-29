@@ -6,6 +6,8 @@
 package model;
 public class Peashooter extends Plant{
 
+
+    private static int COST = 100;
     /**
      * This creates a Peashooter object given its x and y position
      * @param x the x position of the peashooter
@@ -13,6 +15,11 @@ public class Peashooter extends Plant{
      */
     public Peashooter(int x, int y){
         super(100, 60, x, y, 6, 9, 20, 30, 7500);
+    }
+
+    public static int getCostStatic() {
+        
+        return COST;
     }
 
     /** This updates the Peashooter given the board

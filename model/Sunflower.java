@@ -6,6 +6,8 @@
 package model;
 public class Sunflower extends Plant{
 
+    private static int COST = 50;
+
     /**
      * This creates a Sunflower object given its x and y position
      * @param x the x position of the sunflower
@@ -13,6 +15,10 @@ public class Sunflower extends Plant{
      */
     public Sunflower(int x, int y){
         super(50, 150, x, y, 0, 0, 0, 0, 30000); // 24 ticks = 24 seconds
+    }
+
+    public static int getCostStatic() {
+        return COST;
     }
 
     /** This updates the Peashooter given the board

@@ -297,7 +297,7 @@ public class GameController {
     }
 
     private void progress() {
-        gameTimer = new Timer(1000, e -> decreaseTime());
+        gameTimer = new Timer(100, e -> decreaseTime());
         gameTimer.start();
     }
 
@@ -387,22 +387,22 @@ public class GameController {
         Object source = e.getSource();
         ImageIcon image = null;
 
-        if (source == sunflower && user.getSunCount() >= 50) {
+        if (source == sunflower && user.getSunCount() >= Sunflower.getCostStatic()) {
             if (sunflowerCD != 0)
                 return;
             image = new ImageIcon("view\\gifs\\Sunflower.gif");
             plantSelect = 0;
-        } else if (source == peashooter && user.getSunCount() >= 100) {
+        } else if (source == peashooter && user.getSunCount() >= Peashooter.getCostStatic()) {
             if (peashooterCD != 0)
                 return;
             image = new ImageIcon("view\\gifs\\Peashooter.gif");
             plantSelect = 1;
-        } else if (source == cherry && user.getSunCount() >= 150) {
+        } else if (source == cherry && user.getSunCount() >= CherryBomb.getCostStatic()) {
             if (cherrybombCD != 0)
                 return;
             image = new ImageIcon("view\\gifs\\CherryExplode.gif");
             plantSelect = 2;
-        } else if (source == wallnut && user.getSunCount() >= 50) {
+        } else if (source == wallnut && user.getSunCount() >= Wallnut.getCostStatic()) {
             if (wallnutCD != 0)
                 return;
             image = new ImageIcon("view\\assets\\wallnut.png");

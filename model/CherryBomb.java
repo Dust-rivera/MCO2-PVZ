@@ -7,8 +7,15 @@ package model;
  */
 public class CherryBomb extends Plant {
 
+    private static int COST = 150;
+
     public CherryBomb(int x, int y) {
         super(150, 9999, x, y, 0, 1, 9999, 9999, 50000); // Massive damage, instant
+    }
+
+    public static int getCostStatic() {
+        // TODO Auto-generated method stub
+        return COST;
     }
 
     /**
