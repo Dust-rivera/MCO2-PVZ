@@ -18,11 +18,10 @@ public class Board {
     /**
      * This creates a board object given the player
      * 
-     * @param player the user of the board
      * @param row    the number of rows to be created
      * @param col    the number of columns to be created
      */
-    public Board(User player, int row, int col) {
+    public Board(int row, int col) {
         numRows = row;
         numCols = col;
 
@@ -97,14 +96,6 @@ public class Board {
         }
         return -1;
     }
-    
-    /**
-     * This gets the tile 2D array representing the board
-     * @return a Tile 2D array representing the board
-     */
-    public Tile[][] getBoard() {
-        return board;
-    }
 
     /**
      * This gets the which column the tile given is on
@@ -121,6 +112,14 @@ public class Board {
             }
         }
         return -1;
+    }
+
+    /**
+     * This gets the tile 2D array representing the board
+     * @return a Tile 2D array representing the board
+     */
+    public Tile[][] getBoard() {
+        return board;
     }
 
     /**

@@ -7,14 +7,7 @@ package model;
 
 public class User {
 
-    private int sunCount;
-
-    /**
-     * This creates a User object
-     */
-    public User() {
-        sunCount = 500;
-    }
+    private int sunCount = 50;
 
     /**
      * This gets the user's sun count
@@ -35,11 +28,9 @@ public class User {
     }
 
     /**
-     * This collects the sun from the board
-     * 
-     * @param board  the board to be updated
+     * This collects the sun from the game
      */
-    public void collectSun(Board board) {
+    public void collectSun() {
         // board.setSun();
         sunCount += 25;
     }

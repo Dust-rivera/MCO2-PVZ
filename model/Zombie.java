@@ -15,9 +15,9 @@ public abstract class Zombie {
     
     /**
      * Creates Zombie object given its health, damage, and speed
-     * @param health
-     * @param damage
-     * @param speed
+     * @param health health of the zombie
+     * @param damage the damage of the zombie
+     * @param speed the speed of the zombie
      */
     public Zombie(int health, int damage, int speed) { 
 

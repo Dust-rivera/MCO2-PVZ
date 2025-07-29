@@ -61,6 +61,7 @@ public class GameController {
     private JLabel drag;
     private int offsetX, offsetY;
 
+    private int zombieType;
     private ImageIcon image;
     private Random random = new Random();
     private ArrayList<Zombie> zombieList;
@@ -91,7 +92,7 @@ public class GameController {
 
     private User user = new User();
 
-    private Board board = new Board(user, 5, 9);
+    private Board board;
 
     private GameView view = new GameView();
 
@@ -140,7 +141,11 @@ public class GameController {
 
         if (source == lvl1) {
 
+            board = new Board( 1, 9);
+            zombieType = 1;
+
             setupMap(90, 1, 9, 280);
+            
             view.getBackGround().setIcon(new ImageIcon("view\\assets\\lvl1.png"));
             view.getLayers().remove(cherry);
             view.getLayers().remove(wallnut);
@@ -153,6 +158,10 @@ public class GameController {
 
         } else if (source == lvl2) {
 
+            board = new Board( 3, 9);
+            zombieType = 2;
+
+
             setupMap(270, 3, 9, 190);
             view.getBackGround().setIcon(new ImageIcon("view\\assets\\lvl2.png"));
             view.getLayers().remove(wallnut);
@@ -161,6 +170,9 @@ public class GameController {
             waveNum = 7;
 
         } else if (source == lvl3) {
+
+            board = new Board( 5, 9);
+            zombieType = 3;
 
             setupMap(450, 5, 9, 100);
             view.getBackGround().setIcon(new ImageIcon("view\\assets\\lvl3.png"));
@@ -823,7 +835,7 @@ public class GameController {
      */
     public void sunClick(JLabel sunLabel) {
         view.removeSun(sunLabel);
-        user.collectSun(board);
+        user.collectSun();
         view.updateSunCounter(user.getSunCount());
     }
 
@@ -995,7 +1007,7 @@ public class GameController {
         final ImageIcon zombieIcon;
         final Zombie zombie;
 
-        int zom = random.nextInt(3);
+        int zom = random.nextInt(zombieType);
 
         switch (zom) {
             case 0:

@@ -20,6 +20,7 @@ public class SunClickListener implements MouseListener {
 
     /**
      * Creates a SunClick Listener given the game controler and the sun's Jlabel
+     * @param sunLabel the JLabel of the sun
      * @param controller the game controller
      */
     public SunClickListener(JLabel sunLabel, GameController controller) {

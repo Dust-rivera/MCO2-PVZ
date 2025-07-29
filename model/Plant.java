@@ -29,6 +29,7 @@ public abstract class Plant {
      * @param range     how far plant reaches
      * @param damage    the amount of damage plant deals
      * @param dirDamage the amount of damage the plant deals close range
+     * @param regen     the amount of time it takes for the plant to regenerate (buy again)
      */
     public Plant(int cost, int health, int x, int y, int speed, int range, int damage, int dirDamage, int regen) {
         xPosition = x;
