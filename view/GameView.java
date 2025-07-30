@@ -27,29 +27,29 @@ import javax.swing.JProgressBar;
 
 public class GameView extends JFrame {
 
-    private JLabel backGround = new JLabel();
-    private JLabel shopLabel = new JLabel();
-    private JLabel sunCount = new JLabel();
+    private JLabel backGround;
+    private JLabel shopLabel;
+    private JLabel sunCount;
 
-    private JLabel sunflowerPack = new JLabel();
-    private JLabel peashooterPack = new JLabel();
-    private JLabel cherryPack = new JLabel();
-    private JLabel wallnutPack = new JLabel();
+    private JLabel sunflowerPack;
+    private JLabel peashooterPack;
+    private JLabel cherryPack;
+    private JLabel wallnutPack;
 
-    private JLabel shovel = new JLabel();
+    private JLabel shovel;
 
-    private CardLayout cardLayout = new CardLayout();
-    private JPanel container = new JPanel(cardLayout);
+    private CardLayout cardLayout;
+    private JPanel container;
 
-    private JButton lvl1 = new JButton("Level 1");
-    private JButton lvl2 = new JButton("Level 2");
-    private JButton lvl3 = new JButton("Level 3");
+    private JButton lvl1;
+    private JButton lvl2;
+    private JButton lvl3;
 
-    private JLabel mow1 = new JLabel();
-    private JLabel mow2 = new JLabel();
-    private JLabel mow3 = new JLabel();
-    private JLabel mow4 = new JLabel();
-    private JLabel mow5 = new JLabel();
+    private JLabel mow1;
+    private JLabel mow2;
+    private JLabel mow3;
+    private JLabel mow4;
+    private JLabel mow5;
 
     public JPanel[][] gridCells;
 
@@ -57,15 +57,44 @@ public class GameView extends JFrame {
 
     private JPanel board;
 
-    private JLayeredPane progress = new JLayeredPane();
-    private JProgressBar progressBar = new JProgressBar();
+    private JLayeredPane progress;
+    private JProgressBar progressBar;
 
-    private JLayeredPane layers = new JLayeredPane();
+    private JLayeredPane layers;
 
     /**
      * This creates the main GUI of the game using JLayeredPane
      */
     public GameView() {
+
+        backGround = new JLabel();
+        shopLabel = new JLabel();
+        sunCount = new JLabel();
+
+        sunflowerPack = new JLabel();
+        peashooterPack = new JLabel();
+        cherryPack = new JLabel();
+        wallnutPack = new JLabel();
+
+        shovel = new JLabel();
+
+        cardLayout = new CardLayout();
+        container = new JPanel(cardLayout);
+
+        lvl1 = new JButton("Level 1");
+        lvl2 = new JButton("Level 2");
+        lvl3 = new JButton("Level 3");
+
+        mow1 = new JLabel();
+        mow2 = new JLabel();
+        mow3 = new JLabel();
+        mow4 = new JLabel();
+        mow5 = new JLabel();
+
+        progress = new JLayeredPane();
+        progressBar = new JProgressBar();
+
+        layers = new JLayeredPane();
 
         ImageIcon mow = new ImageIcon("view\\assets\\Lawn_Mower.png");
         mow1.setIcon(mow);
@@ -255,6 +284,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JLabel containing the suncount
+     * 
      * @return a JLabel containing the suncount
      */
     public JLabel getSunCount() {
@@ -263,6 +293,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JLabel containing the sunflowerPack
+     * 
      * @return a JLabel containing the sunflowerPack
      */
     public JLabel getSunflowerPack() {
@@ -271,6 +302,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JLabel containing the peashooterPack
+     * 
      * @return a JLabel containing the peashooterPack
      */
     public JLabel getPeashooterPack() {
@@ -279,6 +311,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JLabel containing the cherryPack
+     * 
      * @return a JLabel containing the cherryPack
      */
     public JLabel getCherryPack() {
@@ -287,6 +320,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JLabel containing the wallnutpack
+     * 
      * @return a JLabel containing the wallnutpack
      */
     public JLabel getWallnutPack() {
@@ -295,6 +329,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JLayeredPane containing the layers of the display
+     * 
      * @return a JLayeredPane containing layers variable
      */
     public JLayeredPane getLayers() {
@@ -303,6 +338,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JPanel 2D array containing the JPanels representing a tile
+     * 
      * @return a JPanel 2D array containing the gridCells variable
      */
     public JPanel[][] getGridCells() {
@@ -311,6 +347,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JProgressBar containing the progressbar of the game
+     * 
      * @return a JProgressBar containing the progressBar variable
      */
     public JProgressBar getProgressBar() {
@@ -319,6 +356,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JLabel containing the shovel of the game
+     * 
      * @return a JLabel containing the shovel variable
      */
     public JLabel getShovel() {
@@ -327,6 +365,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JButton of the first button of the game main menu
+     * 
      * @return a JButton containing lvl1 variable
      */
     public JButton getLvl1() {
@@ -335,6 +374,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JButton of the second button of the game main menu
+     * 
      * @return a JButton containing lvl2 variable
      */
     public JButton getLvl2() {
@@ -343,6 +383,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JButton of the third button of the game main menu
+     * 
      * @return a JButton containing lvl3 variable
      */
     public JButton getLvl3() {
@@ -351,6 +392,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the CardLayout of the different scenes of the game
+     * 
      * @return a CardLayout containing the cardLayout variable
      */
     public CardLayout getCardLayout() {
@@ -359,6 +401,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JPanel containing cardLayout
+     * 
      * @return a JPanel containing the container variable
      */
     public JPanel getContainerP() {
@@ -366,7 +409,8 @@ public class GameView extends JFrame {
     }
 
     /**
-     * This gets the JLabel containing the game's background image 
+     * This gets the JLabel containing the game's background image
+     * 
      * @return a JLabel for the game's background
      */
     public JLabel getBackGround() {
@@ -375,6 +419,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JPanel of the board where plants are placed
+     * 
      * @return a JPanel containing the board variable
      */
     public JPanel getBoard() {
@@ -383,6 +428,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JLabel for the first lawn mower
+     * 
      * @return a JLabel representing the first lawn mower
      */
     public JLabel getMow1() {
@@ -391,7 +437,8 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JLabel for the second lawn mower
-     * @return a JLabel representing the second lawn mower 
+     * 
+     * @return a JLabel representing the second lawn mower
      */
     public JLabel getMow2() {
         return mow2;
@@ -399,6 +446,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JLabel for the third lawn mower
+     * 
      * @return a JLabel representing the third lawn mower
      */
     public JLabel getMow3() {
@@ -407,6 +455,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JLabel for the fourth lawn mower
+     * 
      * @return a JLabel representing the fourth lawn mower
      */
     public JLabel getMow4() {
@@ -415,6 +464,7 @@ public class GameView extends JFrame {
 
     /**
      * This gets the JLabel for the fifth lawn mower
+     * 
      * @return a JLabel representing the fifth lawn mower
      */
     public JLabel getMow5() {
@@ -423,6 +473,7 @@ public class GameView extends JFrame {
 
     /**
      * This updates the sun counter display with the given count.
+     * 
      * @param count the new sun count to display
      */
     public void updateSunCounter(int count) {
@@ -431,6 +482,7 @@ public class GameView extends JFrame {
 
     /**
      * Adds a zombie JLabel to the game display.
+     * 
      * @param zombie the JLabel representing the zombie
      */
     public void addZombie(JLabel zombie) {
@@ -440,6 +492,7 @@ public class GameView extends JFrame {
 
     /**
      * Adds a sun JLabel to the game display.
+     * 
      * @param sun the JLabel representing the sun
      */
     public void addSun(JLabel sun) {
@@ -449,6 +502,7 @@ public class GameView extends JFrame {
 
     /**
      * Removes a sun JLabel from the game display.
+     * 
      * @param sun the JLabel representing the sun
      */
     public void removeSun(JLabel sun) {
