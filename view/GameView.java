@@ -558,7 +558,7 @@ public class GameView extends JFrame {
         layers.repaint();
     }
 
-        /**
+    /**
      * Gets the ImageIcon for the normal zombie walking animation.
      * @return ImageIcon for normal zombie walking
      */

@@ -24,7 +24,8 @@ public class User {
      * @param amount the cost of the plant to be bought
      */
     public void buyPlant(int amount) {
-        sunCount -= amount;
+        if(amount > 0)
+            sunCount -= amount;
     }
 
     /**
