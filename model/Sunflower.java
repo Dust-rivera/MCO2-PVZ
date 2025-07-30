@@ -16,7 +16,7 @@ public class Sunflower extends Plant {
      * @param y the y position of the sunflower
      */
     public Sunflower(int x, int y) {
-        super(50, 150, x, y, 0, 0, 0, 0, 30000); // 24 ticks = 24 seconds
+        super(50, 150, x, y, 0, 0, 0, 0, 7500); // 24 ticks = 24 seconds
     }
 
     /**
