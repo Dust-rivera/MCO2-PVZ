@@ -145,11 +145,11 @@ public class GameView extends JFrame {
 
         this.setGridCells(gridCells);
 
-        JLabel mow1 = new JLabel();
-        JLabel mow2 = new JLabel();
-        JLabel mow3 = new JLabel();
-        JLabel mow4 = new JLabel();
-        JLabel mow5 = new JLabel();
+        mow1 = new JLabel();
+        mow2 = new JLabel();
+        mow3 = new JLabel();
+        mow4 = new JLabel();
+        mow5 = new JLabel();
 
         this.getLayers().add(board, Integer.valueOf(3));
         this.getLayers().setOpaque(false);

@@ -3,7 +3,7 @@
  * also handles all the logic
  * @author Deveza, Jerry King 
  * @author Rivera, Dustine Gian
- * @version 23.1
+ * @version 27.1
  */
 package controller;
 
@@ -27,23 +27,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import java.io.File;
-import model.Board;
-import model.BucketheadZombie;
-import model.CherryBomb;
-import model.ConeheadZombie;
-import model.FlagZombie;
-import model.NormalZombie;
-import model.Peashooter;
-import model.User;
-import model.Wallnut;
-import model.Zombie;
-import view.GameView;
-import view.MenuListener;
-import view.ShopListener;
-import view.ShovelListener;
-import view.SunClickListener;
-import model.Sunflower;
-import model.Plant;
+import model.*;
+import view.*;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -223,8 +208,6 @@ public class GameController {
             for (int col = 0; col < c; col++) {
                 view.getGridCells()[row][col] = new JPanel();
                 view.getGridCells()[row][col].setOpaque(false);
-                //view.getGridCells()[row][col].setBorder(BorderFactory.createLineBorder(Color.RED)); // So background is
-                                                                                                    // visible
                 view.getBoard().add(view.getGridCells()[row][col]);
             }
         }
@@ -334,7 +317,7 @@ public class GameController {
      * Starts the game timer and initializes the game progress
      */
     private void progress() {
-        gameTimer = new Timer(1000, e -> decreaseTime());
+        gameTimer = new Timer(100, e -> decreaseTime());
         gameTimer.start();
     }
 
@@ -1136,7 +1119,7 @@ public class GameController {
 
         Timer[] zombieWalkingRef = new Timer[1];
 
-        Timer zombieWalking = new Timer(150, new ActionListener() {
+        Timer zombieWalking = new Timer(130, new ActionListener() {
 
             int x = startX;
 
@@ -1145,7 +1128,7 @@ public class GameController {
 
                 x -= zombie.getSpeed() / 2;
 
-                if (x == 100) {
+                if (x < 300) {
                     switch (yCoordinate) {
                         case 75:
                             moveMow(view.getMow1());
