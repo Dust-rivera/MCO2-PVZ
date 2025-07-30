@@ -107,16 +107,16 @@ public class GameView extends JFrame {
 
         layers = new JLayeredPane();
 
-        normalZWalk = new ImageIcon("view\\gif\\Zombie80.gif");
-        coneZWalk = new ImageIcon("view\\gif\\ConeheadZombie.gif");
-        bucketZWalk = new ImageIcon("view\\gif\\BucketheadZombie.gif");
-        normalZEat = new ImageIcon("view\\gif\\NormalZombieEating.gif");
-        coneZEat = new ImageIcon("view\\gif\\ConeZombieEating.gif");
-        bucketZEat = new ImageIcon("view\\gif\\Bucketheadeating.gif");
+        normalZWalk = new ImageIcon("view\\gifs\\Zombie80.gif");
+        coneZWalk = new ImageIcon("view\\gifs\\ConeheadZombie.gif");
+        bucketZWalk = new ImageIcon("view\\gifs\\BucketheadZombie.gif");
+        normalZEat = new ImageIcon("view\\gifs\\NormalZombieEating.gif");
+        coneZEat = new ImageIcon("view\\gifs\\ConeZombieEating.gif");
+        bucketZEat = new ImageIcon("view\\gifs\\Bucketheadeating.gif");
 
-        peashooterGif = new ImageIcon("view\\gif\\Peashooter.gif");
-        sunflowerGif = new ImageIcon("view\\gif\\Sunflower.gif");
-        cherrybombGif = new ImageIcon("view\\gif\\CherryExplode.gif");
+        peashooterGif = new ImageIcon("view\\gifs\\Peashooter.gif");
+        sunflowerGif = new ImageIcon("view\\gifs\\Sunflower.gif");
+        cherrybombGif = new ImageIcon("view\\gifs\\CherryExplode.gif");
         wallnutpic = new ImageIcon("view\\assets\\wallnut.png");
 
         pea = new ImageIcon("view\\assets\\Pea_p.png");
