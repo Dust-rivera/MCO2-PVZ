@@ -1128,7 +1128,7 @@ public class GameController {
 
                 x -= zombie.getSpeed() / 2;
 
-                if (x < 300) {
+                if (x < 150) {
                     switch (yCoordinate) {
                         case 75:
                             moveMow(view.getMow1());
