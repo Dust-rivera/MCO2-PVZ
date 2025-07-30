@@ -24,9 +24,20 @@ public class User {
      * @param amount the cost of the plant to be bought
      */
     public void buyPlant(int amount) {
+<<<<<<< HEAD
         if(amount > 0){
             sunCount -= amount;
         }
+=======
+<<<<<<< HEAD
+        if (amount > 0) {
+         sunCount -= amount;   
+        } 
+=======
+        if(amount > 0)
+            sunCount -= amount;
+>>>>>>> 962b2c9b4dcd2b794f0b0c46de3d90e96176928e
+>>>>>>> 9c0ab9cba9aaf3f6ce90a3efdd9e0d9ae0cd10e7
     }
 
     /**
