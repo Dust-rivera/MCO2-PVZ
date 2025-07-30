@@ -317,7 +317,7 @@ public class GameController {
      * Starts the game timer and initializes the game progress
      */
     private void progress() {
-        gameTimer = new Timer(100, e -> decreaseTime());
+        gameTimer = new Timer(1000, e -> decreaseTime());
         gameTimer.start();
     }
 
