@@ -313,8 +313,8 @@ public class GameController {
      */
     public void elementPressed(ImageIcon image, MouseEvent e) {
         if (image != null) {
+            
             drag = new JLabel(image);
-
             // Get mouse position relative to layered pane
             Point point = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view.getLayers());
 
