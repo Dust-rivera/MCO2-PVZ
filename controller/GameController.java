@@ -7,7 +7,6 @@
  */
 package controller;
 
-import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -27,8 +26,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
-import javax.swing.BorderFactory;
-
 import java.io.File;
 import model.Board;
 import model.BucketheadZombie;
@@ -437,22 +434,22 @@ public class GameController {
         if (source == sunflower && user.getSunCount() >= Sunflower.getCostStatic()) {
             if (sunflowerCD != 0)
                 return;
-            image = new ImageIcon("view\\gifs\\Sunflower.gif");
+            image = view.getSunflowerGif();
             plantSelect = 0;
         } else if (source == peashooter && user.getSunCount() >= Peashooter.getCostStatic()) {
             if (peashooterCD != 0)
                 return;
-            image = new ImageIcon("view\\gifs\\Peashooter.gif");
+            image = view.getPeashooterGif();
             plantSelect = 1;
         } else if (source == cherry && user.getSunCount() >= CherryBomb.getCostStatic()) {
             if (cherrybombCD != 0)
                 return;
-            image = new ImageIcon("view\\gifs\\CherryExplode.gif");
+            image = view.getCherrybombGif();
             plantSelect = 2;
         } else if (source == wallnut && user.getSunCount() >= Wallnut.getCostStatic()) {
             if (wallnutCD != 0)
                 return;
-            image = new ImageIcon("view\\assets\\wallnut.png");
+            image = view.getWallnutpic();
             plantSelect = 3;
         }
 
@@ -749,7 +746,7 @@ public class GameController {
      * @param col  the column index
      */
     private void shootPea(JPanel cell, int row, int col) {
-        ImageIcon peaIcon = new ImageIcon("view\\assets\\Pea_p.png");
+        ImageIcon peaIcon = view.getPea();
         JLabel peaLabel = new JLabel(peaIcon);
 
         // Convert cell position to layered pane coordinates
@@ -776,7 +773,7 @@ public class GameController {
                                     zombie.takeDamage(board.getTile(row, col).getPlant().getDirDamage());
                                 else
                                     zombie.takeDamage(board.getTile(row, col).getPlant().getDamage());
-                                ImageIcon explosion = new ImageIcon("view\\assets\\peax.png");
+                                ImageIcon explosion = view.getPeax();
                                 peaLabel.setIcon(explosion);
                                 int explosionWidth = explosion.getIconWidth();
                                 int explosionHeight = explosion.getIconHeight();
@@ -833,7 +830,7 @@ public class GameController {
         int x = point.x + (cell.getWidth() - 70) / 2;
         int y = point.y + (cell.getWidth() - 70) / 2;
 
-        ImageIcon sunIcon = new ImageIcon("view\\assets\\Sun.png"); // replace path
+        ImageIcon sunIcon = view.getSun(); // replace path
         Image scaled = sunIcon.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
         sunIcon = new ImageIcon(scaled);
 
@@ -892,7 +889,7 @@ public class GameController {
      * Spawns a sun at a random position and animates its fall.
      */
     private void spawnSun() {
-        ImageIcon sunIcon = new ImageIcon("view\\assets\\Sun.png"); // replace path
+        ImageIcon sunIcon = view.getSun(); // replace path
         Image scaled = sunIcon.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
         sunIcon = new ImageIcon(scaled);
 
@@ -996,13 +993,14 @@ public class GameController {
                 if (Math.abs(cellX - zombieX) <= 50) {
                     walkTimer.stop();
                     JLabel zombieLabel = zombieLabels.get(index);
+                    ImageIcon prevIcon = (ImageIcon)zombieLabels.get(index).getIcon();
 
                     if (zombie instanceof NormalZombie)
-                        zombieLabel.setIcon(new ImageIcon("view/gifs/NormalZombieEating.gif"));
+                        zombieLabel.setIcon(view.getNormalZEat());
                     else if (zombie instanceof ConeheadZombie)
-                        zombieLabel.setIcon(new ImageIcon("view/gifs/ConeZombieEating.gif"));
+                        zombieLabel.setIcon(view.getConeZEat());
                     else if (zombie instanceof BucketheadZombie)
-                        zombieLabel.setIcon(new ImageIcon("view/gifs/Bucketheadeating.gif"));
+                        zombieLabel.setIcon(view.getBucketZEat());
 
                     final int capturedCol = col;
                     Timer eatTimer = new Timer(800, null);
@@ -1016,7 +1014,7 @@ public class GameController {
                             cell.revalidate();
                             cell.repaint();
 
-                            zombieLabel.setIcon(new ImageIcon("view/gifs/Zombie80.gif"));
+                            zombieLabel.setIcon(prevIcon);
                             walkTimer.start();
                         }
                     });
@@ -1055,15 +1053,15 @@ public class GameController {
 
         switch (zom) {
             case 0:
-                zombieIconT = new ImageIcon("view\\gifs\\Zombie80.gif");
+                zombieIconT = view.getNormalZWalk();
                 zombieT = new NormalZombie();
                 break;
             case 1:
-                zombieIconT = new ImageIcon("view\\gifs\\ConeheadZombie.gif");
+                zombieIconT = view.getConeZWalk();
                 zombieT = new ConeheadZombie();
                 break;
             case 2:
-                zombieIconT = new ImageIcon("view\\gifs\\BucketheadZombie.gif");
+                zombieIconT = view.getBucketZWalk();
                 zombieT = new BucketheadZombie();
         }
         zombie = zombieT;

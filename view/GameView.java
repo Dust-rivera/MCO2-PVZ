@@ -10,12 +10,7 @@ package view;
 import java.awt.Image;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.Graphics;
-import java.io.File;
-import java.io.IOException;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -53,14 +48,30 @@ public class GameView extends JFrame {
 
     public JPanel[][] gridCells;
 
-    private Font customFont;
-
     private JPanel board;
 
     private JLayeredPane progress;
     private JProgressBar progressBar;
 
     private JLayeredPane layers;
+
+    private ImageIcon normalZWalk;
+    private ImageIcon coneZWalk;
+    private ImageIcon bucketZWalk;
+
+    private ImageIcon normalZEat;
+    private ImageIcon coneZEat;
+    private ImageIcon bucketZEat;
+
+    private ImageIcon peashooterGif;
+    private ImageIcon sunflowerGif;
+    private ImageIcon cherrybombGif;
+    private ImageIcon wallnutpic;
+
+    private ImageIcon pea;
+    private ImageIcon peax;
+
+    private ImageIcon sun;
 
     /**
      * This creates the main GUI of the game using JLayeredPane
@@ -95,6 +106,53 @@ public class GameView extends JFrame {
         progressBar = new JProgressBar();
 
         layers = new JLayeredPane();
+
+        normalZWalk = new ImageIcon("view\\gif\\Zombie80.gif");
+        coneZWalk = new ImageIcon("view\\gif\\ConeheadZombie.gif");
+        bucketZWalk = new ImageIcon("view\\gif\\BucketheadZombie.gif");
+        normalZEat = new ImageIcon("view\\gif\\NormalZombieEating.gif");
+        coneZEat = new ImageIcon("view\\gif\\ConeZombieEating.gif");
+        bucketZEat = new ImageIcon("view\\gif\\Bucketheadeating.gif");
+
+        peashooterGif = new ImageIcon("view\\gif\\Peashooter.gif");
+        sunflowerGif = new ImageIcon("view\\gif\\Sunflower.gif");
+        cherrybombGif = new ImageIcon("view\\gif\\CherryExplode.gif");
+        wallnutpic = new ImageIcon("view\\assets\\wallnut.png");
+
+        pea = new ImageIcon("view\\assets\\Pea_p.png");
+        peax = new ImageIcon("view\\assets\\peax.png");
+
+        sun = new ImageIcon("view\\assets\\Sun.png");
+
+        layers.setLayout(null);
+        layers.setOpaque(false);
+
+        board = new JPanel();
+        board.setLayout(null);
+        board.setBackground(new Color(0, 0, 0, 0));
+
+        this.setBoard(board);
+
+        gridCells = new JPanel[5][9];
+        for (int i = 0; i < gridCells.length; i++) {
+            for (int j = 0; j < gridCells[i].length; j++) {
+                gridCells[i][j] = new JPanel();
+                gridCells[i][j].setBounds(j * 100, i * 100, 100, 100);
+                gridCells[i][j].setOpaque(false);
+                board.add(gridCells[i][j]);
+            }
+        }
+
+        this.setGridCells(gridCells);
+
+        JLabel mow1 = new JLabel();
+        JLabel mow2 = new JLabel();
+        JLabel mow3 = new JLabel();
+        JLabel mow4 = new JLabel();
+        JLabel mow5 = new JLabel();
+
+        this.getLayers().add(board, Integer.valueOf(3));
+        this.getLayers().setOpaque(false);
 
         ImageIcon mow = new ImageIcon("view\\assets\\Lawn_Mower.png");
         mow1.setIcon(mow);
@@ -139,16 +197,6 @@ public class GameView extends JFrame {
         menu.add(lvl3);
 
         container.add(menu, "Menu");
-
-        // try {
-        //     customFont = Font
-        //             .createFont(Font.TRUETYPE_FONT,
-        //                     new File("view\\assets\\Chalkboard.ttc"))
-        //             .deriveFont(18f);
-        //     sunCount.setFont(customFont);
-        // } catch (FontFormatException e) {
-        // } catch (IOException e) {
-        // }
 
         ImageIcon icon = new ImageIcon("view\\assets\\logo.png");
         ImageIcon shop = new ImageIcon("view\\assets\\shop border.png");
@@ -508,5 +556,109 @@ public class GameView extends JFrame {
     public void removeSun(JLabel sun) {
         layers.remove(sun);
         layers.repaint();
+    }
+
+        /**
+     * Gets the ImageIcon for the normal zombie walking animation.
+     * @return ImageIcon for normal zombie walking
+     */
+    public ImageIcon getNormalZWalk() {
+        return normalZWalk;
+    }
+
+    /**
+     * Gets the ImageIcon for the conehead zombie walking animation.
+     * @return ImageIcon for conehead zombie walking
+     */
+    public ImageIcon getConeZWalk() {
+        return coneZWalk;
+    }
+
+    /**
+     * Gets the ImageIcon for the buckethead zombie walking animation.
+     * @return ImageIcon for buckethead zombie walking
+     */
+    public ImageIcon getBucketZWalk() {
+        return bucketZWalk;
+    }
+
+    /**
+     * Gets the ImageIcon for the normal zombie eating animation.
+     * @return ImageIcon for normal zombie eating
+     */
+    public ImageIcon getNormalZEat() {
+        return normalZEat;
+    }
+
+    /**
+     * Gets the ImageIcon for the conehead zombie eating animation.
+     * @return ImageIcon for conehead zombie eating
+     */
+    public ImageIcon getConeZEat() {
+        return coneZEat;
+    }
+
+    /**
+     * Gets the ImageIcon for the buckethead zombie eating animation.
+     * @return ImageIcon for buckethead zombie eating
+     */
+    public ImageIcon getBucketZEat() {
+        return bucketZEat;
+    }
+
+    /**
+     * Gets the ImageIcon for the peashooter animation.
+     * @return ImageIcon for peashooter
+     */
+    public ImageIcon getPeashooterGif() {
+        return peashooterGif;
+    }
+
+    /**
+     * Gets the ImageIcon for the sunflower animation.
+     * @return ImageIcon for sunflower
+     */
+    public ImageIcon getSunflowerGif() {
+        return sunflowerGif;
+    }
+
+    /**
+     * Gets the ImageIcon for the cherry bomb animation.
+     * @return ImageIcon for cherry bomb
+     */
+    public ImageIcon getCherrybombGif() {
+        return cherrybombGif;
+    }
+
+    /**
+     * Gets the ImageIcon for the wallnut image.
+     * @return ImageIcon for wallnut
+     */
+    public ImageIcon getWallnutpic() {
+        return wallnutpic;
+    }
+
+    /**
+     * Gets the ImageIcon for the pea projectile.
+     * @return ImageIcon for pea
+     */
+    public ImageIcon getPea() {
+        return pea;
+    }
+
+    /**
+     * Gets the ImageIcon for the peax projectile.
+     * @return ImageIcon for peax
+     */
+    public ImageIcon getPeax() {
+        return peax;
+    }
+
+    /**
+     * Gets the ImageIcon for the sun.
+     * @return ImageIcon for sun
+     */
+    public ImageIcon getSun() {
+        return sun;
     }
 }
