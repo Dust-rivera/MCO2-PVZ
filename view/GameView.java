@@ -140,15 +140,15 @@ public class GameView extends JFrame {
 
         container.add(menu, "Menu");
 
-        try {
-            customFont = Font
-                    .createFont(Font.TRUETYPE_FONT,
-                            new File("view\\assets\\Chalkboard.ttc"))
-                    .deriveFont(18f);
-            sunCount.setFont(customFont);
-        } catch (FontFormatException e) {
-        } catch (IOException e) {
-        }
+        // try {
+        //     customFont = Font
+        //             .createFont(Font.TRUETYPE_FONT,
+        //                     new File("view\\assets\\Chalkboard.ttc"))
+        //             .deriveFont(18f);
+        //     sunCount.setFont(customFont);
+        // } catch (FontFormatException e) {
+        // } catch (IOException e) {
+        // }
 
         ImageIcon icon = new ImageIcon("view\\assets\\logo.png");
         ImageIcon shop = new ImageIcon("view\\assets\\shop border.png");

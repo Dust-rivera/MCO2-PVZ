@@ -7,7 +7,7 @@ package model;
 
 public class User {
 
-    private int sunCount = 50;
+    private int sunCount = 500;
 
     /**
      * This gets the user's sun count
