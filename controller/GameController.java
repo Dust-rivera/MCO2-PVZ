@@ -26,6 +26,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.BorderFactory;
 
 import java.io.File;
@@ -225,7 +226,7 @@ public class GameController {
             for (int col = 0; col < c; col++) {
                 view.getGridCells()[row][col] = new JPanel();
                 view.getGridCells()[row][col].setOpaque(false);
-                view.getGridCells()[row][col].setBorder(BorderFactory.createLineBorder(Color.RED)); // So background is
+                //view.getGridCells()[row][col].setBorder(BorderFactory.createLineBorder(Color.RED)); // So background is
                                                                                                     // visible
                 view.getBoard().add(view.getGridCells()[row][col]);
             }
@@ -759,58 +760,66 @@ public class GameController {
         peaLabel.setBounds(startX, startY, 20, 20);
         view.getLayers().add(peaLabel, Integer.valueOf(4));
 
-        Timer peaTimer = new Timer(20, new ActionListener() {
-            int x = startX;
-
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                x += 5;
-                // Only attack locked zombie
-                for (Zombie zombie : zombieList) {
-                    if (!zombie.isDead() && Math.abs(zombie.getXPosition() - x) <= 5) {
-                        if (Math.abs(zombie.getXPosition()) <= startX + 100)
-                            zombie.takeDamage(board.getTile(row, col).getPlant().getDirDamage());
-                        else
-                            zombie.takeDamage(board.getTile(row, col).getPlant().getDamage());
-                        ImageIcon explosion = new ImageIcon("view\\assets\\peax.png");
-                        peaLabel.setIcon(explosion);
-                        int explosionWidth = explosion.getIconWidth();
-                        int explosionHeight = explosion.getIconHeight();
-                        peaLabel.setBounds(x - explosionWidth / 2, startY - explosionHeight / 2, explosionWidth,
-                                explosionHeight);
-                        ((Timer) e.getSource()).stop();
+            protected Void doInBackground() {
+                Timer peaTimer = new Timer(20, new ActionListener() {
+                    int x = startX;
 
-                        new Timer(100, evt -> {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        x += 5;
+                        // Only attack locked zombie
+                        for (Zombie zombie : zombieList) {
+                            if (!zombie.isDead() && Math.abs(zombie.getXPosition() - x) <= 5) {
+                                if (Math.abs(zombie.getXPosition()) <= startX + 100)
+                                    zombie.takeDamage(board.getTile(row, col).getPlant().getDirDamage());
+                                else
+                                    zombie.takeDamage(board.getTile(row, col).getPlant().getDamage());
+                                ImageIcon explosion = new ImageIcon("view\\assets\\peax.png");
+                                peaLabel.setIcon(explosion);
+                                int explosionWidth = explosion.getIconWidth();
+                                int explosionHeight = explosion.getIconHeight();
+                                peaLabel.setBounds(x - explosionWidth / 2, startY - explosionHeight / 2, explosionWidth,
+                                        explosionHeight);
+                                ((Timer) e.getSource()).stop();
+
+                                new Timer(100, evt -> {
+                                    view.getLayers().remove(peaLabel);
+                                    view.getLayers().repaint();
+                                    ((Timer) evt.getSource()).stop();
+                                }).start();
+
+                                if (zombie.isDead()) {
+                                    int index = zombieList.indexOf(zombie);
+                                    view.getLayers().remove(zombieLabels.get(index));
+                                    view.getLayers().repaint();
+                                    zombieList.remove(zombie);
+                                    zombieLabels.remove(index);
+                                    zombieWalkTimers.get(index).stop();
+                                    zombieWalkTimers.remove(index);
+                                }
+                                return;
+                            }
+                        }
+
+                        if (x > view.getLayers().getWidth()) {
+                            ((Timer) e.getSource()).stop();
                             view.getLayers().remove(peaLabel);
                             view.getLayers().repaint();
-                            ((Timer) evt.getSource()).stop();
-                        }).start();
-
-                        if (zombie.isDead()) {
-                            int index = zombieList.indexOf(zombie);
-                            view.getLayers().remove(zombieLabels.get(index));
+                        } else {
+                            peaLabel.setBounds(x, startY, 20, 20);
                             view.getLayers().repaint();
-                            zombieList.remove(zombie);
-                            zombieLabels.remove(index);
-                            zombieWalkTimers.get(index).stop();
-                            zombieWalkTimers.remove(index);
                         }
-                        return;
                     }
-                }
+                });
 
-                if (x > view.getLayers().getWidth()) {
-                    ((Timer) e.getSource()).stop();
-                    view.getLayers().remove(peaLabel);
-                    view.getLayers().repaint();
-                } else {
-                    peaLabel.setBounds(x, startY, 20, 20);
-                    view.getLayers().repaint();
-                }
+                peaTimer.start();
+                return null;
             }
-        });
+        };
+        worker.execute();
 
-        peaTimer.start();
     }
 
     /**
