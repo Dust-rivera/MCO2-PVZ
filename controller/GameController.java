@@ -728,7 +728,7 @@ public class GameController {
      * @param row  the row index
      * @param col  the column index
      */
-    private void shootPea(JPanel cell, int row, int col) {
+    private void shootPea(JPanel cell,int row, int col) {
         ImageIcon peaIcon = view.getPea();
         JLabel peaLabel = new JLabel(peaIcon);
 
@@ -740,6 +740,30 @@ public class GameController {
         peaLabel.setBounds(startX, startY, 20, 20);
         view.getLayers().add(peaLabel, Integer.valueOf(4));
 
+        final int[] rowHolder = { -1 };
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (view.getGridCells()[i][j] == cell) {
+                    rowHolder[0] = i;
+                    break;
+                }
+            }
+        }
+        if (rowHolder[0] == -1) return;
+    
+        // Lock onto first live zombie in row
+        Zombie target = null;
+        for (Zombie zombie : zombieList) {
+            if (!zombie.isDead() && zombie.getYPosition() == rowHolder[0] && zombie.getXPosition() > startX) {
+                target = zombie;
+                break;
+            }
+        }
+        if (target == null) return;
+    
+        final int rowZ = rowHolder[0];
+        Zombie lockedZombie = target;
+
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() {
@@ -750,12 +774,12 @@ public class GameController {
                     public void actionPerformed(ActionEvent e) {
                         x += 5;
                         // Only attack locked zombie
-                        for (Zombie zombie : zombieList) {
-                            if (!zombie.isDead() && Math.abs(zombie.getXPosition() - x) <= 5) {
-                                if (Math.abs(zombie.getXPosition()) <= startX + 100)
-                                    zombie.takeDamage(board.getTile(row, col).getPlant().getDirDamage());
+                        //for (Zombie zombie : zombieList) {
+                            if (!lockedZombie.isDead() && Math.abs(lockedZombie.getXPosition() - x) <= 5) {
+                                if (Math.abs(lockedZombie.getXPosition()) <= startX + 100)
+                                    lockedZombie.takeDamage(board.getTile(rowZ, col).getPlant().getDirDamage());
                                 else
-                                    zombie.takeDamage(board.getTile(row, col).getPlant().getDamage());
+                                    lockedZombie.takeDamage(board.getTile(rowZ, col).getPlant().getDamage());
                                 ImageIcon explosion = view.getPeax();
                                 peaLabel.setIcon(explosion);
                                 int explosionWidth = explosion.getIconWidth();
@@ -770,20 +794,20 @@ public class GameController {
                                     ((Timer) evt.getSource()).stop();
                                 }).start();
 
-                                if (zombie.isDead()) {
-                                    int index = zombieList.indexOf(zombie);
+                                if (lockedZombie.isDead()) {
+                                    int index = zombieList.indexOf(lockedZombie);
                                     view.getLayers().remove(zombieLabels.get(index));
                                     view.getLayers().repaint();
-                                    zombieList.remove(zombie);
+                                    zombieList.remove(lockedZombie);
                                     zombieLabels.remove(index);
                                     zombieWalkTimers.get(index).stop();
                                     zombieWalkTimers.remove(index);
                                 }
                                 return;
                             }
-                        }
+                        //}
 
-                        if (x > view.getLayers().getWidth()) {
+                        if (x > view.getWidth()) {
                             ((Timer) e.getSource()).stop();
                             view.getLayers().remove(peaLabel);
                             view.getLayers().repaint();
